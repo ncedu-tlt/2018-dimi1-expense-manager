@@ -2,40 +2,40 @@ INSERT INTO Person (person_id, login, pass, reg_date) VALUES (1, 'qwerty', '1234
 INSERT INTO Person (person_id, email, phone_number) VALUES (2, 'qqq@mail.ru', 89171546552);
 
 INSERT INTO Accounts (account_id, person_id_fk, currency, balance, description) 
-                        VALUES (4854630037067858, 1, 'RUB', 3500, 'Кредитная');
+                        VALUES (4854630037067858, 1, 'RUB', 3500, 'РљСЂРµРґРёС‚РЅР°СЏ');
 INSERT INTO Accounts (account_id, person_id_fk, currency, balance, description) 
-                        VALUES (3608650012003000, 1, 'RUB', 500, 'Дебетовая');
+                        VALUES (3608650012003000, 1, 'RUB', 500, 'Р”РµР±РµС‚РѕРІР°СЏ');
 INSERT INTO Accounts (account_id, person_id_fk, currency, balance, description) 
-                        VALUES (4565123278982585, 2, 'USD', 5000, 'Дебетовая');
+                        VALUES (4565123278982585, 2, 'USD', 5000, 'Р”РµР±РµС‚РѕРІР°СЏ');
 INSERT INTO Accounts (account_id, person_id_fk, currency, balance, description) 
-                        VALUES (1, 1, 'RUB', 250, 'Наличные');
+                        VALUES (1, 1, 'RUB', 250, 'РќР°Р»РёС‡РЅС‹Рµ');
 INSERT INTO Accounts (account_id, person_id_fk, currency, balance, description) 
-                        VALUES (2, 2, 'RUB', 2000, 'Наличные');
+                        VALUES (2, 2, 'RUB', 2000, 'РќР°Р»РёС‡РЅС‹Рµ');
 
 INSERT INTO Budget_type (budget_type_id, name, required, check_max) 
-                        VALUES (1, 'Питание', true, 7000);
+                        VALUES (1, 'РџРёС‚Р°РЅРёРµ', true, 7000);
 INSERT INTO Budget_type (budget_type_id, group_id, name, required) 
-                        VALUES (11, 1, 'Магазины', true);
+                        VALUES (11, 1, 'РњР°РіР°Р·РёРЅС‹', true);
 INSERT INTO Budget_type (budget_type_id, group_id, name, required) 
-                        VALUES (12, 1, 'Столовая', true);
+                        VALUES (12, 1, 'РЎС‚РѕР»РѕРІР°СЏ', true);
 INSERT INTO Budget_type (budget_type_id, name, required) 
-                        VALUES (2, 'Квартирные платежи', true);
+                        VALUES (2, 'РљРІР°СЂС‚РёСЂРЅС‹Рµ РїР»Р°С‚РµР¶Рё', true);
 INSERT INTO Budget_type (budget_type_id, group_id, name, required) 
-                        VALUES (21, 2, 'Коммуналка', true);
+                        VALUES (21, 2, 'РљРѕРјРјСѓРЅР°Р»РєР°', true);
 INSERT INTO Budget_type (budget_type_id, group_id, name, required) 
-                        VALUES (22, 2, 'Кап ремонт', true);
+                        VALUES (22, 2, 'РљР°Рї СЂРµРјРѕРЅС‚', true);
 INSERT INTO Budget_type (budget_type_id, group_id, name, required) 
-                        VALUES (23, 2, 'Телефон/Интернет', true);
+                        VALUES (23, 2, 'РўРµР»РµС„РѕРЅ/РРЅС‚РµСЂРЅРµС‚', true);
 INSERT INTO Budget_type (budget_type_id, name, required) 
-                        VALUES (3, 'Проезд', true);
+                        VALUES (3, 'РџСЂРѕРµР·Рґ', true);
 INSERT INTO Budget_type (budget_type_id, group_id, name, required) 
-                        VALUES (31, 3, 'Маршрутка', true);
+                        VALUES (31, 3, 'РњР°СЂС€СЂСѓС‚РєР°', true);
 INSERT INTO Budget_type (budget_type_id, group_id, name, required) 
-                        VALUES (32, 3, 'Такси', false);
+                        VALUES (32, 3, 'РўР°РєСЃРё', false);
 INSERT INTO Budget_type (budget_type_id, name, required) 
-                        VALUES (100, 'Зарплата', true);
+                        VALUES (100, 'Р—Р°СЂРїР»Р°С‚Р°', true);
 INSERT INTO Budget_type (budget_type_id, name, required) 
-                        VALUES (101, 'Стипендия', true);
+                        VALUES (101, 'РЎС‚РёРїРµРЅРґРёСЏ', true);
 
 INSERT INTO Budget (budget_id, operation_type, budget_type_id_fk, description, account_id_fk, operation_date, charge_value)
                         VALUES (1000, 1, 100, '', 3608650012003000, TO_DATE('15.11.2018', 'dd.mm.yyyy'), 45000);
@@ -50,7 +50,7 @@ INSERT INTO Budget (budget_id, operation_type, budget_type_id_fk, description, a
 INSERT INTO Budget (budget_id, operation_type, budget_type_id_fk, description, account_id_fk, operation_date, charge_value)
                         VALUES (1005, 0, 31, '', 3608650012003000, TO_DATE('28.11.2018', 'dd.mm.yyyy'), 50);
 INSERT INTO Budget (budget_id, operation_type, budget_type_id_fk, description, account_id_fk, operation_date, charge_value)
-                        VALUES (1006, 0, 11, 'Предновогодняя закупка к праздничному столу', 4565123278982585, TO_DATE('20.12.2018', 'dd.mm.yyyy'), 5000);
+                        VALUES (1006, 0, 11, 'РџСЂРµРґРЅРѕРІРѕРіРѕРґРЅСЏСЏ Р·Р°РєСѓРїРєР° Рє РїСЂР°Р·РґРЅРёС‡РЅРѕРјСѓ СЃС‚РѕР»Сѓ', 4565123278982585, TO_DATE('20.12.2018', 'dd.mm.yyyy'), 5000);
 INSERT INTO Budget (budget_id, operation_type, budget_type_id_fk, description, account_id_fk, operation_date, charge_value)
                         VALUES (1007, 0, 31, '', 1, TO_DATE('20.11.2018', 'dd.mm.yyyy'), 54);
 INSERT INTO Budget (budget_id, operation_type, budget_type_id_fk, description, account_id_fk, operation_date, charge_value)
@@ -62,7 +62,7 @@ INSERT INTO Budget (budget_id, operation_type, budget_type_id_fk, description, a
 INSERT INTO Budget (budget_id, operation_type, budget_type_id_fk, description, account_id_fk, operation_date, charge_value)
                         VALUES (1011, 0, 12, '', 1, TO_DATE('25.11.2018', 'dd.mm.yyyy'), 110);
 INSERT INTO Budget (budget_id, operation_type, budget_type_id_fk, description, account_id_fk, operation_date, charge_value)
-                        VALUES (1012, 0, 1, 'Запись для проверки работы Report1', 1, TO_DATE('30.11.2018', 'dd.mm.yyyy'), 200);
+                        VALUES (1012, 0, 1, 'Р—Р°РїРёСЃСЊ РґР»СЏ РїСЂРѕРІРµСЂРєРё СЂР°Р±РѕС‚С‹ Report1', 1, TO_DATE('30.11.2018', 'dd.mm.yyyy'), 200);
 
 INSERT INTO Plan_budget (plan_budget_id, operation_type, budget_type_id_fk, 
                                               description, account_id_fk, operation_date, charge_value, 
@@ -71,7 +71,7 @@ INSERT INTO Plan_budget (plan_budget_id, operation_type, budget_type_id_fk,
 INSERT INTO Plan_budget (plan_budget_id, operation_type, budget_type_id_fk, 
                                               description, account_id_fk, operation_date, charge_value,
                                               regular_mask, repeat_count, start_date, end_date)
-                       VALUES (101, 0, 3, 'Заказан билет на поезд в Тамбов', 4854630037067858, TO_DATE('3.01.2019', 'dd.mm.yyyy'), 3000, null, null, null, null);
+                       VALUES (101, 0, 3, 'Р—Р°РєР°Р·Р°РЅ Р±РёР»РµС‚ РЅР° РїРѕРµР·Рґ РІ РўР°РјР±РѕРІ', 4854630037067858, TO_DATE('3.01.2019', 'dd.mm.yyyy'), 3000, null, null, null, null);
 INSERT INTO Plan_budget (plan_budget_id, operation_type, budget_type_id_fk, 
                                               description, account_id_fk, operation_date, charge_value, 
                                               regular_mask, repeat_count, start_date, end_date)
