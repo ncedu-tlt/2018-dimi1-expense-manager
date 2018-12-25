@@ -5,7 +5,7 @@ public class Main {
     static final String DB_URL = "jdbc:h2:~/test";
 
     static final String USER = "sa";
-    static final String PASS = "as";
+    static final String PASS = "";
 
     static final String CHECK_TABLE_SQL =  "select count(TABLE_NAME) as CNT " +
             "from INFORMATION_SCHEMA.TABLES  " +
