@@ -1,6 +1,6 @@
 package interfaces;
 
-import java.math.BigInteger;
+        import java.math.BigInteger;
 
 public interface Accounts extends Entity {
     BigInteger getAccountId();
@@ -8,5 +8,4 @@ public interface Accounts extends Entity {
     String getCurrency();
     Double getBalance();
     String getDescription();
-    Accounts getAccounts();
 }

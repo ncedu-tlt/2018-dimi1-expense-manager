@@ -8,5 +8,4 @@ public interface BudgetType extends Entity {
     String getName();
     Boolean getRequired();
     Double getCheckMax();
-    BudgetType getBudgetType();
 }

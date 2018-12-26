@@ -8,6 +8,4 @@ public interface Person extends Entity {
     String getCurrency();
     Double getBalance();
     String getDescription();
-
-    Person getPerson();
 }

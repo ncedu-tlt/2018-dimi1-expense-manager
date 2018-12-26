@@ -15,5 +15,4 @@ public interface PlanBudget extends Entity {
     Integer getRepeatCount();
     Date getStartDate();
     Date getEndDate();
-    PlanBudget getPlanBudget();
 }

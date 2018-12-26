@@ -12,5 +12,4 @@ public interface Budget extends Entity {
     BigInteger getAccountId();
     Date getOperationDate();
     Double getChargeValue();
-    Budget getBudget();
 }
