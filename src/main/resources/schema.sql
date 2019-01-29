@@ -5,12 +5,13 @@ CREATE TABLE Person(
   email VARCHAR2(40),
   description VARCHAR(350),
   reg_date DATE,
-  phone_number VARCHAR2(11)
+  phone_number VARCHAR2(12)
 );
 
 
 CREATE TABLE Accounts(
-  account_id NUMBER(16) PRIMARY KEY not null,
+  account_id NUMBER(5) PRIMARY KEY not null,
+  account_number NUMBER(16),
   person_id_fk NUMBER(5),
   currency VARCHAR2(3),
   balance NUMBER(7),
@@ -23,24 +24,24 @@ CREATE TABLE Budget_type (
   group_id NUMBER(5),
   name VARCHAR2(100),
   required BOOLEAN,
-  check_max NUMBER(7),
+  check_max DECIMAL(7, 2),
 );
 
 CREATE TABLE Budget (
   budget_id serial PRIMARY KEY not null,
-  operation_type BOOLEAN,
+  operation_type VARCHAR2(15),
   budget_type_id_fk NUMBER(5),
   description VARCHAR2(350),
   account_id_fk NUMBER(16),
   operation_date DATE,
-  charge_value NUMBER(7),
+  charge_value DECIMAL(7, 2),
   FOREIGN KEY (budget_type_id_fk) REFERENCES Budget_type(budget_type_id),
   FOREIGN KEY (account_id_fk) REFERENCES Accounts(account_id)
 );
 
 CREATE TABLE Plan_budget (
   plan_budget_id NUMBER(10),
-  operation_type BOOLEAN,
+  operation_type VARCHAR2(15),
   budget_type_id_fk NUMBER(5),
   description VARCHAR2(350),
   account_id_fk NUMBER(16),
