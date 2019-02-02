@@ -6,7 +6,7 @@ import java.math.BigInteger;
 import java.sql.*;
 import java.util.Scanner;
 
-public class AccountsImplementation implements Accounts {
+public class AccountsImpl implements Accounts {
     private BigInteger accountId;
     private String accountNumber;
     private BigInteger personId;
@@ -17,7 +17,7 @@ public class AccountsImplementation implements Accounts {
 
     Scanner in = new Scanner(System.in);
 
-    public AccountsImplementation(Connection connect){ this.connect = connect; }
+    public AccountsImpl(Connection connect){ this.connect = connect; }
 
     @Override
     public void create() {

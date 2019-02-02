@@ -7,7 +7,7 @@ import java.sql.*;
 import java.util.Date;
 import java.util.Scanner;
 
-public class PlanBudgetImplementation implements PlanBudget {
+public class PlanBudgetImpl implements PlanBudget {
     private BigInteger planBudgetId;
     private String operationType;
     private BigInteger budgetTypeId;
@@ -21,7 +21,7 @@ public class PlanBudgetImplementation implements PlanBudget {
     private Date endDate;
     private Connection connect;
 
-    public PlanBudgetImplementation(Connection connect){ this.connect = connect; }
+    public PlanBudgetImpl(Connection connect){ this.connect = connect; }
 
     @Override
     public void create() {

@@ -8,7 +8,7 @@ import java.util.Date;
 import java.util.Scanner;
 
 
-public class PersonImplementation implements Person {
+public class PersonImpl implements Person {
     private BigInteger personId;
     private String login, pass, email, phonenumber, description;
     private Date regDate;
@@ -16,7 +16,7 @@ public class PersonImplementation implements Person {
 
     Scanner in = new Scanner(System.in);
 
-    public PersonImplementation(Connection connect){ this.connect = connect; }
+    public PersonImpl(Connection connect){ this.connect = connect; }
 
     @Override
     public void create() {
@@ -140,7 +140,7 @@ public class PersonImplementation implements Person {
                 field5 = resultPers.getString("description");
                 field6 = resultPers.getDate("reg_date");
                 field7 = resultPers.getString("phone_number");
-                System.out.println(String.format("Id: %5d| login: %15s| pass: %15s| email: %15s| " +  //TODO форматированный вывод настроить
+                System.out.println(String.format("Id: %5d| login: %15s| pass: %15s| email: %15s| " +
                                 "phone: %12s| registration date: %tD| description: %s",
                         field1, field2, field3, field4, field7, field6, field5));
             }

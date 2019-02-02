@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
-public class BudgetTypeImplementation implements BudgetType {
+public class BudgetTypeImpl implements BudgetType {
     private BigInteger budgetTypeId;
     private BigInteger groupId;
     private String name;
@@ -15,7 +15,7 @@ public class BudgetTypeImplementation implements BudgetType {
     private Double checkMax;
     private Connection connect;
 
-    public BudgetTypeImplementation(Connection connect){ this.connect = connect; }
+    public BudgetTypeImpl(Connection connect){ this.connect = connect; }
 
     @Override
     public void create() {
@@ -44,7 +44,8 @@ public class BudgetTypeImplementation implements BudgetType {
 
     @Override
     public void delete() {
-        try{
+        try{//TODO сократить повторяющийся код
+            //TODO заменить запрос на COUNT()
             String checkQuery = "SELECT * FROM budget_type WHERE group_id = " + budgetTypeId.intValue();
             Statement checkIdStmt = connect.createStatement();
             ResultSet checkRes = checkIdStmt.executeQuery(checkQuery);
