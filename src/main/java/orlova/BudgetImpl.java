@@ -6,7 +6,7 @@ import java.sql.*;
 import java.util.Date;
 import java.util.Scanner;
 
-public class BudgetImplementation implements Budget {
+public class BudgetImpl implements Budget {
     private BigInteger budgetId;
     private String operationType;
     private BigInteger budgetTypeId;
@@ -16,7 +16,7 @@ public class BudgetImplementation implements Budget {
     private Double chargeValue;
     private Connection connect;
 
-    public BudgetImplementation(Connection connect){ this.connect = connect; }
+    public BudgetImpl(Connection connect){ this.connect = connect; }
 
     @Override
     public void create() {

@@ -6,7 +6,7 @@ import java.math.BigInteger;
 import java.sql.*;
 import java.util.Scanner;
 
-public class AccountsImplementation implements Accounts {
+public class AccountsImpl implements Accounts {
     private BigInteger accountId;
     private String accountNumber;
     private BigInteger personId;
@@ -17,7 +17,7 @@ public class AccountsImplementation implements Accounts {
 
     Scanner in = new Scanner(System.in);
 
-    public AccountsImplementation(Connection connect){ this.connect = connect; }
+    public AccountsImpl(Connection connect){ this.connect = connect; }
 
     @Override
     public void create() {
@@ -43,17 +43,19 @@ public class AccountsImplementation implements Accounts {
     @Override
     public void delete(){
         try{
-            String checkBudget = "SELECT * FROM budget WHERE account_id_fk = " + accountId.intValue();
+            String checkBudget = "SELECT COUNT(*) AS cnt FROM budget WHERE account_id_fk = " + accountId.intValue();
             Statement checkBudgIdStmt = connect.createStatement();
             ResultSet checkBudgRes = checkBudgIdStmt.executeQuery(checkBudget);
-            if(checkBudgRes.next()){
+            checkBudgRes.next();
+            if(checkBudgRes.getInt("cnt") != 0){
                 System.out.println("This record has a link in the table BUDGET.\nDelete all related entries first.");
                 return;
             }
-            String checkPlanBudg = "SELECT * FROM budget WHERE account_id_fk = " + accountId.intValue();
+            String checkPlanBudg = "SELECT COUNT(*) AS cnt FROM plan_budget WHERE account_id_fk = " + accountId.intValue();
             Statement checkPBIdStmt = connect.createStatement();
             ResultSet checkPBRes = checkPBIdStmt.executeQuery(checkPlanBudg);
-            if(checkPBRes.next()){
+            checkPBRes.next();
+            if(checkPBRes.getInt("cnt") != 0){
                 System.out.println("This record has a link in the table PLAN_BUDGET.\nDelete all related entries first.");
                 return;
             }

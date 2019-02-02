@@ -8,7 +8,7 @@ import java.util.Date;
 import java.util.Scanner;
 
 
-public class PersonImplementation implements Person {
+public class PersonImpl implements Person {
     private BigInteger personId;
     private String login, pass, email, phonenumber, description;
     private Date regDate;
@@ -16,7 +16,7 @@ public class PersonImplementation implements Person {
 
     Scanner in = new Scanner(System.in);
 
-    public PersonImplementation(Connection connect){ this.connect = connect; }
+    public PersonImpl(Connection connect){ this.connect = connect; }
 
     @Override
     public void create() {
@@ -43,11 +43,12 @@ public class PersonImplementation implements Person {
 
     @Override
     public void delete() {
-        String checkQuery = "SELECT * FROM accounts WHERE person_id_fk = " + personId.intValue();
+        String checkQuery = "SELECT COUNT(*) AS cnt FROM accounts WHERE person_id_fk = " + personId.intValue();
         try{
             Statement checkIdStmt = connect.createStatement();
             ResultSet checkRes = checkIdStmt.executeQuery(checkQuery);
-            if(checkRes.next()){
+            checkRes.next();
+            if(checkRes.getInt("cnt") != 0){
                 System.out.println("This record has a link in the table ACCOUNTS.\nDelete all related entries first.");
                 return;
             }

@@ -22,6 +22,8 @@ public class Main {
 
         Scanner in = new Scanner(System.in);
 
+
+
         try {
             Class.forName(JDBC_DRIVER);
 
@@ -50,7 +52,7 @@ public class Main {
                         case 2:                         //Выбран пункт меню для добавления записи в таблицу Accounts
                             System.out.println("Input person id, hwo is creating new account: ");
                             BigInteger persId = in.nextBigInteger();
-                            PersonImplementation pers = new PersonImplementation(conn);
+                            PersonImpl pers = new PersonImpl(conn);
                             if (pers.isPersonExist(persId)){
                                 pers.setPersonId(persId);
                                 addFieldAccount(pers);
@@ -78,7 +80,7 @@ public class Main {
                         case 2:                         //Выбран пункт меню для удаления записи из таблицы Accounts
                             System.out.println("Input person id, hwo is creating new account: ");
                             BigInteger persId = in.nextBigInteger();
-                            PersonImplementation pers = new PersonImplementation(conn);
+                            PersonImpl pers = new PersonImpl(conn);
                             if (pers.isPersonExist(persId)){
                                 pers.setPersonId(persId);
                                 deleteFieldAccount(pers);
@@ -106,7 +108,7 @@ public class Main {
                         case 2:                         //Выбран пункт меню для изменения записи в таблице Accounts
                             System.out.println("Input person id, hwo is creating new account: ");
                             BigInteger persId = in.nextBigInteger();
-                            PersonImplementation pers = new PersonImplementation(conn);
+                            PersonImpl pers = new PersonImpl(conn);
                             if (pers.isPersonExist(persId)){
                                 pers.setPersonId(persId);
                                 modifyFieldAccount(pers);
@@ -257,7 +259,7 @@ public class Main {
     public static void addFieldPerson() {
         Scanner in = new Scanner(System.in);
 
-        PersonImplementation insertPerson = new PersonImplementation(conn);
+        PersonImpl insertPerson = new PersonImpl(conn);
         insertPerson.setPersonId();
         System.out.print("Input your login: ");
         insertPerson.setLogin(in.nextLine());
@@ -274,10 +276,10 @@ public class Main {
         insertPerson.create();
     }
 
-    public static void addFieldAccount(PersonImplementation person){
+    public static void addFieldAccount(PersonImpl person){
         Scanner in = new Scanner(System.in);
 
-        AccountsImplementation insertAccount = new AccountsImplementation(conn);
+        AccountsImpl insertAccount = new AccountsImpl(conn);
         insertAccount.setAccountId();
         insertAccount.setPersonId(person.getPersonId());
         System.out.print("Input your account's number: ");
@@ -307,7 +309,7 @@ public class Main {
     public static void addFieldsBudgetType(){
         Scanner in = new Scanner(System.in);
 
-        BudgetTypeImplementation insertBudgetType = new BudgetTypeImplementation(conn);
+        BudgetTypeImpl insertBudgetType = new BudgetTypeImpl(conn);
         insertBudgetType.setBudgetTypeId();
 
         System.out.println("Choose: ");
@@ -350,7 +352,7 @@ public class Main {
     public static void addFieldPlanBudget(){
         Scanner in = new Scanner(System.in);
 
-        PlanBudgetImplementation insertPlanBudget = new PlanBudgetImplementation(conn);
+        PlanBudgetImpl insertPlanBudget = new PlanBudgetImpl(conn);
         insertPlanBudget.setPlanBudgetId();
         System.out.println("Select operation type: ");
         System.out.print("1 - Нал\n2 - Безнал\n");
@@ -364,7 +366,7 @@ public class Main {
             return;
         }
         System.out.println("Input budget type's ID: ");
-        BudgetTypeImplementation obj = new BudgetTypeImplementation(conn);
+        BudgetTypeImpl obj = new BudgetTypeImpl(conn);
         obj.showTable();
         int choice = in.nextInt();
         if (obj.isBudgetTypeExists(BigInteger.valueOf(choice))){
@@ -374,7 +376,7 @@ public class Main {
         System.out.print("Input description (optional): ");
         insertPlanBudget.setDescription(in.nextLine());
         System.out.print("Input account's ID: ");
-        AccountsImplementation objAcc = new AccountsImplementation(conn);
+        AccountsImpl objAcc = new AccountsImpl(conn);
         BigInteger checkAcc = in.nextBigInteger();
         if (objAcc.isAccountExists(checkAcc)){
             insertPlanBudget.setAccountId(checkAcc);
@@ -429,7 +431,7 @@ public class Main {
     public static void addFieldBudget() {
         Scanner in = new Scanner(System.in);
 
-        BudgetImplementation insertBudget = new BudgetImplementation(conn);
+        BudgetImpl insertBudget = new BudgetImpl(conn);
         insertBudget.setBudgetId();
         System.out.println("Select operation type: ");
         System.out.print("1 - Нал\n2 - Безнал\n");
@@ -443,7 +445,7 @@ public class Main {
             return;
         }
         System.out.println("Input budget type's ID: ");
-        BudgetTypeImplementation obj = new BudgetTypeImplementation(conn);
+        BudgetTypeImpl obj = new BudgetTypeImpl(conn);
         obj.showTable();
         int choice = in.nextInt();
         if (obj.isBudgetTypeExists(BigInteger.valueOf(choice))){
@@ -453,7 +455,7 @@ public class Main {
         System.out.print("Input description (optional): ");
         insertBudget.setDescription(in.nextLine());
         System.out.print("Input account's ID: ");
-        AccountsImplementation objAcc = new AccountsImplementation(conn);
+        AccountsImpl objAcc = new AccountsImpl(conn);
         BigInteger checkAcc = in.nextBigInteger();
         if (objAcc.isAccountExists(checkAcc)){
             insertBudget.setAccountId(checkAcc);
@@ -479,15 +481,15 @@ public class Main {
 
     public static void deleteFieldPerson(){
         Scanner in = new Scanner(System.in);
-        PersonImplementation objPersForDelete = new PersonImplementation(conn);
+        PersonImpl objPersForDelete = new PersonImpl(conn);
         System.out.print("Enter the Primary key of the user you want to delete: ");
         objPersForDelete.setPersonId(in.nextBigInteger());
         objPersForDelete.delete();
     }
 
-    public static void deleteFieldAccount(PersonImplementation pers){
+    public static void deleteFieldAccount(PersonImpl pers){
         Scanner in = new Scanner(System.in);
-        AccountsImplementation objAccountForDelete = new AccountsImplementation(conn);
+        AccountsImpl objAccountForDelete = new AccountsImpl(conn);
         objAccountForDelete.setPersonId(pers.getPersonId());
         System.out.print("Enter the account number that you want to delete: ");
         objAccountForDelete.setAccountNumber(in.nextLine());
@@ -496,7 +498,7 @@ public class Main {
 
     public static void deleteFieldBudgetType(){
         Scanner in = new Scanner(System.in);
-        BudgetTypeImplementation objBudgetTypeForDelete = new BudgetTypeImplementation(conn);
+        BudgetTypeImpl objBudgetTypeForDelete = new BudgetTypeImpl(conn);
         System.out.print("Enter the Primary key of the budget type you want to delete: ");
         objBudgetTypeForDelete.setBudgetTypeId(in.nextBigInteger());
         objBudgetTypeForDelete.delete();
@@ -504,7 +506,7 @@ public class Main {
 
     public static void deleteFieldPlanBudget() {
         Scanner in = new Scanner(System.in);
-        PlanBudgetImplementation objPlanBudgetForDelete = new PlanBudgetImplementation(conn);
+        PlanBudgetImpl objPlanBudgetForDelete = new PlanBudgetImpl(conn);
         System.out.print("Enter the Primary key of the plan budget you want to delete: ");
         objPlanBudgetForDelete.setPlanBudgetId(in.nextBigInteger());
         objPlanBudgetForDelete.delete();
@@ -512,7 +514,7 @@ public class Main {
 
     public static void deleteFieldBudget() {
         Scanner in = new Scanner(System.in);
-        BudgetImplementation objBudgetForDelete = new BudgetImplementation(conn);
+        BudgetImpl objBudgetForDelete = new BudgetImpl(conn);
         System.out.print("Enter the Primary key of the budget you want to delete: ");
         objBudgetForDelete.setBudgetId(in.nextBigInteger());
         objBudgetForDelete.delete();
@@ -521,7 +523,7 @@ public class Main {
     public static void modifyFieldPerson(){
         Scanner in = new Scanner(System.in);
 
-        PersonImplementation objPersForUpdate = new PersonImplementation(conn);
+        PersonImpl objPersForUpdate = new PersonImpl(conn);
 
         System.out.println("Enter the Primary key of the user you want to update: ");
         int personIdForUpdate = in.nextInt();
@@ -558,10 +560,10 @@ public class Main {
         }
     }
 
-    public static void modifyFieldAccount(PersonImplementation pers){
+    public static void modifyFieldAccount(PersonImpl pers){
         Scanner in = new Scanner(System.in);
 
-        AccountsImplementation objAccountForUpdate = new AccountsImplementation(conn);
+        AccountsImpl objAccountForUpdate = new AccountsImpl(conn);
 
         System.out.println("Enter the account's number that you want to update: ");
         String accNumForUpdate = in.nextLine();
@@ -593,7 +595,7 @@ public class Main {
     public static void modifyFieldBudgetType(){
         Scanner in = new Scanner(System.in);
 
-        BudgetTypeImplementation objBudgTypeForUpdate = new BudgetTypeImplementation(conn);
+        BudgetTypeImpl objBudgTypeForUpdate = new BudgetTypeImpl(conn);
 
         System.out.println("Enter the Primary key of the budget type you want to update: ");
         int budgetTypeIdForUpdate = in.nextInt();
@@ -642,7 +644,7 @@ public class Main {
     public static void modifyFieldPlanBudget() {
         Scanner in = new Scanner(System.in);
 
-        PlanBudgetImplementation objPlanBudgForUpdate = new PlanBudgetImplementation(conn);
+        PlanBudgetImpl objPlanBudgForUpdate = new PlanBudgetImpl(conn);
 
         System.out.println("Enter the Primary key of the plan budget you want to update: ");
         BigInteger planBudgetIdForUpdate = in.nextBigInteger();
@@ -669,7 +671,7 @@ public class Main {
                 newOperationType = null;
             }
             System.out.println("Input new budget type's ID: ");
-            BudgetTypeImplementation obj = new BudgetTypeImplementation(conn);
+            BudgetTypeImpl obj = new BudgetTypeImpl(conn);
             obj.showTable();
             int choice = in.nextInt();
             if (obj.isBudgetTypeExists(BigInteger.valueOf(choice))){
@@ -681,7 +683,7 @@ public class Main {
             System.out.print("Input new description (optional): ");
             newDescription = in.nextLine();
             System.out.print("Input new account's ID: ");
-            AccountsImplementation objAcc = new AccountsImplementation(conn);
+            AccountsImpl objAcc = new AccountsImpl(conn);
             BigInteger checkAcc = in.nextBigInteger();
             if (objAcc.isAccountExists(checkAcc)){
                 newAccountId = checkAcc;
@@ -746,7 +748,7 @@ public class Main {
     public static void modifyFieldBudget() {
         Scanner in = new Scanner(System.in);
 
-        BudgetImplementation objBudgForUpdate = new BudgetImplementation(conn);
+        BudgetImpl objBudgForUpdate = new BudgetImpl(conn);
 
         System.out.println("Enter the Primary key of the budget you want to update: ");
         BigInteger budgetIdForUpdate = in.nextBigInteger();
@@ -774,7 +776,7 @@ public class Main {
                 newOperationType = null;
             }
             System.out.println("Input new budget type's ID: ");
-            BudgetTypeImplementation obj = new BudgetTypeImplementation(conn);
+            BudgetTypeImpl obj = new BudgetTypeImpl(conn);
             obj.showTable();
             int choice = in.nextInt();
             if (obj.isBudgetTypeExists(BigInteger.valueOf(choice))){
@@ -786,7 +788,7 @@ public class Main {
             System.out.print("Input new description (optional): ");
             newDescription = in.nextLine();
             System.out.print("Input new account's ID: ");
-            AccountsImplementation objAcc = new AccountsImplementation(conn);
+            AccountsImpl objAcc = new AccountsImpl(conn);
             BigInteger checkAcc = in.nextBigInteger();
             if (objAcc.isAccountExists(checkAcc)){
                 newAccountId = checkAcc;
@@ -913,27 +915,27 @@ public class Main {
     }
 
     public static void showFieldsPerson() {
-        PersonImplementation objPers = new PersonImplementation(conn);
+        PersonImpl objPers = new PersonImpl(conn);
         objPers.showTable();
     }
 
     public static void showFieldsAccounts() {
-        AccountsImplementation objAccount = new AccountsImplementation(conn);
+        AccountsImpl objAccount = new AccountsImpl(conn);
         objAccount.showTable();
     }
 
     public static void showFieldsBudgetType() {
-        BudgetTypeImplementation objBudgetType = new BudgetTypeImplementation(conn);
+        BudgetTypeImpl objBudgetType = new BudgetTypeImpl(conn);
         objBudgetType.showTable();
     }
 
     public static void showFieldsPlanBudget() {
-        PlanBudgetImplementation objPlanBudget = new PlanBudgetImplementation(conn);
+        PlanBudgetImpl objPlanBudget = new PlanBudgetImpl(conn);
         objPlanBudget.showTable();
     }
 
     public static void showFieldsBudget() {
-        BudgetImplementation objBudget = new BudgetImplementation(conn);
+        BudgetImpl objBudget = new BudgetImpl(conn);
         objBudget.showTable();
     }
 
