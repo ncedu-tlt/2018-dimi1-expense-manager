@@ -25,5 +25,5 @@ public interface Entity {
     void create();
     void delete();
     void update();
-    void load(BigInteger id);
+    boolean load(BigInteger id);
 }

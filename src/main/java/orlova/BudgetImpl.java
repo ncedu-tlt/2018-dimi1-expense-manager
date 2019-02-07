@@ -77,27 +77,37 @@ public class BudgetImpl implements Budget {
     }
 
     @Override
-    public void load(BigInteger id) {
-        String dataBudget = "SELECT * FROM budget WHERE budget_id = " + id.intValue();
-        try {
-            Statement stmtBudg = connect.createStatement();
-            ResultSet resultBudg = stmtBudg.executeQuery(dataBudget);
-            while (resultBudg.next()){
-                operationType = resultBudg.getString("operation_type");
-                budgetTypeId = BigInteger.valueOf(resultBudg.getInt("budget_type_id_fk"));
-                description = resultBudg.getString("description");
-                accountId = BigInteger.valueOf(resultBudg.getInt("account_id_fk"));
-                operationDate = resultBudg.getDate("operation_date");
-                chargeValue = resultBudg.getDouble("charge_value");
+    public boolean load(BigInteger id) {
+        try{
+            Statement stmtCheckRecord = connect.createStatement();
+            ResultSet resultCheckBudget = stmtCheckRecord.executeQuery("SELECT COUNT(*) AS cnt FROM budget WHERE budget_id = " + id.intValue());
+            resultCheckBudget.next();
+            if (resultCheckBudget.getInt("cnt") != 0){
+                String dataBudget = "SELECT * FROM budget WHERE budget_id = " + id.intValue();
+                Statement stmtBudg = connect.createStatement();
+                ResultSet resultBudg = stmtBudg.executeQuery(dataBudget);
+                while (resultBudg.next()){
+                    budgetId = id;
+                    operationType = resultBudg.getString("operation_type");
+                    budgetTypeId = BigInteger.valueOf(resultBudg.getInt("budget_type_id_fk"));
+                    description = resultBudg.getString("description");
+                    accountId = BigInteger.valueOf(resultBudg.getInt("account_id_fk"));
+                    operationDate = resultBudg.getDate("operation_date");
+                    chargeValue = resultBudg.getDouble("charge_value");
 
-                System.out.println(String.format("Id: %5d| operation type: %12s| budgetTypeId: %5d| description: %45s| " +
-                                "accountId: %5d| operation date: %10tD| charge value: %7.2f",
-                        id, operationType, budgetTypeId, description, accountId, operationDate, chargeValue));
+                    System.out.println(String.format("Id: %5d| operation type: %12s| budgetTypeId: %5d| description: %45s| " +
+                                    "accountId: %5d| operation date: %10tD| charge value: %7.2f",
+                            id, operationType, budgetTypeId, description, accountId, operationDate, chargeValue));
+                }
+                return true;
+            } else {
+                System.out.println("Budget with the specified ID is not in the table BUDGET");
             }
         } catch (SQLException e) {
             System.out.println("An error occured while displaying information from the database table BUDGET");
             e.printStackTrace();
         }
+        return false;
     }
 
     public void showTable() {
@@ -125,24 +135,6 @@ public class BudgetImpl implements Budget {
             System.out.println("An error occured while displaying information from the database table BUDGET");
             e.printStackTrace();
         }
-    }
-
-    public boolean isBudgetExists(BigInteger id) {
-        try {
-            PreparedStatement checkRecord = connect.prepareStatement("SELECT * FROM budget WHERE budget_id = ?");
-            checkRecord.setInt(1, id.intValue());
-
-            try (ResultSet checkRes = checkRecord.executeQuery()) {
-                if (checkRes.next()){
-                    return true;
-                } else {
-                    System.out.println("Budget with the specified ID is not in the table BUDGET");
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return false;
     }
 
     @Override

@@ -85,25 +85,35 @@ public class BudgetTypeImpl implements BudgetType {
     }
 
     @Override
-    public void load(BigInteger id) {
-        String dataBudgetType = "SELECT * FROM budget_type WHERE budget_type_id = " + id.intValue();
-        try {
-            Statement stmtBudgType = connect.createStatement();
-            ResultSet resultBudgType = stmtBudgType.executeQuery(dataBudgetType);
-            while (resultBudgType.next()){
-                groupId = BigInteger.valueOf(resultBudgType.getInt("group_id"));
-                name = resultBudgType.getString("name");
-                isRequired = resultBudgType.getBoolean("required");
-                checkMax = resultBudgType.getDouble("check_max");
+    public boolean load(BigInteger id) {
+        try{
+            Statement stmtCheckRecord = connect.createStatement();
+            ResultSet resultCheckBudgetType = stmtCheckRecord.executeQuery("SELECT COUNT(*) AS cnt FROM budget_type WHERE budget_type_id = " + id.intValue());
+            resultCheckBudgetType.next();
+            if (resultCheckBudgetType.getInt("cnt") != 0){
+                String dataBudgetType = "SELECT * FROM budget_type WHERE budget_type_id = " + id.intValue();
+                Statement stmtBudgType = connect.createStatement();
+                ResultSet resultBudgType = stmtBudgType.executeQuery(dataBudgetType);
+                while (resultBudgType.next()){
+                    budgetTypeId = id;
+                    groupId = BigInteger.valueOf(resultBudgType.getInt("group_id"));
+                    name = resultBudgType.getString("name");
+                    isRequired = resultBudgType.getBoolean("required");
+                    checkMax = resultBudgType.getDouble("check_max");
 
-                System.out.println(String.format("BudgetTypeId: %5d| groupId: %15d| name: %15s| " +
-                                "required: %5b| check_max: %10f.2",
-                        id, groupId, name, isRequired, checkMax));
+                    System.out.println(String.format("BudgetTypeId: %5d| groupId: %15d| name: %15s| " +
+                                    "required: %5b| check_max: %10f.2",
+                            id, groupId, name, isRequired, checkMax));
+                }
+                return true;
+            } else {
+                System.out.println("Budget type with the specified ID is not in the table BUDGET_TYPE");
             }
         } catch (SQLException e) {
             System.out.println("An error occured while displaying information from the database table BUDGET_TYPE");
             e.printStackTrace();
         }
+        return false;
     }
 
     public void showTable(){
@@ -174,16 +184,15 @@ public class BudgetTypeImpl implements BudgetType {
     }
 
     public boolean isBudgetTypeExists(BigInteger id){
+        String checkBudgetTypeId = "SELECT COUNT(*) AS cnt FROM budget_type WHERE budget_type_id = " + id.intValue();
         try {
-            PreparedStatement checkRecord = connect.prepareStatement("SELECT * FROM budget_type WHERE budget_type_id = ?");
-            checkRecord.setInt(1, id.intValue());
-
-            try (ResultSet checkRes = checkRecord.executeQuery()) {
-                if (checkRes.next()){
-                    return true;
-                } else {
-                    System.out.println("Budget type with the specified ID is not in the table BUDGET_TYPE");
-                }
+            Statement stmtcheckRecord = connect.createStatement();
+            ResultSet checkRes = stmtcheckRecord.executeQuery(checkBudgetTypeId);
+            checkRes.next();
+            if(checkRes.getInt("cnt") != 0){
+                return true;
+            } else {
+                System.out.println("Budget type with the specified ID is not in the table BUDGET_TYPE");
             }
         } catch (SQLException e) {
             e.printStackTrace();

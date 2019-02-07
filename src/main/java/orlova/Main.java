@@ -43,13 +43,13 @@ public class Main {
             int choiceValue;
             int choiceReport;
             switch (choice) {
-                case 1:                         //Выбран пункт главного меню "Добавить"
-                    choiceTable = menuTable();      //Меню выбора таблиц
+                case 1:                         //"Добавить"
+                    choiceTable = menuTable();
                     switch (choiceTable){
-                        case 1:                         //Выбран пункт меню для добавления записи в таблицу Person
+                        case 1:                         //Person
                             addFieldPerson();
                             break;
-                        case 2:                         //Выбран пункт меню для добавления записи в таблицу Accounts
+                        case 2:                         //Accounts
                             System.out.println("Input person id, hwo is creating new account: ");
                             BigInteger persId = in.nextBigInteger();
                             PersonImpl pers = new PersonImpl(conn);
@@ -58,26 +58,26 @@ public class Main {
                                 addFieldAccount(pers);
                             }
                             break;
-                        case 3:                         //Выбран пункт меню для добавления записи в таблицу Budget
+                        case 3:                         //Budget
                             addFieldBudget();
                             break;
-                        case 4:                         //Выбран пункт меню для добавления записи в таблицу BudgetType
+                        case 4:                         //BudgetType
                             addFieldsBudgetType();
                             break;
-                        case 5:                         //Выбран пункт меню для добавления записи в таблицу PlanBudget
+                        case 5:                         //PlanBudget
                             addFieldPlanBudget();
                             break;
-                        case 0:                         //Выбран пункт "Назад"
+                        case 0:
                             break;
                     }
                     break;
-                case 2:                         //Выбран пункт главного меню "Удалить"
-                    choiceTable = menuTable();      //Меню выбора таблиц
+                case 2:                         //"Удалить"
+                    choiceTable = menuTable();
                     switch (choiceTable){
-                        case 1:                         //Выбран пункт меню для удаления записи из таблицы Person
+                        case 1:                         //Person
                             deleteFieldPerson();
                             break;
-                        case 2:                         //Выбран пункт меню для удаления записи из таблицы Accounts
+                        case 2:                         //Accounts
                             System.out.println("Input person id, hwo is working with account: ");
                             BigInteger persId = in.nextBigInteger();
                             PersonImpl pers = new PersonImpl(conn);
@@ -86,26 +86,26 @@ public class Main {
                                 deleteFieldAccount(pers);
                             }
                             break;
-                        case 3:                         //Выбран пункт меню для удаления записи из таблицы Budget
+                        case 3:                         //Budget
                             deleteFieldBudget();
                             break;
-                        case 4:                         //Выбран пункт меню для удаления записи из таблицы BudgetType
+                        case 4:                         //BudgetType
                             deleteFieldBudgetType();
                             break;
-                        case 5:                         //Выбран пункт меню для удаления записи из таблицы PlanBudget
+                        case 5:                         //PlanBudget
                             deleteFieldPlanBudget();
                             break;
-                        case 0:                         //Выбран пункт "Назад"
+                        case 0:
                             break;
                     }
                     break;
-                case 3:                         //Выбран пункт главного меню "Изменить"
-                    choiceTable = menuTable();      //Меню выбора таблиц
+                case 3:                         //"Изменить"
+                    choiceTable = menuTable();
                     switch (choiceTable){
-                        case 1:                         //Выбран пункт меню для изменения записи в таблице Person
+                        case 1:                         //Person
                             modifyFieldPerson();
                             break;
-                        case 2:                         //Выбран пункт меню для изменения записи в таблице Accounts
+                        case 2:                         //Accounts
                             System.out.println("Input person id, hwo is working with account: ");
                             BigInteger persId = in.nextBigInteger();
                             PersonImpl pers = new PersonImpl(conn);
@@ -114,66 +114,66 @@ public class Main {
                                 modifyFieldAccount(pers);
                             }
                             break;
-                        case 3:                         //Выбран пункт меню для изменения записи в таблице Budget
+                        case 3:                         //Budget
                             modifyFieldBudget();
                             break;
-                        case 4:                         //Выбран пункт меню для изменения записи в таблице BudgetType
+                        case 4:                         //BudgetType
                             modifyFieldBudgetType();
                             break;
-                        case 5:                         //Выбран пункт меню для изменения записи в таблице PlanBudget
+                        case 5:                         //PlanBudget
                             modifyFieldPlanBudget();
                             break;
-                        case 0:                         //Выбран пункт "Назад"
+                        case 0:
                             break;
                     }
                     break;
-                case 4:                         //Выбран пункт главного меню "Вывод"
-                    choiceValue = menuChoice();     //Меню выбора репортов/таблиц
+                case 4:                         //"Вывод"
+                    choiceValue = menuChoice();
                     switch(choiceValue) {
-                        case 1:                         //Выбран пункт для отображения меню репортов
-                            choiceReport = menuReport();        //Меню выбора репортов
+                        case 1:                         //reports
+                            choiceReport = menuReport();
                             switch (choiceReport) {
-                                case 1:                             //Выбран пункт меню для отображения репорта 1
+                                case 1:                             //report1
                                     showReport1();
                                     break;
-                                case 2:                             //Выбран пункт меню для отображения репорта 2
+                                case 2:                             //report2
                                     break;
-                                case 3:                             //Выбран пункт меню для отображения репорта 3
+                                case 3:                             //report3
                                     break;
-                                case 0:                             //Выбран пункт "Назад"
+                                case 0:
                                     break;
                             }
                             break;
-                        case 2:                         //Выбран пункт меню для отображения меню таблиц
-                            choiceTable = menuTable();      //Меню выбора таблиц
+                        case 2:                         //tables
+                            choiceTable = menuTable();
                             switch (choiceTable){
-                                case 1:                         //Выбран пункт меню для отображения данных таблицы Person
+                                case 1:                         //Person
                                     showFieldsPerson();
                                     break;
-                                case 2:                         //Выбран пункт меню для отображения данных таблицы Accounts
+                                case 2:                         //Accounts
                                     showFieldsAccounts();
                                     break;
-                                case 3:                         //Выбран пункт меню для отображения данных таблицы Budget
+                                case 3:                         //Budget
                                     showFieldsBudget();
                                     break;
-                                case 4:                         //Выбран пункт меню для отображения данных таблицы BudgetType
+                                case 4:                         //BudgetType
                                     showFieldsBudgetType();
                                     break;
-                                case 5:                         //Выбран пункт меню для отображения данных таблицы PlanBudget
+                                case 5:                         //PlanBudget
                                     showFieldsPlanBudget();
                                     break;
-                                case 0:                         //Выбран пункт "Назад"
+                                case 0:
                                     break;
                             }
                             break;
-                        case 0:                         //Выбран пункт меню "Назад"
+                        case 0:
                             break;
                     }
                     break;
-                case 0:                             //Выбран пункт главного меню "Выход"
+                case 0:                             //"Выход"
                     System.exit(0);
                     break;
-                default:                            //Остальные случаи некорректного ввода
+                default:
                     System.out.println("Такого пункта нет, повторите ввод");
             }
         }
@@ -284,7 +284,8 @@ public class Main {
         insertAccount.setPersonId(person.getPersonId());
         System.out.print("Input your account's number: ");
         String checkAccNum = in.nextLine();
-        while(!insertAccount.isAccountNumberNotExist(checkAccNum, person.getPersonId())){
+        while(insertAccount.isAccountNumberExist(checkAccNum, person.getPersonId())){
+            System.out.println("You have account with such number.\nTry again: ");
             checkAccNum = in.nextLine();
         }
         insertAccount.setAccountNumber(checkAccNum);
@@ -483,8 +484,10 @@ public class Main {
         Scanner in = new Scanner(System.in);
         PersonImpl objPersForDelete = new PersonImpl(conn);
         System.out.print("Enter the Primary key of the user you want to delete: ");
-        objPersForDelete.setPersonId(in.nextBigInteger());
-        objPersForDelete.delete();
+        BigInteger checkIdPerson = in.nextBigInteger();
+        if(objPersForDelete.load(checkIdPerson)){
+            objPersForDelete.delete();
+        }
     }
 
     public static void deleteFieldAccount(PersonImpl pers){
@@ -492,32 +495,40 @@ public class Main {
         AccountsImpl objAccountForDelete = new AccountsImpl(conn);
         objAccountForDelete.setPersonId(pers.getPersonId());
         System.out.print("Enter the account number that you want to delete: ");
-        objAccountForDelete.setAccountId(in.nextBigInteger());
-        objAccountForDelete.delete();
+        BigInteger checkIdAcc = in.nextBigInteger();
+        if(objAccountForDelete.load(checkIdAcc)){
+            objAccountForDelete.delete();
+        }
     }
 
     public static void deleteFieldBudgetType(){
         Scanner in = new Scanner(System.in);
         BudgetTypeImpl objBudgetTypeForDelete = new BudgetTypeImpl(conn);
         System.out.print("Enter the Primary key of the budget type you want to delete: ");
-        objBudgetTypeForDelete.setBudgetTypeId(in.nextBigInteger());
-        objBudgetTypeForDelete.delete();
+        BigInteger checkIdBudgetType = in.nextBigInteger();
+        if(objBudgetTypeForDelete.load(checkIdBudgetType)){
+            objBudgetTypeForDelete.delete();
+        }
     }
 
     public static void deleteFieldPlanBudget() {
         Scanner in = new Scanner(System.in);
         PlanBudgetImpl objPlanBudgetForDelete = new PlanBudgetImpl(conn);
         System.out.print("Enter the Primary key of the plan budget you want to delete: ");
-        objPlanBudgetForDelete.setPlanBudgetId(in.nextBigInteger());
-        objPlanBudgetForDelete.delete();
+        BigInteger checkIdPlanBudget = in.nextBigInteger();
+        if(objPlanBudgetForDelete.load(checkIdPlanBudget)){
+            objPlanBudgetForDelete.delete();
+        }
     }
 
     public static void deleteFieldBudget() {
         Scanner in = new Scanner(System.in);
         BudgetImpl objBudgetForDelete = new BudgetImpl(conn);
         System.out.print("Enter the Primary key of the budget you want to delete: ");
-        objBudgetForDelete.setBudgetId(in.nextBigInteger());
-        objBudgetForDelete.delete();
+        BigInteger checkIdBudget = in.nextBigInteger();
+        if(objBudgetForDelete.load(checkIdBudget)){
+            objBudgetForDelete.delete();
+        }
     }
 
     public static void modifyFieldPerson(){
@@ -527,9 +538,7 @@ public class Main {
 
         System.out.println("Enter the Primary key of the user you want to update: ");
         int personIdForUpdate = in.nextInt();
-        if (objPersForUpdate.isPersonExist(BigInteger.valueOf(personIdForUpdate))){
-            objPersForUpdate.load(BigInteger.valueOf(personIdForUpdate));
-            objPersForUpdate.setPersonId(BigInteger.valueOf(personIdForUpdate));
+        if (objPersForUpdate.load(BigInteger.valueOf(personIdForUpdate))){
             System.out.print("Enter new field values if necessary\n" +
                     "(If you don't want to change the field, skip it)\n\n");
             String newLogin, newPass, newEmail, newPhone, newDescr;
@@ -567,9 +576,8 @@ public class Main {
 
         System.out.println("Enter the account's number that you want to update: ");
         String accNumForUpdate = in.nextLine();
-        if (!objAccountForUpdate.isAccountNumberNotExist(accNumForUpdate, pers.getPersonId())){
+        if (objAccountForUpdate.isAccountNumberExist(accNumForUpdate, pers.getPersonId())){
             objAccountForUpdate.load(objAccountForUpdate.findAccountId(accNumForUpdate, pers.getPersonId()));
-            objAccountForUpdate.setAccountId(objAccountForUpdate.findAccountId(accNumForUpdate, pers.getPersonId()));
             System.out.print("Enter new field values if necessary\n" +
                     "(If you don't want to change the field, skip it)\n\n");
             String newCurrency, newDescr;
@@ -599,9 +607,7 @@ public class Main {
 
         System.out.println("Enter the Primary key of the budget type you want to update: ");
         int budgetTypeIdForUpdate = in.nextInt();
-        if (objBudgTypeForUpdate.isBudgetTypeExists(BigInteger.valueOf(budgetTypeIdForUpdate))){
-            objBudgTypeForUpdate.load(BigInteger.valueOf(budgetTypeIdForUpdate));
-            objBudgTypeForUpdate.setBudgetTypeId(BigInteger.valueOf(budgetTypeIdForUpdate));
+        if (objBudgTypeForUpdate.load(BigInteger.valueOf(budgetTypeIdForUpdate))){
             System.out.print("Enter new field values if necessary\n" +
                     "(If you don't want to change the field, skip it)\n\n");
             BigInteger newGroupId = null;
@@ -648,9 +654,7 @@ public class Main {
 
         System.out.println("Enter the Primary key of the plan budget you want to update: ");
         BigInteger planBudgetIdForUpdate = in.nextBigInteger();
-        if (objPlanBudgForUpdate.isPlanBudgetExists(planBudgetIdForUpdate)){
-            objPlanBudgForUpdate.load(planBudgetIdForUpdate);
-            objPlanBudgForUpdate.setPlanBudgetId(planBudgetIdForUpdate);
+        if (objPlanBudgForUpdate.load(planBudgetIdForUpdate)){
             System.out.print("Enter new field values if necessary\n" +
                     "(If you don't want to change the field, skip it)\n\n");
             BigInteger newBudgetTypeId, newAccountId;
@@ -752,9 +756,7 @@ public class Main {
 
         System.out.println("Enter the Primary key of the budget you want to update: ");
         BigInteger budgetIdForUpdate = in.nextBigInteger();
-        if (objBudgForUpdate.isBudgetExists(budgetIdForUpdate)){
-            objBudgForUpdate.load(budgetIdForUpdate);
-            objBudgForUpdate.setBudgetId(budgetIdForUpdate);
+        if (objBudgForUpdate.load(budgetIdForUpdate)){
 
             System.out.print("Enter new field values if necessary\n" +
                     "(If you don't want to change the field, skip it)\n\n");

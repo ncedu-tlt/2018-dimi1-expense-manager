@@ -83,41 +83,50 @@ public class PersonImpl implements Person {
     }
 
     @Override
-    public void load(BigInteger id) {
-        String dataPerson = "SELECT * FROM person WHERE person_id = " + id.intValue();
-        try {
-            Statement stmtPers = connect.createStatement();
-            ResultSet resultPers = stmtPers.executeQuery(dataPerson);
-            while (resultPers.next()){
-                login = resultPers.getString("login");
-                pass = resultPers.getString("pass");
-                email = resultPers.getString("email");
-                description = resultPers.getString("description");
-                regDate = resultPers.getDate("reg_date");
-                phonenumber = resultPers.getString("phone_number");
+    public boolean load(BigInteger id) {
+        try{
+            Statement stmtCheckRecord = connect.createStatement();
+            ResultSet resultCheckPerson = stmtCheckRecord.executeQuery("SELECT COUNT(*) AS cnt FROM person WHERE person_id = " + id.intValue());
+            resultCheckPerson.next();
+            if (resultCheckPerson.getInt("cnt") != 0){
+                String dataPerson = "SELECT * FROM person WHERE person_id = " + id.intValue();
+                Statement stmtPers = connect.createStatement();
+                ResultSet resultPers = stmtPers.executeQuery(dataPerson);
+                while (resultPers.next()){
+                    personId = id;
+                    login = resultPers.getString("login");
+                    pass = resultPers.getString("pass");
+                    email = resultPers.getString("email");
+                    description = resultPers.getString("description");
+                    regDate = resultPers.getDate("reg_date");
+                    phonenumber = resultPers.getString("phone_number");
 
-                System.out.println(String.format("Id: %d| login: %s| pass: %s| email: %s| " +
-                        "phone: %s| registration date: %tD| description: %s",
-                        id, login, pass, email, phonenumber, regDate, description));
+                    System.out.println(String.format("Id: %d| login: %s| pass: %s| email: %s| " +
+                                    "phone: %s| registration date: %tD| description: %s",
+                            id, login, pass, email, phonenumber, regDate, description));
+                }
+                return true;
+            } else {
+                System.out.println("Record with the specified ID is not in the table PERSON");
             }
         } catch (SQLException e) {
             System.out.println("An error occured while displaying information from the database table PERSON");
             e.printStackTrace();
         }
+        return false;
     }
 
     public boolean isPersonExist(BigInteger id){
+        String checkPersonId = "SELECT COUNT(*) AS cnt FROM person WHERE person_id = " + id;
         try {
-            PreparedStatement checkRecord = connect.prepareStatement("SELECT * FROM person WHERE person_id = ?");
-            checkRecord.setInt(1, id.intValue());
-
-            try (ResultSet checkRes = checkRecord.executeQuery()) {
-                if (checkRes.next()){
+            Statement stmtCheckRecord = connect.createStatement();
+            ResultSet checkRes = stmtCheckRecord.executeQuery(checkPersonId);
+            checkRes.next();
+                if (checkRes.getInt("cnt") != 0){
                     return true;
                 } else {
                     System.out.println("Record with the specified ID is not in the table PERSON");
                 }
-            }
         } catch (SQLException e) {
             e.printStackTrace();
         }

@@ -90,33 +90,44 @@ public class PlanBudgetImpl implements PlanBudget {
     }
 
     @Override
-    public void load(BigInteger id) {
-        String dataPerson = "SELECT * FROM plan_budget WHERE plan_budget_id = " + id.intValue();
+    public boolean load(BigInteger id) {
         try {
-            Statement stmtPlanBudg = connect.createStatement();
-            ResultSet resultPlanBudget = stmtPlanBudg.executeQuery(dataPerson);
-            while (resultPlanBudget.next()){
-                operationType = resultPlanBudget.getString("operation_type");
-                budgetTypeId = BigInteger.valueOf(resultPlanBudget.getInt("budget_type_id_fk"));
-                description = resultPlanBudget.getString("description");
-                accountId = BigInteger.valueOf(resultPlanBudget.getInt("account_id_fk"));
-                operationDate = resultPlanBudget.getDate("operation_date");
-                chargeValue = resultPlanBudget.getDouble("charge_value");
-                regularMask = resultPlanBudget.getString("regular_mask");
-                repeatCount = resultPlanBudget.getInt("repeat_count");
-                startDate = resultPlanBudget.getDate("start_date");
-                endDate = resultPlanBudget.getDate("end_date");
+            Statement stmtCheckRecord = connect.createStatement();
+            ResultSet resultCheckPlanBudget = stmtCheckRecord.executeQuery("SELECT COUNT(*) AS cnt " +
+                    "FROM plan_budget WHERE plan_budget_id = " + id.intValue());
+            resultCheckPlanBudget.next();
+            if (resultCheckPlanBudget.getInt("cnt") != 0){
+                String dataPerson = "SELECT * FROM plan_budget WHERE plan_budget_id = " + id.intValue();
+                Statement stmtPlanBudg = connect.createStatement();
+                ResultSet resultPlanBudget = stmtPlanBudg.executeQuery(dataPerson);
+                while (resultPlanBudget.next()){
+                    planBudgetId = id;
+                    operationType = resultPlanBudget.getString("operation_type");
+                    budgetTypeId = BigInteger.valueOf(resultPlanBudget.getInt("budget_type_id_fk"));
+                    description = resultPlanBudget.getString("description");
+                    accountId = BigInteger.valueOf(resultPlanBudget.getInt("account_id_fk"));
+                    operationDate = resultPlanBudget.getDate("operation_date");
+                    chargeValue = resultPlanBudget.getDouble("charge_value");
+                    regularMask = resultPlanBudget.getString("regular_mask");
+                    repeatCount = resultPlanBudget.getInt("repeat_count");
+                    startDate = resultPlanBudget.getDate("start_date");
+                    endDate = resultPlanBudget.getDate("end_date");
 
-                System.out.println(String.format("Id: %5d| operation type: %12s| budgetTypeId: %5d| description: %3s| " +
-                                "accountId: %5d| operation date: %10tD| charge value: %7.2f| regular mask: %20s| " +
-                                "repeat count: %4d| start date: %10tD| end date: %10td",
-                        id, operationType, budgetTypeId, description, accountId, operationDate, chargeValue,
-                        regularMask, repeatCount, startDate, endDate));
+                    System.out.println(String.format("Id: %5d| operation type: %12s| budgetTypeId: %5d| description: %3s| " +
+                                    "accountId: %5d| operation date: %10tD| charge value: %7.2f| regular mask: %20s| " +
+                                    "repeat count: %4d| start date: %10tD| end date: %10td",
+                            id, operationType, budgetTypeId, description, accountId, operationDate, chargeValue,
+                            regularMask, repeatCount, startDate, endDate));
+                }
+                return true;
+            } else {
+                System.out.println("Plan budget with the specified ID is not in the table PLAN_BUDGET");
             }
         } catch (SQLException e) {
             System.out.println("An error occured while displaying information from the database table PLAN_BUDGET");
             e.printStackTrace();
         }
+        return false;
     }
 
     public void showTable(){
@@ -149,24 +160,6 @@ public class PlanBudgetImpl implements PlanBudget {
             System.out.println("An error occured while displaying information from the database table PLAN BUDGET");
             e.printStackTrace();
         }
-    }
-
-    public boolean isPlanBudgetExists(BigInteger id) {
-        try {
-            PreparedStatement checkRecord = connect.prepareStatement("SELECT * FROM plan_budget WHERE plan_budget_id = ?");
-            checkRecord.setInt(1, id.intValue());
-
-            try (ResultSet checkRes = checkRecord.executeQuery()) {
-                if (checkRes.next()){
-                    return true;
-                } else {
-                    System.out.println("Plan budget with the specified ID is not in the table PLAN_BUDGET");
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return false;
     }
 
     @Override

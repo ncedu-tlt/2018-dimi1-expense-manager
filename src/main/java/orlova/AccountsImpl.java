@@ -83,57 +83,69 @@ public class AccountsImpl implements Accounts {
     }
 
     @Override
-    public void load(BigInteger id) {
-        String dataAcc = "SELECT * FROM accounts WHERE account_id = " + id.intValue();
-        try {
-            Statement stmtAcc = connect.createStatement();
-            ResultSet resultAcc = stmtAcc.executeQuery(dataAcc);
-            while (resultAcc.next()){
-                accountNumber = resultAcc.getString("account_number");
-                personId = BigInteger.valueOf(resultAcc.getInt("person_id_fk"));
-                currency = resultAcc.getString("currency");
-                balance = resultAcc.getDouble("balance");
-                description = resultAcc.getString("description");
-                System.out.println(String.format("accountId: %d| personId: %d| currency: %s| " +
-                                "balance: %.2f| description: %s|",
-                        id, personId, currency, balance, description));
+    public boolean load(BigInteger id) {
+        try{
+            Statement stmtCheckRecord = connect.createStatement();
+            ResultSet resultCheckAcc = stmtCheckRecord.executeQuery("SELECT COUNT(*) AS cnt FROM accounts WHERE account_id = " + id.intValue());
+            resultCheckAcc.next();
+            if (resultCheckAcc.getInt("cnt") != 0){
+                String dataAcc = "SELECT * FROM accounts WHERE account_id = " + id.intValue();
+                Statement stmtAcc = connect.createStatement();
+                ResultSet resultAcc = stmtAcc.executeQuery(dataAcc);
+                while (resultAcc.next()){
+                    accountId = id;
+                    accountNumber = resultAcc.getString("account_number");
+                    personId = BigInteger.valueOf(resultAcc.getInt("person_id_fk"));
+                    currency = resultAcc.getString("currency");
+                    balance = resultAcc.getDouble("balance");
+                    description = resultAcc.getString("description");
+
+                    System.out.println(String.format("accountId: %d| personId: %d| currency: %s| " +
+                                    "balance: %.2f| description: %s|",
+                            id, personId, currency, balance, description));
+                }
+                return true;
+            } else {
+                System.out.println("Account with the specified ID is not in the table ACCOUNTS");
             }
         } catch (SQLException e) {
             System.out.println("An error occured while displaying information from the database table ACCOUNTS");
             e.printStackTrace();
         }
+        return false;
     }
 
-    public boolean isAccountNumberNotExist(String accNum, BigInteger persId) {
+    public boolean isAccountNumberExist(String accNum, BigInteger persId) {
         try {
-            PreparedStatement checkRecord = connect.prepareStatement("SELECT * FROM accounts " +
+            PreparedStatement checkRecord = connect.prepareStatement("SELECT COUNT(*) AS cnt FROM accounts " +
                     "WHERE account_number = ? AND person_id_fk = ?");
             checkRecord.setString(1, accNum);
             checkRecord.setInt(2, persId.intValue());
 
             try (ResultSet checkRes = checkRecord.executeQuery()) {
-                if (checkRes.next()) {
-                    System.out.println("This number is already used for another account.\nTry again: ");
-                    return false;
+                checkRes.next();
+                if (checkRes.getInt("cnt") != 0) {
+                    return true;
+                } else {
+                    System.out.println("You haven't got account with such id");
                 }
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return true;
+        return false;
     }
 
     public boolean isAccountExists(BigInteger id) {
+        String checkAccountId = "SELECT COUNT(*) AS cnt FROM accounts WHERE account_id = " + id.intValue();
         try {
-            PreparedStatement checkRecord = connect.prepareStatement("SELECT * FROM accounts WHERE account_id = ?");
-            checkRecord.setInt(1, id.intValue());
-
-            try (ResultSet checkRes = checkRecord.executeQuery()) {
-                if (checkRes.next()) {
-                    return true;
-                } else {
-                    System.out.println("Account with the specified ID is not in the table ACCOUNTS");
-                }
+            Statement stmtCheckRecord = connect.createStatement();
+            ResultSet checkRes = stmtCheckRecord.executeQuery(checkAccountId);
+            checkRes.next();
+            if(checkRes.getInt("cnt") != 0){
+                return true;
+            } else {
+                System.out.println("Account with the specified ID is not in the table ACCOUNTS");
             }
         } catch (SQLException e) {
             e.printStackTrace();
