@@ -44,36 +44,23 @@ public class BudgetTypeImpl implements BudgetType {
 
     @Override
     public void delete() {
-        try{//TODO сократить повторяющийся код
-            //TODO заменить запрос на COUNT()
-            String checkQuery = "SELECT * FROM budget_type WHERE group_id = " + budgetTypeId.intValue();
-            Statement checkIdStmt = connect.createStatement();
-            ResultSet checkRes = checkIdStmt.executeQuery(checkQuery);
-            if(checkRes.next()){
-                System.out.println("This record is the parent of other entries.\nDelete all related entries first.");
-                return;
+        String checkQuery = "SELECT COUNT(*) AS cnt FROM budget_type WHERE group_id = " + budgetTypeId.intValue();
+        String checkPlanBudg = "SELECT COUNT(*) AS cnt FROM plan_budget WHERE budget_type_id_fk = " + budgetTypeId.intValue();
+        String checkBudg = "SELECT COUNT(*) AS cnt FROM budget WHERE budget_type_id_fk = " + budgetTypeId.intValue();
+        DataBaseWork check = new DataBaseWork(connect);
+        if(check.checkExist(checkQuery)!=0 || check.checkExist(checkPlanBudg)!=0 ||
+                check.checkExist(checkBudg)!=0){
+            System.out.println("This record has a link in the other table(s).\nDelete all related entries first.");
+            return;
+        } else{
+            try{
+                String deletBudgetType = "DELETE FROM budget_type WHERE budget_type_id = " + budgetTypeId.intValue();
+                Statement stmtDelBudgetType = connect.createStatement();
+                stmtDelBudgetType.executeUpdate(deletBudgetType);
+            } catch(SQLException e) {
+                System.out.println("An error occured while deleting a record from the database table BUDGET_TYPE");
+                e.printStackTrace();
             }
-            String checkPlanBudg = "SELECT * FROM plan_budget WHERE budget_type_id_fk = " + budgetTypeId.intValue();
-            Statement checkPBStmt = connect.createStatement();
-            ResultSet checkPBRes = checkPBStmt.executeQuery(checkPlanBudg);
-            if(checkPBRes.next()){
-                System.out.println("This record has a link in the table PLAN_BUDGET.\nDelete all related entries first.");
-                return;
-            }
-            String checkBudg = "SELECT * FROM budget WHERE budget_type_id_fk = " + budgetTypeId.intValue();
-            Statement checkBStmt = connect.createStatement();
-            ResultSet checkBRes = checkBStmt.executeQuery(checkBudg);
-            if(checkBRes.next()){
-                System.out.println("This record has a link in the table BUDGET.\nDelete all related entries first.");
-                return;
-            }
-            String deletBudgetType = "DELETE FROM budget_type WHERE budget_type_id = " + budgetTypeId.intValue();
-            Statement stmtDelBudgetType = connect.createStatement();
-            stmtDelBudgetType.executeUpdate(deletBudgetType);
-
-        } catch(SQLException e) {
-            System.out.println("An error occured while deleting a record from the database table BUDGET_TYPE");
-            e.printStackTrace();
         }
     }
 

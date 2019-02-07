@@ -42,29 +42,23 @@ public class AccountsImpl implements Accounts {
 
     @Override
     public void delete(){
-        try{
-            String checkBudget = "SELECT * FROM budget WHERE account_id_fk = " + accountId.intValue();
-            Statement checkBudgIdStmt = connect.createStatement();
-            ResultSet checkBudgRes = checkBudgIdStmt.executeQuery(checkBudget);
-            if(checkBudgRes.next()){
-                System.out.println("This record has a link in the table BUDGET.\nDelete all related entries first.");
+            String checkBudget = "SELECT COUNT(*) AS cnt FROM budget WHERE account_id_fk = " + accountId.intValue();
+            String checkPlanBudg = "SELECT COUNT(*) AS cnt FROM budget WHERE account_id_fk = " + accountId.intValue();
+            DataBaseWork check = new DataBaseWork(connect);
+            if(check.checkExist(checkBudget)!=0 || check.checkExist(checkPlanBudg)!=0){
+                System.out.println("This record has a link in the other table(s).\nDelete all related entries first.");
                 return;
+            } else{
+                try{
+                    String deletAccount = "DELETE FROM accounts WHERE account_number = " +
+                            accountNumber + " AND person_id_fk = " + personId.intValue();
+                    Statement stmtDelPers = connect.createStatement();
+                    stmtDelPers.executeUpdate(deletAccount);
+                } catch(SQLException e) {
+                    System.out.println("An error occured while deleting a record from the database table ACCOUNTS");
+                    e.printStackTrace();
+                }
             }
-            String checkPlanBudg = "SELECT * FROM budget WHERE account_id_fk = " + accountId.intValue();
-            Statement checkPBIdStmt = connect.createStatement();
-            ResultSet checkPBRes = checkPBIdStmt.executeQuery(checkPlanBudg);
-            if(checkPBRes.next()){
-                System.out.println("This record has a link in the table PLAN_BUDGET.\nDelete all related entries first.");
-                return;
-            }
-            String deletAccount = "DELETE FROM accounts WHERE account_number = " +
-                    accountNumber + " AND person_id_fk = " + personId.intValue();
-            Statement stmtDelPers = connect.createStatement();
-            stmtDelPers.executeUpdate(deletAccount);
-        } catch(SQLException e) {
-            System.out.println("An error occured while deleting a record from the database table ACCOUNTS");
-            e.printStackTrace();
-        }
     }
 
     @Override

@@ -43,20 +43,20 @@ public class PersonImpl implements Person {
 
     @Override
     public void delete() {
-        String checkQuery = "SELECT * FROM accounts WHERE person_id_fk = " + personId.intValue();
-        try{
-            Statement checkIdStmt = connect.createStatement();
-            ResultSet checkRes = checkIdStmt.executeQuery(checkQuery);
-            if(checkRes.next()){
-                System.out.println("This record has a link in the table ACCOUNTS.\nDelete all related entries first.");
-                return;
+        String checkQuery = "SELECT COUNT(*) AS cnt FROM accounts WHERE person_id_fk = " + personId.intValue();
+        DataBaseWork check = new DataBaseWork(connect);
+        if (check.checkExist(checkQuery) != 0) {
+            System.out.println("This record has a link in the other table(s).\nDelete all related entries first.");
+            return;
+        } else {
+            try {
+                String deletPerson = "DELETE FROM person WHERE person_id = " + personId.intValue();
+                Statement stmtDelPers = connect.createStatement();
+                stmtDelPers.executeUpdate(deletPerson);
+            } catch (SQLException e) {
+                System.out.println("An error occured while deleting a record from the database table PERSON");
+                e.printStackTrace();
             }
-            String deletPerson = "DELETE FROM person WHERE person_id = " + personId.intValue();
-            Statement stmtDelPers = connect.createStatement();
-            stmtDelPers.executeUpdate(deletPerson);
-        } catch(SQLException e) {
-            System.out.println("An error occured while deleting a record from the database table PERSON");
-            e.printStackTrace();
         }
     }
 
