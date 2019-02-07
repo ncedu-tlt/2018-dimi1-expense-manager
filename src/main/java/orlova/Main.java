@@ -78,7 +78,7 @@ public class Main {
                             deleteFieldPerson();
                             break;
                         case 2:                         //Выбран пункт меню для удаления записи из таблицы Accounts
-                            System.out.println("Input person id, hwo is creating new account: ");
+                            System.out.println("Input person id, hwo is working with account: ");
                             BigInteger persId = in.nextBigInteger();
                             PersonImpl pers = new PersonImpl(conn);
                             if (pers.isPersonExist(persId)){
@@ -106,7 +106,7 @@ public class Main {
                             modifyFieldPerson();
                             break;
                         case 2:                         //Выбран пункт меню для изменения записи в таблице Accounts
-                            System.out.println("Input person id, hwo is creating new account: ");
+                            System.out.println("Input person id, hwo is working with account: ");
                             BigInteger persId = in.nextBigInteger();
                             PersonImpl pers = new PersonImpl(conn);
                             if (pers.isPersonExist(persId)){
@@ -492,7 +492,7 @@ public class Main {
         AccountsImpl objAccountForDelete = new AccountsImpl(conn);
         objAccountForDelete.setPersonId(pers.getPersonId());
         System.out.print("Enter the account number that you want to delete: ");
-        objAccountForDelete.setAccountNumber(in.nextLine());
+        objAccountForDelete.setAccountId(in.nextBigInteger());
         objAccountForDelete.delete();
     }
 
