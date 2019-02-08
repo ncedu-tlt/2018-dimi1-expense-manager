@@ -43,7 +43,7 @@ public class AccountsImpl implements Accounts {
     @Override
     public void delete(){
             String checkBudget = "SELECT COUNT(*) AS cnt FROM budget WHERE account_id_fk = " + accountId.intValue();
-            String checkPlanBudg = "SELECT COUNT(*) AS cnt FROM budget WHERE account_id_fk = " + accountId.intValue();
+            String checkPlanBudg = "SELECT COUNT(*) AS cnt FROM plan_budget WHERE account_id_fk = " + accountId.intValue();
             DataBaseWork check = new DataBaseWork(connect);
             if(check.checkExist(checkBudget)!=0 || check.checkExist(checkPlanBudg)!=0){
                 System.out.println("This record has a link in the other table(s).\nDelete all related entries first.");
