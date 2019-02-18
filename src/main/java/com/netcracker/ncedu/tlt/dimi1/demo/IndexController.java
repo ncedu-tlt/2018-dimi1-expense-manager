@@ -18,7 +18,11 @@ public class IndexController {
 
     @RequestMapping("/")
     String home(ModelMap model) {
-        model.addAttribute("cats", jdbcTemplate.queryForList("select * from cats"));
+        model.addAttribute("persons", jdbcTemplate.queryForList("select * from person"));
+        model.addAttribute("accounts", jdbcTemplate.queryForList("select * from accounts"));
+        model.addAttribute("budget_types", jdbcTemplate.queryForList("select * from budget_type"));
+        model.addAttribute("budgets", jdbcTemplate.queryForList("select * from budget"));
+        model.addAttribute("plan_budgets", jdbcTemplate.queryForList("select * from plan_budget"));
         return "index";
     }
 }
