@@ -41,7 +41,7 @@ public class DatabaseWork {
 
     public Person getPersonByLogin(String login){
         BigInteger personId = BigInteger.valueOf(-1);
-        String qwr = "SELECT person_id AS id FROM person where login = " + login.trim();
+        String qwr = "SELECT person_id AS id FROM person where login = '" + login.trim() + "'";
         try {
             Statement stmt = connect.createStatement();
             ResultSet res = stmt.executeQuery(qwr);
