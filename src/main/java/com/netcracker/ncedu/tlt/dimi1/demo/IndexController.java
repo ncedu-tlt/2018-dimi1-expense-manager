@@ -1,5 +1,6 @@
 package com.netcracker.ncedu.tlt.dimi1.demo;
 
+import implementations.DatabaseWork;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Controller;
@@ -18,11 +19,13 @@ public class IndexController {
 
     @RequestMapping("/")
     String home(ModelMap model) {
-        model.addAttribute("persons", jdbcTemplate.queryForList("select * from person"));
-        model.addAttribute("accounts", jdbcTemplate.queryForList("select * from accounts"));
-        model.addAttribute("budget_types", jdbcTemplate.queryForList("select * from budget_type"));
-        model.addAttribute("budgets", jdbcTemplate.queryForList("select * from budget"));
-        model.addAttribute("plan_budgets", jdbcTemplate.queryForList("select * from plan_budget"));
+        DatabaseWork databaseObj = new DatabaseWork();
+
+        model.addAttribute("persons", databaseObj.getAllPersons());
+        model.addAttribute("accounts", databaseObj.getAllAccounts());
+        model.addAttribute("budget_types", databaseObj.getAllBudgetTypes());
+        model.addAttribute("budgets", databaseObj.getAllBudgets());
+        model.addAttribute("plan_budgets", databaseObj.getAllPlanBudgets());
         return "index";
     }
 }

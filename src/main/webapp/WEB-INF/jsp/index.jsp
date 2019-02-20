@@ -1,7 +1,9 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+    <%--<meta charset="UTF-8">--%>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
     <title>Expense maneger</title>
 </head>
 <body>
@@ -14,13 +16,13 @@
         </tr>
         <c:forEach items="${persons}" var="person">
             <tr>
-                <td>${person.person_id}</td>
-                <td>${person.login}</td>
-                <td>${person.pass}</td>
-                <td>${person.email}</td>
-                <td>${person.description}</td>
-                <td>${person.reg_date}</td>
-                <td>${person.phone_number}</td>
+                <td>${person.getPersonId()}</td>
+                <td>${person.getLogin()}</td>
+                <td>${person.getPass()}</td>
+                <td>${person.getEmail()}</td>
+                <td>${person.getDescription()}</td>
+                <td>${person.getRegDate()}</td>
+                <td>${person.getPhonenumber()}</td>
             </tr>
         </c:forEach>
     </table>
@@ -32,12 +34,12 @@
         </tr>
         <c:forEach items="${accounts}" var="account">
             <tr>
-                <td>${account.account_id}</td>
-                <td>${account.account_number}</td>
-                <td>${account.person_id_fk}</td>
-                <td>${account.currency}</td>
-                <td>${account.balance}</td>
-                <td>${account.description}</td>
+                <td>${account.getAccountId()}</td>
+                <td>${account.getAccountNumber()}</td>
+                <td>${account.getPersonId()}</td>
+                <td>${account.getCurrency()}</td>
+                <td>${account.getBalance()}</td>
+                <td>${account.getDescription()}</td>
             </tr>
         </c:forEach>
     </table>
@@ -49,11 +51,11 @@
         </tr>
         <c:forEach items="${budget_types}" var="budget_type">
             <tr>
-                <td>${budget_type.budget_type_id}</td>
-                <td>${budget_type.group_id}</td>
-                <td>${budget_type.name}</td>
-                <td>${budget_type.required}</td>
-                <td>${budget_type.check_max}</td>
+                <td>${budget_type.getBudgetTypeId()}</td>
+                <td>${budget_type.getGroupId()}</td>
+                <td>${budget_type.getName()}</td>
+                <td>${budget_type.getRequired()}</td>
+                <td>${budget_type.getCheckMax()}</td>
             </tr>
         </c:forEach>
     </table>
@@ -66,13 +68,13 @@
         </tr>
         <c:forEach items="${budgets}" var="budget">
             <tr>
-                <td>${budget.budget_id}</td>
-                <td>${budget.operation_type}</td>
-                <td>${budget.budget_type_id_fk}</td>
-                <td>${budget.description}</td>
-                <td>${budget.account_id_fk}</td>
-                <td>${budget.operation_date}</td>
-                <td>${budget.charge_value}</td>
+                <td>${budget.getBudgetId()}</td>
+                <td>${budget.getOperationType()}</td>
+                <td>${budget.getBudgetTypeId()}</td>
+                <td>${budget.getDescription()}</td>
+                <td>${budget.getAccountId()}</td>
+                <td>${budget.getOperationDate()}</td>
+                <td>${budget.getChargeValue()}</td>
             </tr>
         </c:forEach>
     </table>
@@ -86,17 +88,17 @@
         </tr>
         <c:forEach items="${plan_budgets}" var="plan_budget">
             <tr>
-                <td>${plan_budget.plan_budget_id}</td>
-                <td>${plan_budget.operation_type}</td>
-                <td>${plan_budget.budget_type_id_fk}</td>
-                <td>${plan_budget.description}</td>
-                <td>${plan_budget.account_id_fk}</td>
-                <td>${plan_budget.operation_date}</td>
-                <td>${plan_budget.charge_value}</td>
-                <td>${plan_budget.regular_mask}</td>
-                <td>${plan_budget.repeat_count}</td>
-                <td>${plan_budget.start_date}</td>
-                <td>${plan_budget.end_date}</td>
+                <td>${plan_budget.getPlanBudgetId()}</td>
+                <td>${plan_budget.getOperationType()}</td>
+                <td>${plan_budget.getBudgetTypeId()}</td>
+                <td>${plan_budget.getDescription()}</td>
+                <td>${plan_budget.getAccountId()}</td>
+                <td>${plan_budget.getOperationDate()}</td>
+                <td>${plan_budget.getChargeValue()}</td>
+                <td>${plan_budget.getRegularMask()}</td>
+                <td>${plan_budget.getRepeatCount()}</td>
+                <td>${plan_budget.getStartDate()}</td>
+                <td>${plan_budget.getEndDate()}</td>
             </tr>
         </c:forEach>
     </table>

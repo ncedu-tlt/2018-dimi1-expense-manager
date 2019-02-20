@@ -5,7 +5,8 @@ CREATE TABLE Person(
   email VARCHAR2(40),
   description VARCHAR(350),
   reg_date DATE,
-  phone_number VARCHAR2(12)
+  phone_number VARCHAR2(12),
+  UNIQUE (login)
 );
 
 
