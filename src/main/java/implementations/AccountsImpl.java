@@ -42,7 +42,7 @@ public class AccountsImpl implements Accounts {
     }
 
     @Override
-    public void delete(){//TODO закоммитить изменения
+    public void delete(){
             String checkBudget = "SELECT COUNT(*) AS cnt FROM budget WHERE account_id_fk = " + accountId.intValue();
             String checkPlanBudg = "SELECT COUNT(*) AS cnt FROM Plan_budget WHERE account_id_fk = " + accountId.intValue();
             DatabaseWork check = new DatabaseWork(connect);
@@ -99,7 +99,7 @@ public class AccountsImpl implements Accounts {
                     personId = BigInteger.valueOf(resultAcc.getInt("person_id_fk"));
                     currency = resultAcc.getString("currency");
                     balance = resultAcc.getDouble("balance");
-                    description = new String(resultAcc.getString("description").getBytes(), "UTF-8");
+                    description = resultAcc.getString("description");
                 }
                 return true;
             } else {
@@ -107,8 +107,6 @@ public class AccountsImpl implements Accounts {
             }
         } catch (SQLException e) {
             System.out.println("An error occured while displaying information from the database table ACCOUNTS");
-            e.printStackTrace();
-        } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
         return false;
@@ -290,13 +288,7 @@ public class AccountsImpl implements Accounts {
 
     @Override
     public String getDescription() {
-        String descr = "";
-        try {
-            descr = new String(description.getBytes(), "UTF-8");
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-        return descr;
+        return description;
     }
 
     public void setDescription(String description) {
