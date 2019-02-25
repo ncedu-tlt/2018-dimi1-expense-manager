@@ -4,6 +4,8 @@ import interfaces.*;
 
 import java.math.BigInteger;
 import java.sql.*;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,7 +43,7 @@ public class DatabaseWork {
 
     public Person getPersonByLogin(String login){
         BigInteger personId = BigInteger.valueOf(-1);
-        String qwr = "SELECT person_id AS id FROM person where login = " + login.trim();
+        String qwr = "SELECT person_id AS id FROM person where login = '" + login.trim() + "'";
         try {
             Statement stmt = connect.createStatement();
             ResultSet res = stmt.executeQuery(qwr);
@@ -146,4 +148,75 @@ public class DatabaseWork {
         return planBudgetL;
     }
 
+    public List<Report1> getReport1(){
+        List<Report1> report1L = new ArrayList<>();
+        Report1 repObj = new Report1(connect);
+        List<Integer> expenseGroups = repObj.getAllExpenseGroups();
+        for(int i=0; i<expenseGroups.size(); i++){
+            repObj.getReportRow(expenseGroups.get(i), report1L);
+        }
+        repObj.setTotalSum();
+        for(int i=0; i<report1L.size(); i++){
+            report1L.get(i).setPercent(report1L.get(i).getSum(), repObj.getTotalSum());
+        }
+        return report1L;
+    }
+
+    public Double getTotalSum(){
+        Report1 repObj = new Report1(connect);
+        repObj.setTotalSum();
+        Double totSum = repObj.getTotalSum();
+        return totSum;
+    }
+
+    public List<Report2> getReport2Required(){
+        List<Report2> report2L = new ArrayList<>();
+        Report2 repObj = new Report2(connect);
+        List<Integer> expenseGroups = repObj.getAllExpenseGroups();
+        for(int i=0; i<expenseGroups.size(); i++){
+            repObj.getReportRow(expenseGroups.get(i), report2L, true);
+        }
+        return report2L;
+    }
+
+    public List<Report2> getReport2Unrequired(){
+        List<Report2> report2L = new ArrayList<>();
+        Report2 repObj = new Report2(connect);
+        List<Integer> expenseGroups = repObj.getAllExpenseGroups();
+        for(int i=0; i<expenseGroups.size(); i++){
+            repObj.getReportRow(expenseGroups.get(i), report2L, false);
+        }
+        return report2L;
+    }
+
+    public Double getTotalSum(boolean required){
+        Report2 repObj = new Report2(connect);
+        repObj.setTotalSum(required);
+        Double totSum = repObj.getTotalSum();
+        return totSum;
+    }
+
+    public List<Report3> getReport3(){
+        List<PlanBudget> planBudgetL = new ArrayList<>();
+        String qwr = "SELECT * FROM plan_budget";
+        try {
+            ResultSet res = stmt.executeQuery(qwr);
+            while(res.next()){
+                PlanBudget plBObj = new PlanBudgetImpl(connect);
+                plBObj.load(BigInteger.valueOf(res.getInt("plan_budget_id")));
+                planBudgetL.add(plBObj);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        List<Report3> report3L = new ArrayList<>();
+        Report3 rep3 = new Report3(connect);
+        DateTimeFormatter format = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+        LocalDate startLocal = LocalDate.parse("03.01.2019", format);
+        LocalDate endLocal = LocalDate.parse("01.04.2019", format);
+        Date start = Date.valueOf(startLocal);
+        Date end = Date.valueOf(endLocal);
+        rep3.getReportRow(planBudgetL, report3L, start, end);
+        return report3L;
+    }
 }

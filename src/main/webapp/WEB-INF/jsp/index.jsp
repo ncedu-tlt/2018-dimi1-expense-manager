@@ -14,15 +14,15 @@
         <tr>
             <td>person_id</td><td>login</td><td>pass</td><td>email</td><td>description</td><td>reg_date</td><td>phone_number</td>
         </tr>
-        <c:forEach items="${persons}" var="person">
+        <c:forEach items="${persons}" var="rep">
             <tr>
-                <td>${person.getPersonId()}</td>
-                <td>${person.getLogin()}</td>
-                <td>${person.getPass()}</td>
-                <td>${person.getEmail()}</td>
-                <td>${person.getDescription()}</td>
-                <td>${person.getRegDate()}</td>
-                <td>${person.getPhonenumber()}</td>
+                <td>${rep.getPersonId()}</td>
+                <td>${rep.getLogin()}</td>
+                <td>${rep.getPass()}</td>
+                <td>${rep.getEmail()}</td>
+                <td>${rep.getDescription()}</td>
+                <td>${rep.getRegDate()}</td>
+                <td>${rep.getPhonenumber()}</td>
             </tr>
         </c:forEach>
     </table>
@@ -104,10 +104,21 @@
     </table>
 
 
-    <%--<form method="POST" action="/add">
-        <label>New cat name <input type="text" name="name"/></label>
-        <input type="submit"/>
-    </form>--%>
+    <form align="center" method="POST" action="/showReport1">
+        <p>
+            <input type="submit" value="Report1"/>
+        </p>
+    </form>
+    <form align="center" method="post" action="/showReport2">
+        <p>
+            <input type="submit" value="Report2"/>
+        </p>
+    </form>
+    <form align="center" method="post" action="/showReport3">
+        <p>
+            <input type="submit" value="Report3"/>
+        </p>
+    </form>
 
     <%--<p><ul>
         <li><a href="/hello">http://localhost:8080/hello</a>
