@@ -6,8 +6,7 @@ CREATE TABLE Person(
   email VARCHAR(40) not null,
   description VARCHAR(350),
   reg_date DATE,
-  phone_number VARCHAR2(12)
-);
+  phone_number VARCHAR2(12));
 
 
 CREATE TABLE Accounts(
