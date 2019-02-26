@@ -1,7 +1,5 @@
 package interfaces;
 
-import org.w3c.dom.Entity;
-
 import java.math.BigInteger;
 import java.util.Date;
 
