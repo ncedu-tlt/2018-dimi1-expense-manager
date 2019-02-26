@@ -1,13 +1,12 @@
 CREATE TABLE Person(
   person_id serial PRIMARY KEY not null,
-  login VARCHAR(20),
-  pass VARCHAR(20),
-  email VARCHAR2(40),
+  login VARCHAR(20) not null,
+  pass VARCHAR(20) not null,
+  access VARCHAR(10) not null,
+  email VARCHAR(40) not null,
   description VARCHAR(350),
   reg_date DATE,
-  phone_number VARCHAR2(12),
-  UNIQUE (login)
-);
+  phone_number VARCHAR2(12));
 
 
 CREATE TABLE Accounts(

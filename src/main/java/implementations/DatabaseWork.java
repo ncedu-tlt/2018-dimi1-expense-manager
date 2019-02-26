@@ -146,4 +146,21 @@ public class DatabaseWork {
         return planBudgetL;
     }
 
+    public boolean checkLogin(String sql)
+    {
+        try
+        {
+            Statement checkStmt = connect.createStatement();
+            ResultSet checkRes = checkStmt.executeQuery(sql);
+            if(checkRes.next())
+            {
+                return true;
+            }
+        }catch (SQLException ex)
+        {
+            System.out.println("An error occured while checking child records in database tables");
+            ex.printStackTrace();
+        }
+        return false;
+    }
 }

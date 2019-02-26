@@ -1,5 +1,6 @@
-INSERT INTO Person (person_id, login, pass, reg_date) VALUES (1, 'qwerty', '123456', TO_DATE('11.12.2018', 'dd.mm.yyyy'));
-INSERT INTO Person (person_id, email, phone_number) VALUES (2, 'qqq@mail.ru', 89171546552);
+INSERT INTO Person (person_id, login, pass, access, email, reg_date) VALUES (1, 'test', 'test', 'USER', 'test@mail.ru', TO_DATE('11.12.2018', 'dd.mm.yyyy'));
+INSERT INTO Person (person_id, login, pass, access, email, phone_number) VALUES (2, 'test1', 'test1', 'USER', 'test1@mail.ru', 89171546552);
+INSERT INTO Person (person_id, login, pass, access, email, description, reg_date, phone_number) VALUES (3, 'testtest', 'testtest', 'USER', 'test1@mail.ru', 'description', TO_DATE('11.12.2018', 'dd.mm.yyyy'), 89171546552);
 
 INSERT INTO Accounts (account_id, account_number, person_id_fk, currency, balance, description)
                         VALUES (1, 4854630037067858, 1, 'RUB', 3500, 'Кредитная');

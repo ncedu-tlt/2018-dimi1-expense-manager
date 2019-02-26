@@ -6,6 +6,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 @Controller
 public class IndexController {
@@ -17,15 +18,7 @@ public class IndexController {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    @RequestMapping("/")
+    @RequestMapping(value = "/", method = RequestMethod.GET)
     String home(ModelMap model) {
-        DatabaseWork databaseObj = new DatabaseWork();
-
-        model.addAttribute("persons", databaseObj.getAllPersons());
-        model.addAttribute("accounts", databaseObj.getAllAccounts());
-        model.addAttribute("budget_types", databaseObj.getAllBudgetTypes());
-        model.addAttribute("budgets", databaseObj.getAllBudgets());
-        model.addAttribute("plan_budgets", databaseObj.getAllPlanBudgets());
-        return "index";
     }
 }
