@@ -20,5 +20,6 @@ public class IndexController {
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
     String home(ModelMap model) {
+        return "menu";
     }
 }
