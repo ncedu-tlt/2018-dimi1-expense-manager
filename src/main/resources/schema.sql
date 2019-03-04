@@ -3,12 +3,10 @@ CREATE TABLE Person(
   login VARCHAR(20) not null,
   pass VARCHAR(20) not null,
   access VARCHAR(10) not null,
-  email VARCHAR2(40) not null,
+  email VARCHAR(40) not null,
   description VARCHAR(350),
   reg_date DATE,
-  phone_number VARCHAR2(12),
-  UNIQUE (login)
-);
+  phone_number VARCHAR2(12));
 
 
 CREATE TABLE Accounts(
