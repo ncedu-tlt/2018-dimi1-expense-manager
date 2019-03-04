@@ -41,8 +41,8 @@ public class PersonImpl implements Person {
 
     @Override
     public void update() {
-        String updatePerson = "UPDATE person SET login = ?, pass = ?, access = ?, email = ?, " +
-                "description = ?, phone_number = ?, reg_date = ? " +
+        String updatePerson = "UPDATE person SET login = ?, pass = ?, email = ?, " +
+                "access = ?, description = ?, phone_number = ?, reg_date = ? " +
                 "WHERE person_id = ?";
         jdbcTemplate.update(updatePerson, login, pass, email, access, description, phonenumber, regDate, personId);
     }
@@ -59,8 +59,8 @@ public class PersonImpl implements Person {
             this.personId = id;
             this.login = (String)result.get("LOGIN");
             this.pass = (String)result.get("PASS");
-            this.access = (String) result.get("ACCESS");
             this.email = (String)result.get("EMAIL");
+            this.access = (String) result.get("ACCESS");
             this.description = (String)result.get("DESCRIPTION");
             this.regDate = (Date) result.get("REG_DATE");
             this.phonenumber = (String)result.get("PHONE_NUMBER");
