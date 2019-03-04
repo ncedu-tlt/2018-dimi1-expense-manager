@@ -16,9 +16,7 @@ public class Report3RowMapper implements RowMapper<Report3> {
     public Report3 mapRow(ResultSet row, int rowNum) throws SQLException {
         Report3 rep3 = new Report3(jdbcTemplate);
         rep3.setId(BigInteger.valueOf(row.getInt("ID")));
-        //rep3.setDate(row.getDate("NAME"));
         rep3.setSum(row.getBigDecimal("SUMMA"));
-        //rep3.setRequired(row.getBoolean("REQUIRED"));
         rep3.setDescription(row.getString("DESCRIPTION"));
         return rep3;
     }

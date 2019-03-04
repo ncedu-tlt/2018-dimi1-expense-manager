@@ -20,12 +20,5 @@ public class IndexController {
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
     String home(ModelMap model) { return "menu"; }
-        /*DatabaseWork databaseObj = new DatabaseWork(jdbcTemplate);
 
-        model.addAttribute("persons", databaseObj.getAllPersons());
-        model.addAttribute("accounts", databaseObj.getAllAccounts());
-        model.addAttribute("budget_types", databaseObj.getAllBudgetTypes());
-        model.addAttribute("budgets", databaseObj.getAllBudgets());
-        model.addAttribute("plan_budgets", databaseObj.getAllPlanBudgets());*//*
-        return "index";*/
 }

@@ -67,53 +67,6 @@ public class BudgetTypeImpl implements BudgetType {
         return false;
     }
 
-    /*public void showTable(){
-        String qwre = "SELECT * FROM budget_type";
-        int field1, field2;
-        String field3;
-        Boolean field4;
-        Double field5;
-        try {
-            Statement stmtPers =connect.createStatement();
-            ResultSet resultBudgetType = stmtPers.executeQuery(qwre);
-            while (resultBudgetType.next()){
-                field1 = resultBudgetType.getInt("budget_type_id");
-                field2 = resultBudgetType.getInt("group_id");
-                field3 = resultBudgetType.getString("name");
-                field4 = resultBudgetType.getBoolean("required");
-                field5 = resultBudgetType.getDouble("check_max");
-                System.out.println(String.format("BudgetTypeId: %5d| groupId: %5d| name: %20s| " +
-                                "required: %5b| check_max: %.2f",
-                        field1, field2, field3, field4, field5));
-            }
-        } catch (SQLException e) {
-            System.out.println("An error occured while displaying information from the database table BUDGET_TYPE");
-            e.printStackTrace();
-        }
-    }
-
-    public void showGroups(){
-        String qwre = "SELECT budget_type_id, name, group_id " +
-                "FROM budget_type " +
-                "WHERE group_id IS NULL";
-        HashMap<Integer, String> budgetGroups = new HashMap<>();
-        try {
-            Statement stmtBudgTypeGroup = connect.createStatement();
-            ResultSet resultGroup = stmtBudgTypeGroup.executeQuery(qwre);
-            while (resultGroup.next()){
-                budgetGroups.put(resultGroup.getInt("budget_type_id"),
-                        resultGroup.getString("name"));
-            }
-        } catch (SQLException e) {
-            System.out.println("An error occured while finding budget groups from the database table BUDGET_TYPE");
-            e.printStackTrace();
-        }
-        System.out.println(String.format("\tid\t\t\t\t\tname"));
-        for(Map.Entry entry : budgetGroups.entrySet()){
-            System.out.println(String.format("%6d\t%20s", entry.getKey(), entry.getValue()));
-        }
-    }
-*/
     public boolean isGroupExsist(int checkGroup){
         String qwr = "SELECT budget_type_id, group_id " +
                 "FROM budget_type " +

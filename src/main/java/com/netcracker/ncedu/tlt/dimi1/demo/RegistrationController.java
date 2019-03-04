@@ -46,9 +46,6 @@ public class RegistrationController {
             person.setPhonenumber(number);
             person.setRegDate();
             person.create();
-            /*jdbcTemplate.update("INSERT INTO Person (login, pass, access, email, description, reg_date, phone_number)" +
-                    " VALUES ('"+ login +"', '"+ password +"', 'USER', '"+ email +"', '"+ information +"'," +
-                    "TO_DATE('"+ formatForDateNow.format(date) +"', 'dd.mm.yyyy'), '"+ number +"')");*/
         }
         return "redirect:/";
     }

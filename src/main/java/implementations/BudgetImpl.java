@@ -67,33 +67,6 @@ public class BudgetImpl implements Budget {
         return false;
     }
 
-    /*public void showTable() {
-        String qwre = "SELECT * FROM budget";
-        BigInteger field1, field3, field5;
-        Double field7;
-        String field2, field4;
-        java.sql.Date field6;
-        try {
-            Statement stmtBudg =connect.createStatement();
-            ResultSet resultBudget = stmtBudg.executeQuery(qwre);
-            while (resultBudget.next()){
-                field1 = BigInteger.valueOf(resultBudget.getInt("budget_id"));
-                field2 = resultBudget.getString("operation_type");
-                field3 = BigInteger.valueOf(resultBudget.getInt("budget_type_id_fk"));
-                field4 = resultBudget.getString("description");
-                field5 = BigInteger.valueOf(resultBudget.getInt("account_id_fk"));
-                field6 = resultBudget.getDate("operation_date");
-                field7 = resultBudget.getDouble("charge_value");
-                System.out.println(String.format("Id: %5d| operation type: %12s| budgetTypeId: %5d| description: %45s| " +
-                                "accountId: %5d| operation date: %10tD| charge value: %7.2f",
-                        field1, field2, field3, field4, field5, field6, field7));
-            }
-        } catch (SQLException e) {
-            System.out.println("An error occured while displaying information from the database table BUDGET");
-            e.printStackTrace();
-        }
-    }*/
-
     @Override
     public BigInteger getBudgetId() {
         return budgetId;

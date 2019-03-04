@@ -18,7 +18,7 @@ public class Report1Controller {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    @RequestMapping(value = "/showReport1", method = RequestMethod.POST)
+    @RequestMapping(value = "/showReport1", method = RequestMethod.GET )
     String showReport1(ModelMap model){
         DatabaseWork dbObj = new DatabaseWork(jdbcTemplate);
         model.addAttribute("report1", dbObj.getReport1());

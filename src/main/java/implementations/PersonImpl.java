@@ -41,8 +41,8 @@ public class PersonImpl implements Person {
 
     @Override
     public void update() {
-        String updatePerson = "UPDATE person SET login = ?, pass = ?, email = ?, " +
-                "access = ?, description = ?, phone_number = ?, reg_date = ? " +
+        String updatePerson = "UPDATE person SET login = ?, pass = ?, access = ?, email = ?, " +
+                "description = ?, phone_number = ?, reg_date = ? " +
                 "WHERE person_id = ?";
         jdbcTemplate.update(updatePerson, login, pass, email, access, description, phonenumber, regDate, personId);
     }
@@ -52,13 +52,15 @@ public class PersonImpl implements Person {
         String checkExistPerson = "SELECT COUNT(*) AS cnt FROM person WHERE person_id = ?";
         Integer checkResult = jdbcTemplate.queryForObject(checkExistPerson, Integer.class, id);
         if(checkResult != 0){
-            String dataPerson = "SELECT login, pass, email, description, reg_date, phone_number FROM person WHERE person_id = ?";
+            String dataPerson = "SELECT login, pass, access, email, description, " +
+                    "reg_date, phone_number " +
+                    "FROM person WHERE person_id = ?";
             Map result = jdbcTemplate.queryForMap(dataPerson, id);
             this.personId = id;
             this.login = (String)result.get("LOGIN");
             this.pass = (String)result.get("PASS");
-            this.email = (String)result.get("EMAIL");
             this.access = (String) result.get("ACCESS");
+            this.email = (String)result.get("EMAIL");
             this.description = (String)result.get("DESCRIPTION");
             this.regDate = (Date) result.get("REG_DATE");
             this.phonenumber = (String)result.get("PHONE_NUMBER");

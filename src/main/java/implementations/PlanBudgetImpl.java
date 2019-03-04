@@ -77,38 +77,6 @@ public class PlanBudgetImpl implements PlanBudget {
         return false;
     }
 
-    /*public void showTable(){
-        String qwre = "SELECT * FROM plan_budget";
-        int field1, field3, field5, field9;
-        Double field7;
-        String field2, field4, field8;
-        java.sql.Date field6, field10, field11;
-        try {
-            Statement stmtPlanBudg =connect.createStatement();
-            ResultSet resultPlanBudget = stmtPlanBudg.executeQuery(qwre);
-            while (resultPlanBudget.next()){
-                field1 = resultPlanBudget.getInt("plan_budget_id");
-                field2 = resultPlanBudget.getString("operation_type");
-                field3 = resultPlanBudget.getInt("budget_type_id_fk");
-                field4 = resultPlanBudget.getString("description");
-                field5 = resultPlanBudget.getInt("account_id_fk");
-                field6 = resultPlanBudget.getDate("operation_date");
-                field7 = resultPlanBudget.getDouble("charge_value");
-                field8 = resultPlanBudget.getString("regular_mask");
-                field9 = resultPlanBudget.getInt("repeat_count");
-                field10 = resultPlanBudget.getDate("start_date");
-                field11 = resultPlanBudget.getDate("end_date");
-                System.out.println(String.format("Id: %5d| operation type: %12s| budgetTypeId: %5d| description: %35s| " +
-                                "accountId: %5d| operation date: %10tD| charge value: %7.2f| regular mask: %20s| " +
-                                "repeat count: %4d| start date: %10tD| end date: %10td",
-                        field1, field2, field3, field4, field5, field6, field7, field8, field9, field10, field11));
-            }
-        } catch (SQLException e) {
-            System.out.println("An error occured while displaying information from the database table PLAN BUDGET");
-            e.printStackTrace();
-        }
-    }*/
-
     @Override
     public BigInteger getPlanBudgetId() {
         return planBudgetId;
