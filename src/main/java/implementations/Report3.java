@@ -1,13 +1,11 @@
 package implementations;
 
 import interfaces.PlanBudget;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 
+import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -17,7 +15,7 @@ import java.util.regex.Pattern;
 public class Report3 {
     private BigInteger id;
     private Date date;
-    private Double sum;
+    private BigDecimal sum;
     private String description;
 
     private String minutes;
@@ -34,18 +32,17 @@ public class Report3 {
     private Integer cntDW;
     private Integer cntY;
 
+    private JdbcTemplate jdbcTemplate;
 
-    private Connection connect;
-
-    public Report3(Connection connect){ this.connect = connect; }
+    public Report3(JdbcTemplate jdbcTemplate){ this.jdbcTemplate = jdbcTemplate; }
 
     public void getReportRow(List<PlanBudget> plans, List<Report3> rL, Date criterialStartDate, Date criterialEndDate) {
         for(int i=0; i<plans.size(); i++){
            if(plans.get(i).getOperationDate() != null && plans.get(i).getOperationDate().after(criterialStartDate) &&
                    plans.get(i).getOperationDate().before(criterialEndDate)){
                System.out.println(plans.get(i).getOperationDate());
-               Report3 obj = new Report3(connect);
-               obj.setId(plans.get(i).getBudgetTypeId());
+               Report3 obj = new Report3(jdbcTemplate);
+               obj.setId(BigInteger.valueOf(plans.get(i).getBudgetTypeId()));
                obj.setDate(plans.get(i).getOperationDate());
                obj.setDescription(plans.get(i).getDescription());
                obj.setSum(plans.get(i).getChargeValue());
@@ -59,7 +56,7 @@ public class Report3 {
                        countMask();
                        if((!minutes.equals("*") || !hours.equals("*")) && dayMonth.equals("*") && months.equals("*") &&
                                dayWeek.equals("*") && years.equals("*")){
-                           if(plans.get(i).getRepeatCount() != 0){
+                           if(plans.get(i).getRepeatCount() != null){
                                int counter = 1;
                                Calendar instance = Calendar.getInstance();
                                instance.setTime(plans.get(i).getStartDate());
@@ -72,8 +69,8 @@ public class Report3 {
                                    incr = cntHour;
                                }
                                while(counter<=plans.get(i).getRepeatCount()*incr){
-                                   Report3 obj = new Report3(connect);
-                                   obj.setId(plans.get(i).getBudgetTypeId());
+                                   Report3 obj = new Report3(jdbcTemplate);
+                                   obj.setId(BigInteger.valueOf(plans.get(i).getBudgetTypeId()));
                                    instance.add(Calendar.DAY_OF_MONTH, 1);
                                    Date currentDate = instance.getTime();
                                    if(plans.get(i).getEndDate() != null && currentDate.after(criterialEndDate)){
@@ -85,14 +82,14 @@ public class Report3 {
                                    rL.add(obj);
                                    counter++;
                                }
-                           } else if(plans.get(i).getRepeatCount() == 0) {
+                           } else if(plans.get(i).getRepeatCount() == null) {
                                if (plans.get(i).getEndDate() != null) {
                                    Calendar instance = Calendar.getInstance();
                                    instance.setTime(plans.get(i).getStartDate());
                                    Date currentDate = instance.getTime();
                                    while (currentDate.before(plans.get(i).getEndDate())) {
-                                       Report3 obj = new Report3(connect);
-                                       obj.setId(plans.get(i).getBudgetTypeId());
+                                       Report3 obj = new Report3(jdbcTemplate);
+                                       obj.setId(BigInteger.valueOf(plans.get(i).getBudgetTypeId()));
                                        instance.add(Calendar.DAY_OF_MONTH, 1);
                                        currentDate = instance.getTime();
                                        obj.setDate(currentDate);
@@ -161,22 +158,14 @@ public class Report3 {
         }
     }
 
-   /* public void getReportRow(Date startDate) {
-        try {
-            Statement stmt = connect.createStatement();
-            ResultSet res = stmt.executeQuery("SELECT * FROM plan_budget;");
-            while (res.next()) {
-                Report3 obj = new Report3(connect);
-                obj.setId(BigInteger.valueOf(res.getInt("budget_type_id_fk")));
-                obj.setDescription(res.getString("description"));
-                obj.setSum(res.getDouble("summa"));
-                rL.add(obj);
-            }
-
-        } catch(SQLException ex) {
-            ex.printStackTrace();
+    public void getReportRow(List<Report3> rL) {
+        String getData = "SELECT budget_type_id_fk, description, summa FROM plan_budget";
+        RowMapper<Report3> rowMapper = new Report3RowMapper(jdbcTemplate);
+        List<Report3> getRows = jdbcTemplate.query(getData, rowMapper);
+        for(Report3 i : getRows){
+            rL.add(i);
         }
-    }*/
+    }
 
     public BigInteger getId() {
         return id;
@@ -186,9 +175,7 @@ public class Report3 {
         return description;
     }
 
-    public Double getSum() {
-        return sum;
-    }
+    public BigDecimal getSum() { return sum; }
 
     public Date getDate() { return date;}
 
@@ -200,7 +187,7 @@ public class Report3 {
         this.description = description;
     }
 
-    public void setSum(Double sum) {
+    public void setSum(BigDecimal sum) {
         this.sum = sum;
     }
 

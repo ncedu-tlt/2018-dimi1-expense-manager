@@ -1,66 +1,42 @@
 package implementations;
 
 import interfaces.BudgetType;
+import org.springframework.jdbc.core.JdbcTemplate;
+
+import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.sql.*;
-import java.util.HashMap;
 import java.util.Map;
-import java.util.Scanner;
 
 public class BudgetTypeImpl implements BudgetType {
     private BigInteger budgetTypeId;
-    private BigInteger groupId;
+    private Integer groupId;
     private String name;
     private Boolean isRequired;
-    private Double checkMax;
-    private Connection connect;
+    private BigDecimal checkMax;
+    private JdbcTemplate jdbcTemplate;
 
-    public BudgetTypeImpl(Connection connect){ this.connect = connect; }
+    public BudgetTypeImpl(JdbcTemplate jdbcTemplate){ this.jdbcTemplate = jdbcTemplate; }
 
     @Override
     public void create() {
-
-        String insertPerson = "INSERT INTO budget_type (budget_type_id, group_id, name, required, check_max) " +
+        String insertBudgetType = "INSERT INTO budget_type (budget_type_id, group_id, name, required, check_max) " +
                 "VALUES (?, ?, ?, ?, ?)";
-
-        try {
-            PreparedStatement prepareStmtPers = connect.prepareStatement(insertPerson);
-            prepareStmtPers.setInt(1, budgetTypeId.intValue());
-            if (groupId == null){
-                prepareStmtPers.setNull(2, Types.NUMERIC);
-            } else {
-                prepareStmtPers.setInt(2, groupId.intValue());
-            }
-            prepareStmtPers.setString(3, name);
-            prepareStmtPers.setBoolean(4, isRequired);
-            prepareStmtPers.setDouble(5, checkMax);
-
-            prepareStmtPers.execute();
-        } catch (SQLException e) {
-            System.out.println("An error occured while entering information into the database table BUDGET_TYPE");
-            e.printStackTrace();
-        }
+        jdbcTemplate.update(insertBudgetType, budgetTypeId, groupId, name, isRequired, checkMax);
     }
 
     @Override
     public void delete() {
-        String checkQuery = "SELECT COUNT(*) AS cnt FROM budget_type WHERE group_id = " + budgetTypeId.intValue();
-        String checkPlanBudg = "SELECT COUNT(*) AS cnt FROM plan_budget WHERE budget_type_id_fk = " + budgetTypeId.intValue();
-        String checkBudg = "SELECT COUNT(*) AS cnt FROM budget WHERE budget_type_id_fk = " + budgetTypeId.intValue();
-        DatabaseWork check = new DatabaseWork(connect);
-        if(check.checkExist(checkQuery)!=0 || check.checkExist(checkPlanBudg)!=0 ||
-                check.checkExist(checkBudg)!=0){
+        String checkQuery = "SELECT COUNT(*) AS cnt FROM budget_type WHERE group_id = ?";
+        String checkPlanBudg = "SELECT COUNT(*) AS cnt FROM plan_budget WHERE budget_type_id_fk = ?";
+        String checkBudg = "SELECT COUNT(*) AS cnt FROM budget WHERE budget_type_id_fk = ?";
+        DatabaseWork check = new DatabaseWork(jdbcTemplate);
+        if(check.checkExist(checkQuery, budgetTypeId) != 0 || check.checkExist(checkPlanBudg, budgetTypeId) != 0 ||
+                check.checkExist(checkBudg, budgetTypeId) != 0){
             System.out.println("This record has a link in the other table(s).\nDelete all related entries first.");
             return;
-        } else{
-            try{
-                String deletBudgetType = "DELETE FROM budget_type WHERE budget_type_id = " + budgetTypeId.intValue();
-                Statement stmtDelBudgetType = connect.createStatement();
-                stmtDelBudgetType.executeUpdate(deletBudgetType);
-            } catch(SQLException e) {
-                System.out.println("An error occured while deleting a record from the database table BUDGET_TYPE");
-                e.printStackTrace();
-            }
+        } else {
+            String deletBudgetType = "DELETE FROM budget_type WHERE budget_type_id = ?";
+            jdbcTemplate.update(deletBudgetType, budgetTypeId);
         }
     }
 
@@ -69,50 +45,29 @@ public class BudgetTypeImpl implements BudgetType {
         String updateBudgetType = "UPDATE budget_type SET group_id = ?, name = ?, " +
                 "required = ?, check_max = ? " +
                 "WHERE budget_type_id = ?";
-        try{
-            PreparedStatement preparedStmtPersonForUpdate =connect.prepareStatement(updateBudgetType);
-            preparedStmtPersonForUpdate.setInt(1, groupId.intValue());
-            preparedStmtPersonForUpdate.setString(2, name);
-            preparedStmtPersonForUpdate.setBoolean(3, isRequired);
-            preparedStmtPersonForUpdate.setDouble(4, checkMax);
-            preparedStmtPersonForUpdate.setInt(5, budgetTypeId.intValue());
-
-            preparedStmtPersonForUpdate.execute();
-        } catch (SQLException e) {
-            System.out.println("An error occured while updating a record from the database table BUDGET_TYPE");
-            e.printStackTrace();
-        }
+        jdbcTemplate.update(updateBudgetType, groupId, name, isRequired, checkMax, budgetTypeId);
     }
 
     @Override
     public boolean load(BigInteger id) {
-        try{
-            Statement stmtCheckRecord = connect.createStatement();
-            ResultSet resultCheckBudgetType = stmtCheckRecord.executeQuery("SELECT COUNT(*) AS cnt FROM budget_type WHERE budget_type_id = " + id.intValue());
-            resultCheckBudgetType.next();
-            if (resultCheckBudgetType.getInt("cnt") != 0){
-                String dataBudgetType = "SELECT * FROM budget_type WHERE budget_type_id = " + id.intValue();
-                Statement stmtBudgType = connect.createStatement();
-                ResultSet resultBudgType = stmtBudgType.executeQuery(dataBudgetType);
-                while (resultBudgType.next()){
-                    budgetTypeId = id;
-                    groupId = BigInteger.valueOf(resultBudgType.getInt("group_id"));
-                    name = resultBudgType.getString("name");
-                    isRequired = resultBudgType.getBoolean("required");
-                    checkMax = resultBudgType.getDouble("check_max");
-                }
-                return true;
-            } else {
-                System.out.println("Budget type with the specified ID is not in the table BUDGET_TYPE");
-            }
-        } catch (SQLException e) {
-            System.out.println("An error occured while displaying information from the database table BUDGET_TYPE");
-            e.printStackTrace();
+        String checkExistBudgetType = "SELECT COUNT(*) AS cnt FROM budget_type WHERE budget_type_id = ?";
+        Integer checkResult = jdbcTemplate.queryForObject(checkExistBudgetType, Integer.class, id);
+        if(checkResult != 0){
+            String dataBudgetType = "SELECT group_id, name, required, check_max FROM budget_type WHERE budget_type_id = ?";
+            Map result = jdbcTemplate.queryForMap(dataBudgetType, id);
+            this.budgetTypeId = id;
+            this.groupId = (Integer)result.get("GROUP_ID");//Заменила тип на Integer
+            this.name = (String)result.get("NAME");
+            this.isRequired = (Boolean) result.get("REQUIRED");
+            this.checkMax = (BigDecimal)result.get("CHECK_MAX");//Заменила тип на BigDecimal
+            return true;
+        } else {
+            System.out.println("Budget type with the specified ID is not in the table BUDGET_TYPE");
         }
         return false;
     }
 
-    public void showTable(){
+    /*public void showTable(){
         String qwre = "SELECT * FROM budget_type";
         int field1, field2;
         String field3;
@@ -158,40 +113,27 @@ public class BudgetTypeImpl implements BudgetType {
             System.out.println(String.format("%6d\t%20s", entry.getKey(), entry.getValue()));
         }
     }
-
+*/
     public boolean isGroupExsist(int checkGroup){
-        String qwre = "SELECT budget_type_id, group_id " +
+        String qwr = "SELECT budget_type_id, group_id " +
                 "FROM budget_type " +
                 "WHERE group_id IS NULL";
-        try {
-            Statement stmtBudgTypeGroup = connect.createStatement();
-            ResultSet resultGroup = stmtBudgTypeGroup.executeQuery(qwre);
-            while (resultGroup.next()){
-                if (checkGroup == resultGroup.getInt("budget_type_id")){
-                    return true;
-                }
-            }
-        } catch (SQLException e) {
-            System.out.println("An error occured while finding budget groups from the database table BUDGET_TYPE");
-            e.printStackTrace();
+        Integer checkExist = jdbcTemplate.queryForObject(qwr, Integer.class);
+        if(checkGroup == checkExist){
+            return true;
+        } else {
+            System.out.println("The group with the specified id is missing...");
         }
-        System.out.println("The group with the specified id is missing...");
         return false;
     }
 
     public boolean isBudgetTypeExists(BigInteger id){
-        String checkBudgetTypeId = "SELECT COUNT(*) AS cnt FROM budget_type WHERE budget_type_id = " + id.intValue();
-        try {
-            Statement stmtcheckRecord = connect.createStatement();
-            ResultSet checkRes = stmtcheckRecord.executeQuery(checkBudgetTypeId);
-            checkRes.next();
-            if(checkRes.getInt("cnt") != 0){
-                return true;
-            } else {
-                System.out.println("Budget type with the specified ID is not in the table BUDGET_TYPE");
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
+        String checkBudgetTypeId = "SELECT COUNT(*) AS cnt FROM budget_type WHERE budget_type_id = ?";
+        Integer checkExist = jdbcTemplate.queryForObject(checkBudgetTypeId, Integer.class, id);
+        if(checkExist != 0){
+            return true;
+        } else {
+            System.out.println("Budget type with the specified ID is not in the table BUDGET_TYPE");
         }
         return false;
     }
@@ -201,17 +143,9 @@ public class BudgetTypeImpl implements BudgetType {
         return budgetTypeId;
     }
 
-    public void setBudgetTypeId(){
-        String qwr = "SELECT max(budget_type_id) AS id FROM budget_type";
-        try {
-            Statement stmt = connect.createStatement();
-            ResultSet res = stmt.executeQuery(qwr);
-            res.next();
-            budgetTypeId = BigInteger.valueOf(res.getInt("id") + 1);
-        } catch (SQLException e) {
-            System.out.println("An error occured while determining the primary key for an entry in the database table BUDGET_TYPE");
-            e.printStackTrace();
-        }
+    public void createUniqId(){
+        DatabaseWork dbObj = new DatabaseWork(jdbcTemplate);
+        budgetTypeId = dbObj.getUniqBudgetTypeId();
     }
 
     public void setBudgetTypeId(BigInteger budgetTypeId) {
@@ -219,11 +153,11 @@ public class BudgetTypeImpl implements BudgetType {
     }
 
     @Override
-    public BigInteger getGroupId() {
+    public Integer getGroupId() {
         return groupId;
     }
 
-    public void setGroupId(BigInteger groupId) {
+    public void setGroupId(Integer groupId) {
         this.groupId = groupId;
     }
 
@@ -246,11 +180,11 @@ public class BudgetTypeImpl implements BudgetType {
     }
 
     @Override
-    public Double getCheckMax() {
+    public BigDecimal getCheckMax() {
         return checkMax;
     }
 
-    public void setCheckMax(Double checkMax) {
+    public void setCheckMax(BigDecimal checkMax) {
         this.checkMax = checkMax;
     }
 }

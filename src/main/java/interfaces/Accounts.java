@@ -1,11 +1,12 @@
 package interfaces;
 
+        import java.math.BigDecimal;
         import java.math.BigInteger;
 
 public interface Accounts extends Entity {
     BigInteger getAccountId();
-    BigInteger getPersonId();
+    Integer getPersonId();
     String getCurrency();
-    Double getBalance();
+    BigDecimal getBalance();
     String getDescription();
 }

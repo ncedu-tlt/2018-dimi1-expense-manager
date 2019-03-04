@@ -20,7 +20,7 @@ public class Report1Controller {
 
     @RequestMapping(value = "/showReport1", method = RequestMethod.POST)
     String showReport1(ModelMap model){
-        DatabaseWork dbObj = new DatabaseWork();
+        DatabaseWork dbObj = new DatabaseWork(jdbcTemplate);
         model.addAttribute("report1", dbObj.getReport1());
         model.addAttribute("totalSum", dbObj.getTotalSum());
         return "report1";

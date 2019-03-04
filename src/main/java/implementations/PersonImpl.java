@@ -1,174 +1,91 @@
 package implementations;
 
 import interfaces.Person;
+import org.springframework.jdbc.core.JdbcTemplate;
+
 import java.math.BigInteger;
-import java.sql.*;
 import java.time.LocalDate;
 import java.util.Date;
+import java.util.Map;
 import java.util.Scanner;
-
 
 public class PersonImpl implements Person {
     private BigInteger personId;
-    private String login, pass, email, phonenumber, description;
+    private String login, pass, email, phonenumber, description, access;
     private Date regDate;
-    private Connection connect;
+    private JdbcTemplate jdbcTemplate;
 
     Scanner in = new Scanner(System.in);
 
-    public PersonImpl(Connection connect){ this.connect = connect; }
+    public PersonImpl(JdbcTemplate jdbcTemplate){ this.jdbcTemplate = jdbcTemplate;  }
 
     @Override
     public void create() {
-
-        String insertPerson = "INSERT INTO person (person_id, login, pass, email, description, reg_date, phone_number) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?)";
-
-        try {
-            PreparedStatement prepareStmtPers = connect.prepareStatement(insertPerson);
-            prepareStmtPers.setInt(1, personId.intValue());
-            prepareStmtPers.setString(2, login);
-            prepareStmtPers.setString(3, pass);
-            prepareStmtPers.setString(4, email);
-            prepareStmtPers.setString(5, description);
-            prepareStmtPers.setObject(6, regDate);
-            prepareStmtPers.setString(7, phonenumber);
-
-            prepareStmtPers.execute();
-        } catch (SQLException e) {
-            System.out.println("An error occured while entering information into the database table PERSON");
-            e.printStackTrace();
-        }
+        String insertPerson = "INSERT INTO person (person_id, login, pass, access, email, description, reg_date, phone_number) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        jdbcTemplate.update(insertPerson, personId, login, pass, access, email, description, regDate, phonenumber);
     }
 
     @Override
     public void delete() {
-        String checkQuery = "SELECT COUNT(*) AS cnt FROM accounts WHERE person_id_fk = " + personId.intValue();
-        DatabaseWork check = new DatabaseWork(connect);
-        if (check.checkExist(checkQuery) != 0) {
+        String checkQuery = "SELECT COUNT(*) AS cnt FROM accounts WHERE person_id_fk = ?";
+        DatabaseWork check = new DatabaseWork(jdbcTemplate);
+        if (check.checkExist(checkQuery, personId) != 0) {
             System.out.println("This record has a link in the other table(s).\nDelete all related entries first.");
             return;
         } else {
-            try {
-                String deletPerson = "DELETE FROM person WHERE person_id = " + personId.intValue();
-                Statement stmtDelPers = connect.createStatement();
-                stmtDelPers.executeUpdate(deletPerson);
-            } catch (SQLException e) {
-                System.out.println("An error occured while deleting a record from the database table PERSON");
-                e.printStackTrace();
-            }
+            String deletPerson = "DELETE FROM person WHERE person_id = ?";
+            jdbcTemplate.update(deletPerson, personId);
         }
     }
 
     @Override
     public void update() {
         String updatePerson = "UPDATE person SET login = ?, pass = ?, email = ?, " +
-                "description = ?, phone_number = ?, reg_date = ? " +
+                "access = ?, description = ?, phone_number = ?, reg_date = ? " +
                 "WHERE person_id = ?";
-            try{
-                PreparedStatement preparedStmtPersonForUpdate =connect.prepareStatement(updatePerson);
-                preparedStmtPersonForUpdate.setString(1, login);
-                preparedStmtPersonForUpdate.setString(2, pass);
-                preparedStmtPersonForUpdate.setString(3, email);
-                preparedStmtPersonForUpdate.setString(4, description);
-                preparedStmtPersonForUpdate.setString(5, phonenumber);
-                preparedStmtPersonForUpdate.setObject(6, regDate);
-                preparedStmtPersonForUpdate.setInt(7, personId.intValue());
-
-                preparedStmtPersonForUpdate.execute();
-            } catch (SQLException e) {
-                System.out.println("An error occured while updating a record from the database table PERSON");
-                e.printStackTrace();
-            }
+        jdbcTemplate.update(updatePerson, login, pass, email, access, description, phonenumber, regDate, personId);
     }
 
     @Override
     public boolean load(BigInteger id) {
-        try{
-            Statement stmtCheckRecord = connect.createStatement();
-            ResultSet resultCheckPerson = stmtCheckRecord.executeQuery("SELECT COUNT(*) AS cnt FROM person WHERE person_id = " + id.intValue());
-            resultCheckPerson.next();
-            if (resultCheckPerson.getInt("cnt") != 0){
-                String dataPerson = "SELECT * FROM person WHERE person_id = " + id.intValue();
-                Statement stmtPers = connect.createStatement();
-                ResultSet resultPers = stmtPers.executeQuery(dataPerson);
-                while (resultPers.next()){
-                    personId = id;
-                    login = resultPers.getString("login");
-                    pass = resultPers.getString("pass");
-                    email = resultPers.getString("email");
-                    description = resultPers.getString("description");
-                    regDate = resultPers.getDate("reg_date");
-                    phonenumber = resultPers.getString("phone_number");
-                }
-                return true;
-            } else {
-                System.out.println("Record with the specified ID is not in the table PERSON");
-            }
-        } catch (SQLException e) {
-            System.out.println("An error occured while displaying information from the database table PERSON");
-            e.printStackTrace();
+        String checkExistPerson = "SELECT COUNT(*) AS cnt FROM person WHERE person_id = ?";
+        Integer checkResult = jdbcTemplate.queryForObject(checkExistPerson, Integer.class, id);
+        if(checkResult != 0){
+            String dataPerson = "SELECT login, pass, email, description, reg_date, phone_number FROM person WHERE person_id = ?";
+            Map result = jdbcTemplate.queryForMap(dataPerson, id);
+            this.personId = id;
+            this.login = (String)result.get("LOGIN");
+            this.pass = (String)result.get("PASS");
+            this.email = (String)result.get("EMAIL");
+            this.access = (String) result.get("ACCESS");
+            this.description = (String)result.get("DESCRIPTION");
+            this.regDate = (Date) result.get("REG_DATE");
+            this.phonenumber = (String)result.get("PHONE_NUMBER");
+            return true;
+        } else{
+            System.out.println("Record with the specified ID is not in the table PERSON");
         }
         return false;
     }
 
     public boolean isPersonExist(BigInteger id){
-        String checkPersonId = "SELECT COUNT(*) AS cnt FROM person WHERE person_id = " + id;
-        try {
-            Statement stmtCheckRecord = connect.createStatement();
-            ResultSet checkRes = stmtCheckRecord.executeQuery(checkPersonId);
-            checkRes.next();
-                if (checkRes.getInt("cnt") != 0){
-                    return true;
-                } else {
-                    System.out.println("Record with the specified ID is not in the table PERSON");
-                }
-        } catch (SQLException e) {
-            e.printStackTrace();
+        String checkPersonId = "SELECT COUNT(*) AS cnt FROM person WHERE person_id = ?";
+        Integer checkExist = jdbcTemplate.queryForObject(checkPersonId, Integer.class, id);
+        if(checkExist != 0){
+            return true;
+        } else{
+            System.out.println("Record with the specified ID is not in the table PERSON");
         }
         return false;
-    }
-
-    public void showTable(){
-        String qwre = "SELECT * FROM person";
-        int field1;
-        String field2, field3, field4, field5, field7;
-        java.sql.Date field6;
-        try {
-            Statement stmtPers =connect.createStatement();
-            ResultSet resultPers = stmtPers.executeQuery(qwre);
-            while (resultPers.next()){
-                field1 = resultPers.getInt("person_id");
-                field2 = resultPers.getString("login");
-                field3 = resultPers.getString("pass");
-                field4 = resultPers.getString("email");
-                field5 = resultPers.getString("description");
-                field6 = resultPers.getDate("reg_date");
-                field7 = resultPers.getString("phone_number");
-                System.out.println(String.format("Id: %5d| login: %15s| pass: %15s| email: %15s| " +
-                                "phone: %12s| registration date: %tD| description: %s",
-                        field1, field2, field3, field4, field7, field6, field5));
-            }
-        } catch (SQLException e) {
-            System.out.println("An error occured while displaying information from the database table PERSON");
-            e.printStackTrace();
-        }
     }
 
     @Override
     public BigInteger getPersonId() { return personId; }
 
-    public void setPersonId() {
-        String qwr = "SELECT max(person_id) AS id FROM person";
-        try {
-            Statement stmt = connect.createStatement();
-            ResultSet res = stmt.executeQuery(qwr);
-            res.next();
-            personId = BigInteger.valueOf(res.getInt("id") + 1);
-        } catch (SQLException e) {
-            System.out.println("An error occured while determining the primary key for an entry in the database table PERSON");
-            e.printStackTrace();
-        }
+    public void createUniqId() {
+        DatabaseWork dbObj = new DatabaseWork(jdbcTemplate);
+        personId = dbObj.getUniqPersonId();
     }
 
     public void setPersonId(BigInteger personId) {
@@ -210,6 +127,14 @@ public class PersonImpl implements Person {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getAccess() {
+        return access;
+    }
+
+    public void setAccess(String access) {
+        this.access = access;
     }
 
     @Override

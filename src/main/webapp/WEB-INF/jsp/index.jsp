@@ -1,128 +1,164 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <html lang="en">
+<!DOCTYPE html>
+<html lang="ru">
 <head>
-    <%--<meta charset="UTF-8">--%>
-    <meta http-equiv="content-type" content="text/html; charset=utf-8">
-    <title>Expense maneger</title>
+    <!-- Required meta tags -->
+    <meta http-equiv="Content-Type" content="text/html; charset=windows-1251" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Sign in · Web Site</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+    <link href="/css/index.css" rel="stylesheet" type="text/css"/></link>
+
+    <!-- jQuery first, then Tether, then Bootstrap JS. -->
+    <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.js" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
+    <script src="/js/registration.js" rel="stylesheet" type="text/javascript"></script>
 </head>
+
+<div class="modal fade" id="modalError" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Information</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <center><p id="errors"></p></center>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Ok</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <body>
-    <h2 align="center">Tables from database</h2>
+<header class="navbar fixed-top navbar-empty">
+    <div class="container">
+        <a class="navbar-brand picture" href="">
+            <img src="/picture/main.jpg" width="30" height="30" alt="">
+        </a>
+    </div>
+</header>
+<br>
+<br>
 
-    <h3 align="center">PERSONS</h3>
-    <table border="2" width="450" cellspacing="2" cellpadding="5" align="center">
-        <tr>
-            <td>person_id</td><td>login</td><td>pass</td><td>email</td><td>description</td><td>reg_date</td><td>phone_number</td>
-        </tr>
-        <c:forEach items="${persons}" var="rep">
-            <tr>
-                <td>${rep.getPersonId()}</td>
-                <td>${rep.getLogin()}</td>
-                <td>${rep.getPass()}</td>
-                <td>${rep.getEmail()}</td>
-                <td>${rep.getDescription()}</td>
-                <td>${rep.getRegDate()}</td>
-                <td>${rep.getPhonenumber()}</td>
-            </tr>
-        </c:forEach>
-    </table>
+<sec:authorize access="hasRole('USER')">
+    <c:redirect url="/menu"/>
+</sec:authorize>
+<div class="container padding-container">
+    <div class="row row-width">
+        <div class="col-sm-7">
+            <h1 class="display-4">Expense-Manager</h1>
+            <p data-sourcepos="1:1-1:84" dir="auto"> test text</p>
+        </div>
+        <div class="col-sm-5">
+            <div class="card">
+                <ul class="nav nav-tabs" id="myTab" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true"><center>Sing in</center></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false"><center>Regist</center></a>
+                    </li>
+                </ul>
+                <div class="tab-content" id="myTabContent">
+                    <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                        <!-- форма для логина -->
+                        <form name="loginForm" action="/login" method="post">
+                            <div class="form-group te">
+                                <small><dt label for="login" class="col-form-label">Login:</label></dt></small>
+                                <input type="text" class="form-control" name="username" id="login" placeholder="Login"/>
+                            </div>
+                            <div class="form-group te">
+                                <small><dt label for="pass" class="col-form-label">Password:</label></dt></small>
+                                <input type="password" class="form-control" name="password" id="pass" placeholder="Password">
+                            </div>
+                            <br>
+                            <div class="col-auto my-1 te">
+                                <div class="custom-control custom-checkbox mr-sm-2">
+                                    <input type="checkbox" class="form-check-input" id="customControlAutosizing">
+                                    <small><dt label class="custom-control-label" for="customControlAutosizing">Remember me</label></dt></small>
+                                </div>
+                            </div>
+                            <div class="form-group te">
+                                <input type="hidden" name="_csrf" value="${_csrf.token}"/>
+                                <button onClick="return validateAuthorization();" type="submit" class="bttn btn-success">Sign up</button>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                        <!-- форма для регистрации -->
+                        <form name="registrationForm" action="/registration" method="post">
+                            <div class="form-group te">
+                                <small><dt label for="login" class="col-form-label">Login:</label></dt></small>
+                                <input type="text" class="form-control" name="login" id="login" placeholder="Login"/>
+                            </div>
+                            <div class="form-group te">
+                                <small><dt label for="password" class="col-form-label">Password:</label></dt></small>
+                                <input type="password" class="form-control" name="password" id="pass" placeholder="Password">
+                            </div>
+                            <div class="form-group te">
+                                <small><dt label for="email" class="col-form-label">Email:</label></dt></small>
+                                <input type="text" class="form-control" name="email" id="email" placeholder="@mail">
+                            </div>
+                            <div class="form-group te">
+                                <small><dt label for="attName" class="col-form-label">About myself:</label></dt></small>
+                                <input type="text" class="form-control" name="info" id="info" placeholder="information">
+                            </div>
+                            <div class="form-group te">
+                                <small><dt label for="attName" class="col-form-label">Telephone number:</label></dt></small>
+                                <input type="text" class="form-control" name="phone" id="phone" placeholder="Tel. Number">
+                            </div>
+                            <br>
+                            <div class="form-group te">
+                                <input type="hidden" name="_csrf" value="${_csrf.token}"/>
+                                <button onClick="return validateRegistration();" type="submit" class="bttn btn-success">Regist</button>
 
-    <h3 align="center">ACCOUNTS</h3>
-    <table border="2" width="450" cellspacing="2" cellpadding="5" align="center">
-        <tr>
-            <td>account_id</td><td>account_number</td><td>person_id_fk</td><td>currency</td><td>balance</td><td>description</td>
-        </tr>
-        <c:forEach items="${accounts}" var="account">
-            <tr>
-                <td>${account.getAccountId()}</td>
-                <td>${account.getAccountNumber()}</td>
-                <td>${account.getPersonId()}</td>
-                <td>${account.getCurrency()}</td>
-                <td>${account.getBalance()}</td>
-                <td>${account.getDescription()}</td>
-            </tr>
-        </c:forEach>
-    </table>
-
-    <h3 align="center">BUDGET_TYPE</h3>
-    <table border="2" width="450" cellspacing="2" cellpadding="5" align="center">
-        <tr>
-            <td>budget_type_id</td><td>group_id</td><td>name</td><td>required</td><td>check_max</td>
-        </tr>
-        <c:forEach items="${budget_types}" var="budget_type">
-            <tr>
-                <td>${budget_type.getBudgetTypeId()}</td>
-                <td>${budget_type.getGroupId()}</td>
-                <td>${budget_type.getName()}</td>
-                <td>${budget_type.getRequired()}</td>
-                <td>${budget_type.getCheckMax()}</td>
-            </tr>
-        </c:forEach>
-    </table>
-
-    <h3 align="center">BUDGET</h3>
-    <table border="2" width="450" cellspacing="2" cellpadding="5" align="center">
-        <tr>
-            <td>budget_id</td><td>operation_type</td><td>budget_type_id_fk</td><td>description</td><td>account_id_fk</td>
-            <td>operation_date</td><td>charge_value</td>
-        </tr>
-        <c:forEach items="${budgets}" var="budget">
-            <tr>
-                <td>${budget.getBudgetId()}</td>
-                <td>${budget.getOperationType()}</td>
-                <td>${budget.getBudgetTypeId()}</td>
-                <td>${budget.getDescription()}</td>
-                <td>${budget.getAccountId()}</td>
-                <td>${budget.getOperationDate()}</td>
-                <td>${budget.getChargeValue()}</td>
-            </tr>
-        </c:forEach>
-    </table>
-
-    <h3 align="center">PLAN_BUDGET</h3>
-    <table border="2" width="450" cellspacing="2" cellpadding="5" align="center">
-        <tr>
-            <td>plan_budget_id</td><td>operation_type</td><td>budget_type_id_fk</td><td>description</td><td>account_id_fk</td>
-            <td>operation_date</td><td>charge_value</td><td>regular_mask</td><td>repeat_count</td><td>start_date</td>
-            <td>end_date</td>
-        </tr>
-        <c:forEach items="${plan_budgets}" var="plan_budget">
-            <tr>
-                <td>${plan_budget.getPlanBudgetId()}</td>
-                <td>${plan_budget.getOperationType()}</td>
-                <td>${plan_budget.getBudgetTypeId()}</td>
-                <td>${plan_budget.getDescription()}</td>
-                <td>${plan_budget.getAccountId()}</td>
-                <td>${plan_budget.getOperationDate()}</td>
-                <td>${plan_budget.getChargeValue()}</td>
-                <td>${plan_budget.getRegularMask()}</td>
-                <td>${plan_budget.getRepeatCount()}</td>
-                <td>${plan_budget.getStartDate()}</td>
-                <td>${plan_budget.getEndDate()}</td>
-            </tr>
-        </c:forEach>
-    </table>
-
-
-    <form align="center" method="POST" action="/showReport1">
-        <p>
-            <input type="submit" value="Report1"/>
-        </p>
-    </form>
-    <form align="center" method="post" action="/showReport2">
-        <p>
-            <input type="submit" value="Report2"/>
-        </p>
-    </form>
-    <form align="center" method="post" action="/showReport3">
-        <p>
-            <input type="submit" value="Report3"/>
-        </p>
-    </form>
-
-    <%--<p><ul>
-        <li><a href="/hello">http://localhost:8080/hello</a>
-        <li><a href="/hello?name=Student">http://localhost:8080/hello?name=Student</a>
-    </ul></p>--%>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <p>
+            <div class="card">
+                <div class="conteiner">
+                    <div class="form-group te">
+                        <small><dt label for="attName" class="col-sm-5 col-sm-5 col-form-label">Sign in with</label></dt></small>
+                    </div>
+                    <div class="row justify-content-center">
+                        <div class="col-sm-4 col-sm-5">
+                            <a class="btn brd d-flex align-items-center omniauth-btn text-left oauth-login" id="oauth-login-google_oauth2" rel="nofollow" data-method="post" href="/users/auth/google_oauth2"><img src="/picture/google.png" width="15" height="15" title="Sign in with Google" alt="Google">
+                                <span>&#8194; Google</span>
+                            </a>
+                        </div>
+                        <div class="col-sm-4 col-sm-5">
+                            <a class="btn brd d-flex align-items-center omniauth-btn text-left oauth-login" id="oauth-login-google_oauth2" rel="nofollow" data-method="post" href="/users/auth/google_oauth2"><img src="/picture/ya1.jpg" width="15" height="15" title="Sign in with Yandex" alt="Yandex">
+                                <span>&#8194; Yandex</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <ul class="fixed-bottom nigth-footer">
+                <div class="container">
+                    <div class="row">
+                        <div class="footer-links text-footer">
+                            <a class="col" href="#">Help</a>
+                            <a class="col" href="#">About Site</a>
+                        </div>
+                    </div>
+                </div>
+            </ul>
+        </div>
+    </div>
+</div>
 </body>
 </html>
