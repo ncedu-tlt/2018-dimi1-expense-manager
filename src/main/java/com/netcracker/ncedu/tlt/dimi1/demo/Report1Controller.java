@@ -9,17 +9,20 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 @Controller
-public class IndexController {
+public class Report1Controller {
 
     private JdbcTemplate jdbcTemplate;
 
     @Autowired
-    public IndexController(JdbcTemplate jdbcTemplate) {
+    public Report1Controller(JdbcTemplate jdbcTemplate){
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    @RequestMapping(value = "/", method = RequestMethod.GET)
-    String home(ModelMap model) {
-        return "menu";
+    @RequestMapping(value = "/showReport1", method = RequestMethod.GET )
+    String showReport1(ModelMap model){
+        DatabaseWork dbObj = new DatabaseWork(jdbcTemplate);
+        model.addAttribute("report1", dbObj.getReport1());
+        model.addAttribute("totalSum", dbObj.getTotalSum());
+        return "report1";
     }
 }

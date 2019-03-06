@@ -1,65 +1,42 @@
 package implementations;
 
 import interfaces.PlanBudget;
+import org.springframework.jdbc.core.JdbcTemplate;
 
+import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.sql.*;
 import java.util.Date;
-import java.util.Scanner;
+import java.util.Map;
 
 public class PlanBudgetImpl implements PlanBudget {
     private BigInteger planBudgetId;
     private String operationType;
-    private BigInteger budgetTypeId;
+    private Integer budgetTypeId;
     private String description;
-    private BigInteger accountId;
+    private Integer accountId;
     private Date operationDate;
-    private Double chargeValue;
+    private BigDecimal chargeValue;
     private String regularMask;
     private Integer repeatCount;
     private Date startDate;
     private Date endDate;
-    private Connection connect;
+    private JdbcTemplate jdbcTemplate;
 
-    public PlanBudgetImpl(Connection connect){ this.connect = connect; }
+    public PlanBudgetImpl(JdbcTemplate jdbcTemplate){ this.jdbcTemplate = jdbcTemplate; }
 
     @Override
     public void create() {
         String insertPlanBudg = "INSERT INTO plan_budget (plan_budget_id, operation_type, budget_type_id_fk, description, " +
                 "account_id_fk, operation_date, charge_value, regular_mask, repeat_count, start_date, end_date) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-
-        try {
-            PreparedStatement prepareStmtPlanBudg = connect.prepareStatement(insertPlanBudg);
-            prepareStmtPlanBudg.setInt(1, planBudgetId.intValue());
-            prepareStmtPlanBudg.setString(2, operationType);
-            prepareStmtPlanBudg.setInt(3, budgetTypeId.intValue());
-            prepareStmtPlanBudg.setString(4, description);
-            prepareStmtPlanBudg.setInt(5, accountId.intValue());
-            prepareStmtPlanBudg.setObject(6, operationDate);
-            prepareStmtPlanBudg.setDouble(7, chargeValue);
-            prepareStmtPlanBudg.setString(8, regularMask);
-            prepareStmtPlanBudg.setInt(9, repeatCount);
-            prepareStmtPlanBudg.setObject(10, startDate);
-            prepareStmtPlanBudg.setObject(11, endDate);
-
-            prepareStmtPlanBudg.execute();
-        } catch (SQLException e) {
-            System.out.println("An error occured while entering information into the database table PLAN_BUDGET");
-            e.printStackTrace();
-        }
+        jdbcTemplate.update(insertPlanBudg, planBudgetId, operationType, budgetTypeId, description,
+                accountId, operationDate, chargeValue, regularMask, repeatCount, startDate, endDate);
     }
 
     @Override
     public void delete() {
-        try{
-            String deletPlanBudg = "DELETE FROM plan_budget WHERE plan_budget_id = " + planBudgetId.intValue();
-            Statement stmtDelPlanBudg = connect.createStatement();
-            stmtDelPlanBudg.executeUpdate(deletPlanBudg);
-        } catch(SQLException e) {
-            System.out.println("An error occured while deleting a record from the database table PLAN_BUDGET");
-            e.printStackTrace();
-        }
+        String deletPlanBudg = "DELETE FROM plan_budget WHERE plan_budget_id = ?";
+        jdbcTemplate.update(deletPlanBudg, planBudgetId);
     }
 
     @Override
@@ -68,92 +45,36 @@ public class PlanBudgetImpl implements PlanBudget {
                 "account_id_fk = ?, operation_date = ?, charge_value = ?, regular_mask = ?, " +
                 "repeat_count = ?, start_date = ?, end_date = ?" +
                 "WHERE plan_budget_id = ?";
-        try{
-            PreparedStatement prepareStmtPlanBudgForUpdate = connect.prepareStatement(updatePlanBudg);
-            prepareStmtPlanBudgForUpdate.setString(1, operationType);
-            prepareStmtPlanBudgForUpdate.setInt(2, budgetTypeId.intValue());
-            prepareStmtPlanBudgForUpdate.setString(3, description);
-            prepareStmtPlanBudgForUpdate.setInt(4, accountId.intValue());
-            prepareStmtPlanBudgForUpdate.setObject(5, operationDate);
-            prepareStmtPlanBudgForUpdate.setDouble(6, chargeValue);
-            prepareStmtPlanBudgForUpdate.setString(7, regularMask);
-            prepareStmtPlanBudgForUpdate.setInt(8, repeatCount);
-            prepareStmtPlanBudgForUpdate.setObject(9, startDate);
-            prepareStmtPlanBudgForUpdate.setObject(10, endDate);
-            prepareStmtPlanBudgForUpdate.setInt(11, planBudgetId.intValue());
-
-            prepareStmtPlanBudgForUpdate.execute();
-        } catch (SQLException e) {
-            System.out.println("An error occured while updating a record from the database table PLAN_BUDGET");
-            e.printStackTrace();
-        }
+        jdbcTemplate.update(updatePlanBudg, operationType, budgetTypeId, description, accountId,
+                operationDate, chargeValue, regularMask, repeatCount, startDate, endDate, planBudgetId);
     }
 
     @Override
     public boolean load(BigInteger id) {
-        try {
-            Statement stmtCheckRecord = connect.createStatement();
-            ResultSet resultCheckPlanBudget = stmtCheckRecord.executeQuery("SELECT COUNT(*) AS cnt " +
-                    "FROM plan_budget WHERE plan_budget_id = " + id.intValue());
-            resultCheckPlanBudget.next();
-            if (resultCheckPlanBudget.getInt("cnt") != 0){
-                String dataPerson = "SELECT * FROM plan_budget WHERE plan_budget_id = " + id.intValue();
-                Statement stmtPlanBudg = connect.createStatement();
-                ResultSet resultPlanBudget = stmtPlanBudg.executeQuery(dataPerson);
-                while (resultPlanBudget.next()){
-                    planBudgetId = id;
-                    operationType = resultPlanBudget.getString("operation_type");
-                    budgetTypeId = BigInteger.valueOf(resultPlanBudget.getInt("budget_type_id_fk"));
-                    description = resultPlanBudget.getString("description");
-                    accountId = BigInteger.valueOf(resultPlanBudget.getInt("account_id_fk"));
-                    operationDate = resultPlanBudget.getDate("operation_date");
-                    chargeValue = resultPlanBudget.getDouble("charge_value");
-                    regularMask = resultPlanBudget.getString("regular_mask");
-                    repeatCount = resultPlanBudget.getInt("repeat_count");
-                    startDate = resultPlanBudget.getDate("start_date");
-                    endDate = resultPlanBudget.getDate("end_date");
-                }
-                return true;
-            } else {
-                System.out.println("Plan budget with the specified ID is not in the table PLAN_BUDGET");
-            }
-        } catch (SQLException e) {
-            System.out.println("An error occured while displaying information from the database table PLAN_BUDGET");
-            e.printStackTrace();
+        String checkExistPlanBudget = "SELECT COUNT(*) AS cnt FROM plan_budget WHERE plan_budget_id = ?";
+        Integer checkResult = jdbcTemplate.queryForObject(checkExistPlanBudget, Integer.class, id);
+        if(checkResult != 0){
+            String dataPlanBudget = "SELECT operation_type, budget_type_id_fk, description," +
+                    "account_id_fk, operation_date, charge_value, regular_mask," +
+                    "repeat_count, start_date, end_date " +
+                    "FROM plan_budget WHERE plan_budget_id = ?";
+            Map result = jdbcTemplate.queryForMap(dataPlanBudget, id);
+            this.planBudgetId = id;
+            this.operationType = (String) result.get("OPERATION_TYPE");
+            this.budgetTypeId = (Integer) result.get("BUDGET_TYPE_ID_FK");//Заменила тип на Integer
+            this.description = (String) result.get("DESCRIPTION");
+            this.accountId = (Integer) result.get("ACCOUNT_ID_FK");//Заменила тип на Integer
+            this.operationDate = (Date) result.get("OPERATION_DATE");
+            this.chargeValue = (BigDecimal) result.get("CHARGE_VALUE");//Заменила тип на BigDecimal
+            this.regularMask = (String) result.get("REGULAR_MASK");
+            this.repeatCount = (Integer) result.get("REPEAT_COUNT");
+            this.startDate = (Date) result.get("START_DATE");
+            this.endDate = (Date) result.get("END_DATE");
+            return true;
+        } else {
+            System.out.println("Plan budget with the specified ID is not in the table PLAN_BUDGET");
         }
         return false;
-    }
-
-    public void showTable(){
-        String qwre = "SELECT * FROM plan_budget";
-        int field1, field3, field5, field9;
-        Double field7;
-        String field2, field4, field8;
-        java.sql.Date field6, field10, field11;
-        try {
-            Statement stmtPlanBudg =connect.createStatement();
-            ResultSet resultPlanBudget = stmtPlanBudg.executeQuery(qwre);
-            while (resultPlanBudget.next()){
-                field1 = resultPlanBudget.getInt("plan_budget_id");
-                field2 = resultPlanBudget.getString("operation_type");
-                field3 = resultPlanBudget.getInt("budget_type_id_fk");
-                field4 = resultPlanBudget.getString("description");
-                field5 = resultPlanBudget.getInt("account_id_fk");
-                field6 = resultPlanBudget.getDate("operation_date");
-                field7 = resultPlanBudget.getDouble("charge_value");
-                field8 = resultPlanBudget.getString("regular_mask");
-                field9 = resultPlanBudget.getInt("repeat_count");
-                field10 = resultPlanBudget.getDate("start_date");
-                field11 = resultPlanBudget.getDate("end_date");
-                System.out.println(String.format("Id: %5d| operation type: %12s| budgetTypeId: %5d| description: %35s| " +
-                                "accountId: %5d| operation date: %10tD| charge value: %7.2f| regular mask: %20s| " +
-                                "repeat count: %4d| start date: %10tD| end date: %10td",
-                        field1, field2, field3, field4, field5, field6, field7, field8, field9, field10, field11));
-            }
-        } catch (SQLException e) {
-            System.out.println("An error occured while displaying information from the database table PLAN BUDGET");
-            e.printStackTrace();
-        }
     }
 
     @Override
@@ -161,17 +82,9 @@ public class PlanBudgetImpl implements PlanBudget {
         return planBudgetId;
     }
 
-    public void setPlanBudgetId(){
-        String qwr = "SELECT max(plan_budget_id) AS id FROM plan_budget";
-        try {
-            Statement stmt = connect.createStatement();
-            ResultSet res = stmt.executeQuery(qwr);
-            res.next();
-            planBudgetId = BigInteger.valueOf(res.getInt("id") + 1);
-        } catch (SQLException e) {
-            System.out.println("An error occured while determining the primary key for an entry in the database table PLAN_BUDGET");
-            e.printStackTrace();
-        }
+    public void createUniqId(){
+        DatabaseWork dbObj = new DatabaseWork(jdbcTemplate);
+        planBudgetId = dbObj.getUniqPlanBudgetId();
     }
 
     public void setPlanBudgetId(BigInteger planBudgetId) {
@@ -188,11 +101,11 @@ public class PlanBudgetImpl implements PlanBudget {
     }
 
     @Override
-    public BigInteger getBudgetTypeId() {
+    public Integer getBudgetTypeId() {
         return budgetTypeId;
     }
 
-    public void setBudgetTypeId(BigInteger budgetTypeId) {
+    public void setBudgetTypeId(Integer budgetTypeId) {
         this.budgetTypeId = budgetTypeId;
     }
 
@@ -206,11 +119,11 @@ public class PlanBudgetImpl implements PlanBudget {
     }
 
     @Override
-    public BigInteger getAccountId() {
+    public Integer getAccountId() {
         return accountId;
     }
 
-    public void setAccountId(BigInteger accountId) {
+    public void setAccountId(Integer accountId) {
         this.accountId = accountId;
     }
 
@@ -224,11 +137,11 @@ public class PlanBudgetImpl implements PlanBudget {
     }
 
     @Override
-    public Double getChargeValue() {
+    public BigDecimal getChargeValue() {
         return chargeValue;
     }
 
-    public void setChargeValue(Double chargeValue) {
+    public void setChargeValue(BigDecimal chargeValue) {
         this.chargeValue = chargeValue;
     }
 

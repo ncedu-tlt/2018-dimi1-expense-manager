@@ -1,14 +1,15 @@
 package interfaces;
 
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Date;
 
 public interface Budget extends Entity {
     BigInteger getBudgetId();
     String getOperationType();
-    BigInteger getBudgetTypeId();
+    Integer getBudgetTypeId();
     String getDescription();
-    BigInteger getAccountId();
+    Integer getAccountId();
     Date getOperationDate();
-    Double getChargeValue();
+    BigDecimal getChargeValue();
 }
