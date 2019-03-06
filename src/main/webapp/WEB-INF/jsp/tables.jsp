@@ -104,17 +104,17 @@
     </table>
 
 
-    <form align="center" method="POST" action="/showReport1">
+    <form align="center" method="GET" action="/showReport1">
         <p>
             <input type="submit" value="Report1"/>
         </p>
     </form>
-    <form align="center" method="post" action="/showReport2">
+    <form align="center" method="GET" action="/showReport2">
         <p>
             <input type="submit" value="Report2"/>
         </p>
     </form>
-    <form align="center" method="post" action="/showReport3">
+    <form align="center" method="GET" action="/showReport3">
         <p>
             <input type="submit" value="Report3"/>
         </p>
