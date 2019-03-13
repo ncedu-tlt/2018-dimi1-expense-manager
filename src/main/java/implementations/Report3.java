@@ -63,9 +63,8 @@ public class Report3 {
                        } else if (criterialStartDate.after(plans.get(i).getStartDate())) {
                            curDate = criterialStartDate;
                        }
-                       //TODO Подумать над парсингом времени (вместо 17:15 17:20 20:15 20:20 - 17:15 20:20)
                        if (plans.get(i).getRepeatCount() != null) {
-                           for (int z = 0; z < plans.get(i).getRepeatCount() * getCoef(regM); z++) {
+                           for (int z = 0; z < plans.get(i).getRepeatCount(); z++) {
                                Report3 obj = new Report3(jdbcTemplate);
                                obj.setId(BigInteger.valueOf(plans.get(i).getBudgetTypeId()));
                                obj.setDate(curDate);
@@ -103,54 +102,6 @@ public class Report3 {
                }
            }
         }
-    }
-
-    public int getCoef(String regM){
-        String[] mask = regM.split(" ");
-        if(mask[1] != "*") {
-            minutes = mask[1];
-        }
-        if(mask[2] != "*") {
-            hours = mask[2];
-        }
-        int count = 0;
-        int cntMin = 0, cntHour = 0;
-        cntMin += getCountElements(this.minutes);
-        cntHour += getCountElements(this.hours);
-        if(cntHour == cntMin){
-            count+=cntHour;
-        } else if(cntHour>cntMin){
-            count+=cntHour;
-        } else if(cntMin>cntHour){
-            count+=cntMin;
-        }
-        return count;
-    }
-
-    public int getCountElements(String param){
-        int count = 0;
-        String[] sizeRes = param.split(",");
-        String[][] result = new String[sizeRes.length][];
-        for(int i=0; i<sizeRes.length; i++){
-            if(sizeRes[i].indexOf("-") == -1){
-                result[i] = new String[1];
-                result[i][0] = sizeRes[i];
-            } else {
-                String[] sub = sizeRes[i].split("-");
-                int num1 = Integer.parseInt(sub[0]);
-                int num2 = Integer.parseInt(sub[1]);
-                int currentNumber = num1;
-                result[i] = new String[num2-num1+1];
-                for(int j=0; j<num2-num1+1; j++){
-                    result[i][j] = String.valueOf(currentNumber);
-                    currentNumber++;
-                }
-            }
-        }
-        for(int k=0; k<result.length; k++){
-            count+=result[k].length;
-        }
-        return count;
     }
 
     public void getReportRow(List<Report3> rL) {
