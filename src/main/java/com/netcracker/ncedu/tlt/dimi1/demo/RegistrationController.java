@@ -33,7 +33,7 @@ public class RegistrationController {
 
         DatabaseWork databaseObj = new DatabaseWork(jdbcTemplate);
         String  sql = "select login from person where login = '" + login + "'" ;
-        if(databaseObj.checkLogin(sql) && login != "" && email !="")
+        if(!databaseObj.checkLogin(sql) && login != "" && email !="")
         {
             jdbcTemplate.update("INSERT INTO Person (login, pass, access, email, description, reg_date, phone_number)" +
                     " VALUES ('"+ login +"', '"+ password +"', 'USER', '"+ email +"', '"+ information +"'," +

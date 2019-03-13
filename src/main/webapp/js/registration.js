@@ -8,7 +8,6 @@ function validateAuthorization()
        document.getElementById("errors").innerHTML = 'You have not entered a username or password!';
        $('#modalError').modal('show');
        return false;
-
    }
    if((uname.length < 1) || (uname.length > 15) ||
      (pass.length < 1) || (pass.length > 15))
