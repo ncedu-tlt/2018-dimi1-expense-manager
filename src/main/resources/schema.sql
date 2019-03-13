@@ -14,7 +14,7 @@ CREATE TABLE Accounts(
   account_number VARCHAR(16),
   person_id_fk INTEGER(10),
   currency VARCHAR2(3),
-  balance DECIMAL(7, 2),
+  balance DECIMAL(7,2),
   description VARCHAR(350),
   FOREIGN KEY (person_id_fk) REFERENCES Person(person_id)
 );
