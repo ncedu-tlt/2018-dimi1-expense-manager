@@ -201,7 +201,6 @@ public class DatabaseWork {
         calendar.set(Calendar.HOUR, 22);
         calendar.set(Calendar.MINUTE, 30);
         java.util.Date start = calendar.getTime();
-        System.out.println("START: " + start);
 
         calendar.set(Calendar.YEAR, 2019);
         calendar.set(Calendar.MONTH, 4);
@@ -210,7 +209,6 @@ public class DatabaseWork {
         calendar.set(Calendar.MINUTE, 0);
         calendar.set(Calendar.SECOND, 0);
         java.util.Date end = calendar.getTime();
-        System.out.println("END: " + end);
 
         rep3.getReportRow(planBudgetL, report3L, start, end);
         return report3L;
