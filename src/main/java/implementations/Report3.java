@@ -46,7 +46,7 @@ public class Report3 {
                    rL.add(obj);
 
                }
-           } else if(plans.get(i).getStartDate() != null) {
+           } else {
                if (plans.get(i).getStartDate().after(criterialStartDate) ||
                        plans.get(i).getStartDate().before(criterialEndDate) ||
                        plans.get(i).getStartDate().equals(criterialStartDate)) {
