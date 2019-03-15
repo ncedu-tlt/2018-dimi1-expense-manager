@@ -64,7 +64,7 @@ public class Report3 {
                            curDate = criterialStartDate;
                        }
                        if (plans.get(i).getRepeatCount() != null) {
-                           for (int z = 0; z < plans.get(i).getRepeatCount(); z++) {
+                           for (int z = 0; z < plans.get(i).getRepeatCount() * getCoef(regM, plans.get(i).getSpliter()); z++) {
                                Report3 obj = new Report3(jdbcTemplate);
                                obj.setId(BigInteger.valueOf(plans.get(i).getBudgetTypeId()));
                                obj.setDate(curDate);
@@ -86,6 +86,8 @@ public class Report3 {
                                } else {
                                    end = criterialEndDate;
                                }
+                           } else {
+                               end = criterialEndDate;
                            }
                            curDate = generator.next(curDate);
                            while (curDate.before(end) || curDate.equals(end)) {
@@ -102,6 +104,58 @@ public class Report3 {
                }
            }
         }
+    }
+
+    public int getCoef(String regM, boolean isSplit){
+        String[] mask = regM.split(" ");
+        if(mask[1] != "*") {
+            minutes = mask[1];
+        }
+        if(mask[2] != "*") {
+            hours = mask[2];
+        }
+        int count = 0;
+        int cntMin = 0, cntHour = 0;
+        if(isSplit){
+            cntMin += getCountElements(this.minutes);
+            cntHour += getCountElements(this.hours);
+            if(cntHour == cntMin){
+                count+=cntHour;
+            } else if(cntHour>cntMin){
+                count+=cntHour;
+            } else if(cntMin>cntHour){
+                count+=cntMin;
+            }
+        } else {
+            count = 1;
+        }
+        return count;
+    }
+
+    public int getCountElements(String param){
+        int count = 0;
+        String[] sizeRes = param.split(",");
+        String[][] result = new String[sizeRes.length][];
+        for(int i=0; i<sizeRes.length; i++){
+            if(sizeRes[i].indexOf("-") == -1){
+                result[i] = new String[1];
+                result[i][0] = sizeRes[i];
+            } else {
+                String[] sub = sizeRes[i].split("-");
+                int num1 = Integer.parseInt(sub[0]);
+                int num2 = Integer.parseInt(sub[1]);
+                int currentNumber = num1;
+                result[i] = new String[num2-num1+1];
+                for(int j=0; j<num2-num1+1; j++){
+                    result[i][j] = String.valueOf(currentNumber);
+                    currentNumber++;
+                }
+            }
+        }
+        for(int k=0; k<result.length; k++){
+            count+=result[k].length;
+        }
+        return count;
     }
 
     public void getReportRow(List<Report3> rL) {
