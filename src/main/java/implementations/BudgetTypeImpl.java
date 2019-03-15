@@ -80,17 +80,6 @@ public class BudgetTypeImpl implements BudgetType {
         return false;
     }
 
-    public boolean isBudgetTypeExists(BigInteger id){
-        String checkBudgetTypeId = "SELECT COUNT(*) AS cnt FROM budget_type WHERE budget_type_id = ?";
-        Integer checkExist = jdbcTemplate.queryForObject(checkBudgetTypeId, Integer.class, id);
-        if(checkExist != 0){
-            return true;
-        } else {
-            System.out.println("Budget type with the specified ID is not in the table BUDGET_TYPE");
-        }
-        return false;
-    }
-
     @Override
     public BigInteger getBudgetTypeId() {
         return budgetTypeId;

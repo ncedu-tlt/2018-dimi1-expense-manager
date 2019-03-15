@@ -15,7 +15,7 @@ public class DeleteBudgetTypeController {
     @Autowired
     DeleteBudgetTypeController(JdbcTemplate jdbcTemplate){ this.jdbcTemplate = jdbcTemplate; }
 
-    @RequestMapping
+    @RequestMapping(value = "deleteBudgetType")
     String deleteBudgetType(BigInteger budgetTypeId){
         BudgetTypeImpl budgetTypeForDelete = new BudgetTypeImpl(jdbcTemplate);
         if(budgetTypeForDelete.load(budgetTypeId)){

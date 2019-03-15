@@ -23,11 +23,15 @@ public class UpdateBudgetType {
         BudgetTypeImpl budgetTypeForUpdate = new BudgetTypeImpl(jdbcTemplate);
         if(budgetTypeForUpdate.load(budgetTypeId)){
             budgetTypeForUpdate.setBudgetTypeId(budgetTypeId);
-            budgetTypeForUpdate.setGroupId(groupId);
-            budgetTypeForUpdate.setName(name);
-            budgetTypeForUpdate.setRequired(isRequired);
-            budgetTypeForUpdate.setCheckMax(checkMax);
-            budgetTypeForUpdate.update();
+            if(budgetTypeForUpdate.isGroupExsist(groupId)){
+                budgetTypeForUpdate.setGroupId(groupId);
+                budgetTypeForUpdate.setName(name);
+                budgetTypeForUpdate.setRequired(isRequired);
+                budgetTypeForUpdate.setCheckMax(checkMax);
+                budgetTypeForUpdate.update();
+            } else {
+                log.info("The group with the specified id doesn't exist");
+            }
         } else {
             log.info("Record with the specified ID doesn't exist in table BudgetTypes");
         }

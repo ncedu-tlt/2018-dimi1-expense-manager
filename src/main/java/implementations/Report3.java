@@ -72,9 +72,12 @@ public class Report3 {
                                obj.setSum(plans.get(i).getChargeValue());
                                rL.add(obj);
                                curDate = generator.next(curDate);
+                               if(curDate.after(criterialEndDate)){
+                                   break;
+                               }
                            }
                        } else if (plans.get(i).getRepeatCount() == null) {
-                           Date end = new Date();
+                           Date end;
                            if (plans.get(i).getEndDate() != null) {
                                if (plans.get(i).getEndDate().before(criterialEndDate) ||
                                        plans.get(i).getEndDate().equals(criterialEndDate)) {
@@ -117,8 +120,8 @@ public class Report3 {
         int count = 0;
         int cntMin = 0, cntHour = 0;
         if(isSplit){
-            cntMin += getCountElements(this.minutes);
-            cntHour += getCountElements(this.hours);
+            cntMin += getCountElements(minutes);
+            cntHour += getCountElements(hours);
             if(cntHour == cntMin){
                 count+=cntHour;
             } else if(cntHour>cntMin){

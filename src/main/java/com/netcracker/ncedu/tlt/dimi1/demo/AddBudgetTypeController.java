@@ -34,12 +34,16 @@ public class AddBudgetTypeController {
     @RequestMapping(value = "/addBudgetType")
     String addBudgetType(Integer groupId, String name, boolean isRequired, BigDecimal checkMax){
         BudgetTypeImpl budgetTypeForAdd = new BudgetTypeImpl(jdbcTemplate);
-        budgetTypeForAdd.createUniqId();
-        budgetTypeForAdd.setGroupId(groupId);
-        budgetTypeForAdd.setName(name);
-        budgetTypeForAdd.setRequired(isRequired);
-        budgetTypeForAdd.setCheckMax(checkMax);
-        budgetTypeForAdd.create();
+        if(budgetTypeForAdd.isGroupExsist(groupId)){
+            budgetTypeForAdd.createUniqId();
+            budgetTypeForAdd.setGroupId(groupId);
+            budgetTypeForAdd.setName(name);
+            budgetTypeForAdd.setRequired(isRequired);
+            budgetTypeForAdd.setCheckMax(checkMax);
+            budgetTypeForAdd.create();
+        } else {
+            log.info("The group with the specified id doesn't exist");
+        }
         return "redirect:/";
     }
 }
