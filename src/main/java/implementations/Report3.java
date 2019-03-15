@@ -72,6 +72,9 @@ public class Report3 {
                                obj.setSum(plans.get(i).getChargeValue());
                                rL.add(obj);
                                curDate = generator.next(curDate);
+                               if(curDate.after(criterialEndDate)){
+                                   break;
+                               }
                            }
                        } else if (plans.get(i).getRepeatCount() == null) {
                            Date end = new Date();
