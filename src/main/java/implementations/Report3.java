@@ -18,9 +18,6 @@ public class Report3 {
     private BigDecimal sum;
     private String description;
 
-    private String minutes;
-    private String hours;
-
     private JdbcTemplate jdbcTemplate;
 
     public Report3(JdbcTemplate jdbcTemplate){ this.jdbcTemplate = jdbcTemplate; }
@@ -110,29 +107,11 @@ public class Report3 {
     }
 
     public int getCoef(String regM, boolean isSplit){
+        String minutes, hours;
         String[] mask = regM.split(" ");
-        if(mask[1] != "*") {
-            minutes = mask[1];
-        }
-        if(mask[2] != "*") {
-            hours = mask[2];
-        }
-        int count = 0;
-        int cntMin = 0, cntHour = 0;
-        if(isSplit){
-            cntMin += getCountElements(this.minutes);
-            cntHour += getCountElements(this.hours);
-            if(cntHour == cntMin){
-                count+=cntHour;
-            } else if(cntHour>cntMin){
-                count+=cntHour;
-            } else if(cntMin>cntHour){
-                count+=cntMin;
-            }
-        } else {
-            count = 1;
-        }
-        return count;
+        minutes = mask[1];
+        hours = mask[2];
+        return (!isSplit)?1:getCountElements(minutes) * getCountElements(hours);
     }
 
     public int getCountElements(String param){
