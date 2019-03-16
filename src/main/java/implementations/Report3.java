@@ -6,20 +6,16 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.scheduling.support.CronSequenceGenerator;
 
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
 public class Report3 {
-    private BigInteger id;
+    private Integer id;
     private Date date;
     private BigDecimal sum;
     private String description;
-
-    private String minutes;
-    private String hours;
 
     private JdbcTemplate jdbcTemplate;
 
@@ -39,7 +35,7 @@ public class Report3 {
                    calendar.set(Calendar.MINUTE, 0);
                    date = calendar.getTime();
                    Report3 obj = new Report3(jdbcTemplate);
-                   obj.setId(BigInteger.valueOf(plans.get(i).getBudgetTypeId()));
+                   obj.setId(plans.get(i).getBudgetTypeId());
                    obj.setDate(date);
                    obj.setDescription(plans.get(i).getDescription());
                    obj.setSum(plans.get(i).getChargeValue());
@@ -66,7 +62,7 @@ public class Report3 {
                        if (plans.get(i).getRepeatCount() != null) {
                            for (int z = 0; z < plans.get(i).getRepeatCount() * getCoef(regM, plans.get(i).getSpliter()); z++) {
                                Report3 obj = new Report3(jdbcTemplate);
-                               obj.setId(BigInteger.valueOf(plans.get(i).getBudgetTypeId()));
+                               obj.setId(plans.get(i).getBudgetTypeId());
                                obj.setDate(curDate);
                                obj.setDescription(plans.get(i).getDescription());
                                obj.setSum(plans.get(i).getChargeValue());
@@ -95,7 +91,7 @@ public class Report3 {
                            curDate = generator.next(curDate);
                            while (curDate.before(end) || curDate.equals(end)) {
                                Report3 obj = new Report3(jdbcTemplate);
-                               obj.setId(BigInteger.valueOf(plans.get(i).getBudgetTypeId()));
+                               obj.setId(plans.get(i).getBudgetTypeId());
                                obj.setDate(curDate);
                                obj.setDescription(plans.get(i).getDescription());
                                obj.setSum(plans.get(i).getChargeValue());
@@ -110,29 +106,12 @@ public class Report3 {
     }
 
     public int getCoef(String regM, boolean isSplit){
+        String minutes;
+        String hours;
         String[] mask = regM.split(" ");
-        if(mask[1] != "*") {
-            minutes = mask[1];
-        }
-        if(mask[2] != "*") {
-            hours = mask[2];
-        }
-        int count = 0;
-        int cntMin = 0, cntHour = 0;
-        if(isSplit){
-            cntMin += getCountElements(minutes);
-            cntHour += getCountElements(hours);
-            if(cntHour == cntMin){
-                count+=cntHour;
-            } else if(cntHour>cntMin){
-                count+=cntHour;
-            } else if(cntMin>cntHour){
-                count+=cntMin;
-            }
-        } else {
-            count = 1;
-        }
-        return count;
+        minutes = mask[1];
+        hours = mask[2];
+        return (!isSplit)?1:getCountElements(minutes) * getCountElements(hours);
     }
 
     public int getCountElements(String param){
@@ -170,7 +149,7 @@ public class Report3 {
         }
     }
 
-    public BigInteger getId() {
+    public Integer getId() {
         return id;
     }
 
@@ -182,7 +161,7 @@ public class Report3 {
 
     public Date getDate() { return date;}
 
-    public void setId(BigInteger id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

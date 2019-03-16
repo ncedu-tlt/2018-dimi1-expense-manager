@@ -1,7 +1,5 @@
 package interfaces;
 
-import java.math.BigInteger;
-
 /**
  *  Содержит основные опперации относящиеся ко всем
  *  сущностям обьектной модели, расширяющие его интерфейсы
@@ -25,5 +23,5 @@ public interface Entity {
     void create();
     void delete();
     void update();
-    boolean load(BigInteger id);
+    boolean load(Integer id);
 }

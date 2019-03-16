@@ -3,12 +3,11 @@ package implementations;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Report2 {
-    private BigInteger id;
+    private Integer id;
     private String name;
     private Boolean isRequired;
     private Double sum;
@@ -73,7 +72,7 @@ public class Report2 {
         return totalSum;
     }
 
-    public BigInteger getId() {
+    public Integer getId() {
         return id;
     }
 
@@ -87,7 +86,7 @@ public class Report2 {
         return sum;
     }
 
-    public void setId(BigInteger id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

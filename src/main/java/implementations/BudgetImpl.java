@@ -4,12 +4,11 @@ import interfaces.Budget;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.util.Date;
 import java.util.Map;
 
 public class BudgetImpl implements Budget {
-    private BigInteger budgetId;
+    private Integer budgetId;
     private String operationType;
     private Integer budgetTypeId;
     private String description;
@@ -45,7 +44,7 @@ public class BudgetImpl implements Budget {
     }
 
     @Override
-    public boolean load(BigInteger id) {
+    public boolean load(Integer id) {
         String checkExistBudget = "SELECT COUNT(*) AS cnt FROM budget WHERE budget_id = ?";
         Integer checkResult = jdbcTemplate.queryForObject(checkExistBudget, Integer.class, id);
         if(checkResult != 0){
@@ -68,7 +67,7 @@ public class BudgetImpl implements Budget {
     }
 
     @Override
-    public BigInteger getBudgetId() {
+    public Integer getBudgetId() {
         return budgetId;
     }
 
@@ -77,7 +76,7 @@ public class BudgetImpl implements Budget {
         budgetId = dbObj.getUniqBudgetId();
     }
 
-    public void setBudgetId(BigInteger budgetId) {
+    public void setBudgetId(Integer budgetId) {
         this.budgetId = budgetId;
     }
 

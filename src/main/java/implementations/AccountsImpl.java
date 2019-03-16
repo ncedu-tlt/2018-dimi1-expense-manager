@@ -4,12 +4,11 @@ import interfaces.Accounts;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.util.Map;
 import java.util.Scanner;
 
 public class AccountsImpl implements Accounts {
-    private BigInteger accountId;
+    private Integer accountId;
     private String accountNumber;
     private Integer personId;
     private String currency;
@@ -51,7 +50,7 @@ public class AccountsImpl implements Accounts {
     }
 
     @Override
-    public boolean load(BigInteger id) {
+    public boolean load(Integer id) {
         String checkExistAccount = "SELECT COUNT(*) AS cnt FROM accounts WHERE account_id = ?";
         Integer checkResult = jdbcTemplate.queryForObject(checkExistAccount, Integer.class, id);
         if(checkResult != 0){
@@ -62,7 +61,7 @@ public class AccountsImpl implements Accounts {
             this.accountNumber = (String)result.get("ACCOUNT_NUMBER");
             this.personId = (Integer)result.get("PERSON_ID_FK");//Заменила тип на Integer
             this.currency = (String)result.get("CURRENCY");
-            this.balance = (BigDecimal)result.get("BALANCE");//Зкаменила тип на BigDecimal
+            this.balance = (BigDecimal)result.get("BALANCE");//Заменила тип на BigDecimal
             this.description = (String)result.get("DESCRIPTION");
             return true;
         } else {
@@ -71,7 +70,7 @@ public class AccountsImpl implements Accounts {
         return false;
     }
 
-    public boolean isAccountNumberExist(String accNum, BigInteger persId) {
+    public boolean isAccountNumberExist(String accNum, Integer persId) {
         String checkAccountId = "SELECT COUNT(*) AS cnt FROM accounts " +
                 "WHERE account_number = ? AND person_id_fk = ?";
         Integer checkExist = jdbcTemplate.queryForObject(checkAccountId, Integer.class, accNum, persId);
@@ -83,7 +82,7 @@ public class AccountsImpl implements Accounts {
         return false;
     }
 
-    public boolean isAccountExists(BigInteger id) {
+    public boolean isAccountExists(Integer id) {
         String checkAccountId = "SELECT COUNT(*) AS cnt FROM accounts WHERE account_id = ?";
         Integer checkExist = jdbcTemplate.queryForObject(checkAccountId, Integer.class, id);
         if(checkExist != 0){
@@ -95,22 +94,22 @@ public class AccountsImpl implements Accounts {
     }
 
     @Override
-    public BigInteger getAccountId() {
+    public Integer getAccountId() {
         return accountId;
     }
 
-    public BigInteger findAccountId(String accNum, BigInteger persId){
+    public Integer findAccountId(String accNum, Integer persId){
         String qwr = "SELECT account_id AS id FROM accounts WHERE account_number = ? AND person_id_fk = ?";
-        BigInteger findAccId = jdbcTemplate.queryForObject(qwr, BigInteger.class, accNum, persId);
-        if(findAccId != BigInteger.valueOf(0)){
+        Integer findAccId = jdbcTemplate.queryForObject(qwr, Integer.class, accNum, persId);
+        if(findAccId != 0){
             return findAccId;
         } else {
             System.out.println("Account with the specified ACCOUNT_NUMBER and PERSON_ID is not in the table ACCOUNTS");
         }
-        return BigInteger.valueOf(0);
+        return 0;
     }
 
-    public void setAccountId(BigInteger accountId) {
+    public void setAccountId(Integer accountId) {
         this.accountId = accountId;
     }
 

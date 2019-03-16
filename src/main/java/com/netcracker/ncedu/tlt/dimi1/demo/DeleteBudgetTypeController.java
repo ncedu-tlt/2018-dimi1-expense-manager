@@ -6,8 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import java.math.BigInteger;
-
 public class DeleteBudgetTypeController {
     private JdbcTemplate jdbcTemplate;
     private static final Logger log = Logger.getLogger(DeleteBudgetTypeController.class);
@@ -16,12 +14,13 @@ public class DeleteBudgetTypeController {
     DeleteBudgetTypeController(JdbcTemplate jdbcTemplate){ this.jdbcTemplate = jdbcTemplate; }
 
     @RequestMapping(value = "deleteBudgetType")
-    String deleteBudgetType(BigInteger budgetTypeId){
+    String deleteBudgetType(Integer budgetTypeId){
         BudgetTypeImpl budgetTypeForDelete = new BudgetTypeImpl(jdbcTemplate);
         if(budgetTypeForDelete.load(budgetTypeId)){
             budgetTypeForDelete.delete();
+            log.info("Record removed from BUDGET_TYPE");
         } else {
-            log.info("The record with specified ID no longer exists in the table BudgetTypes");
+            log.info("Deleting a budget type failed. The record with specified ID no longer exists in the table BudgetTypes");
         }
         return "redirect:/";
     }

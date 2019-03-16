@@ -3,14 +3,13 @@ package implementations;
 import interfaces.Person;
 import org.springframework.jdbc.core.JdbcTemplate;
 
-import java.math.BigInteger;
 import java.time.LocalDate;
 import java.util.Date;
 import java.util.Map;
 import java.util.Scanner;
 
 public class PersonImpl implements Person {
-    private BigInteger personId;
+    private Integer personId;
     private String login, pass, email, phonenumber, description, access;
     private Date regDate;
     private JdbcTemplate jdbcTemplate;
@@ -48,7 +47,7 @@ public class PersonImpl implements Person {
     }
 
     @Override
-    public boolean load(BigInteger id) {
+    public boolean load(Integer id) {
         String checkExistPerson = "SELECT COUNT(*) AS cnt FROM person WHERE person_id = ?";
         Integer checkResult = jdbcTemplate.queryForObject(checkExistPerson, Integer.class, id);
         if(checkResult != 0){
@@ -71,7 +70,7 @@ public class PersonImpl implements Person {
         return false;
     }
 
-    public boolean isPersonExist(BigInteger id){
+    public boolean isPersonExist(Integer id){
         String checkPersonId = "SELECT COUNT(*) AS cnt FROM person WHERE person_id = ?";
         Integer checkExist = jdbcTemplate.queryForObject(checkPersonId, Integer.class, id);
         if(checkExist != 0){
@@ -83,14 +82,14 @@ public class PersonImpl implements Person {
     }
 
     @Override
-    public BigInteger getPersonId() { return personId; }
+    public Integer getPersonId() { return personId; }
 
     public void createUniqId() {
         DatabaseWork dbObj = new DatabaseWork(jdbcTemplate);
         personId = dbObj.getUniqPersonId();
     }
 
-    public void setPersonId(BigInteger personId) {
+    public void setPersonId(Integer personId) {
         this.personId = personId;
     }
 

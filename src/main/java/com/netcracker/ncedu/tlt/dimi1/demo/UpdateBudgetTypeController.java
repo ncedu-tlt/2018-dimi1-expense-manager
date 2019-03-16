@@ -8,18 +8,17 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.math.BigDecimal;
-import java.math.BigInteger;
 
 @Controller
-public class UpdateBudgetType {
+public class UpdateBudgetTypeController {
     private JdbcTemplate jdbcTemplate;
-    private static final Logger log = Logger.getLogger(DeleteBudgetTypeController.class);
+    private static final Logger log = Logger.getLogger(UpdateBudgetTypeController.class);
 
     @Autowired
-    UpdateBudgetType(JdbcTemplate jdbcTemplate){ this.jdbcTemplate = jdbcTemplate; }
+    UpdateBudgetTypeController(JdbcTemplate jdbcTemplate){ this.jdbcTemplate = jdbcTemplate; }
 
     @RequestMapping(value = "updateBudgetType")
-    String updateBudgetType(BigInteger budgetTypeId, Integer groupId, String name, boolean isRequired, BigDecimal checkMax){
+    String updateBudgetType(Integer budgetTypeId, Integer groupId, String name, boolean isRequired, BigDecimal checkMax){
         BudgetTypeImpl budgetTypeForUpdate = new BudgetTypeImpl(jdbcTemplate);
         if(budgetTypeForUpdate.load(budgetTypeId)){
             budgetTypeForUpdate.setBudgetTypeId(budgetTypeId);
@@ -29,11 +28,12 @@ public class UpdateBudgetType {
                 budgetTypeForUpdate.setRequired(isRequired);
                 budgetTypeForUpdate.setCheckMax(checkMax);
                 budgetTypeForUpdate.update();
+                log.info("Record in BUDGET_TYPE was updated");
             } else {
-                log.info("The group with the specified id doesn't exist");
+                log.info("Updating a budget type failed. The group with the specified id doesn't exist");
             }
         } else {
-            log.info("Record with the specified ID doesn't exist in table BudgetTypes");
+            log.info("Updating a budget type failed. Record with the specified ID doesn't exist in table BudgetTypes");
         }
         return "redirect:/";
     }
