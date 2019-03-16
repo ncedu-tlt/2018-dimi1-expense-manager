@@ -1,9 +1,6 @@
 package com.netcracker.ncedu.tlt.dimi1.demo;
 
 import implementations.DatabaseWork;
-import implementations.PersonImpl;
-import interfaces.Person;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Controller;
@@ -35,19 +32,14 @@ public class RegistrationController {
         SimpleDateFormat formatForDateNow = new SimpleDateFormat("dd.mm.yyyy");
 
         DatabaseWork databaseObj = new DatabaseWork(jdbcTemplate);
-        String  sql = "SELECT login FROM person WHERE login = ?";
-        if(!databaseObj.checkLogin(sql, login) && login != "" && email != "") {
-            PersonImpl person = new PersonImpl(jdbcTemplate);
-            person.createUniqId();
-            person.setLogin(login);
-            person.setPass(password);
-            person.setEmail(email);
-            person.setAccess("USER");
-            person.setDescription(information);
-            person.setPhonenumber(number);
-            person.setRegDate();
-            person.create();
+        String  sql = "select login from person where login = '" + login + "'" ;
+        if(!databaseObj.checkLogin(sql) && login != "" && email !="")
+        {
+            jdbcTemplate.update("INSERT INTO Person (login, pass, access, email, description, reg_date, phone_number)" +
+                    " VALUES ('"+ login +"', '"+ password +"', 'USER', '"+ email +"', '"+ information +"'," +
+                    "TO_DATE('"+ formatForDateNow.format(date) +"', 'dd.mm.yyyy'), '"+ number +"')");
         }
         return "redirect:/";
     }
+
 }

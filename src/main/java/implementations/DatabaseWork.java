@@ -130,16 +130,40 @@ public class DatabaseWork {
         return planBudgetL;
     }
 
-    public boolean checkLogin(String sql, String login) {
-        List<String> result = jdbcTemplate.query(sql, new RowMapper(){
-            public Object mapRow(ResultSet res, int rowNum) throws SQLException{
-                return res.getString(1);
-            }
-        }, login);
-        if(result.isEmpty()){
+    public boolean checkLogin(String sql) {
+        List<String> list = jdbcTemplate.queryForList(sql, String.class);
+        if(list.isEmpty()){
             return false;
         }
         return true;
+    }
+
+    public boolean checkAccountCardNumber(String personId, String cardNumber)
+    {
+        Person person = getPersonByLogin(personId);
+        String sql = "select account_number from accounts where person_id_fk = '"+ person.getPersonId() +"'" +
+                " and account_number = '"+ cardNumber +"'";
+        List<String> list = jdbcTemplate.queryForList(sql, String.class);
+
+        if(list.isEmpty())
+        {
+            return false;
+        }
+        return true;
+    }
+
+    public List<Accounts> getByPersonIdAccounts(String personId)
+    {
+        List<Accounts> listAccounts = new ArrayList<Accounts>();
+        Person person = getPersonByLogin(personId);
+        String qwr = "SELECT account_id AS id FROM accounts where person_id_fk = '"+ person.getPersonId() + "'";
+        List<BigInteger> accountsIds = jdbcTemplate.queryForList(qwr, BigInteger.class);
+        for(BigInteger accountId : accountsIds){
+            Accounts account = new AccountsImpl(jdbcTemplate);
+            account.load(accountId);
+            listAccounts.add(account);
+        }
+        return listAccounts;
     }
 
     public List<Report1> getReport1(){
