@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 
 public interface BudgetType extends Entity {
-    BigInteger getBudgetTypeId();
+    Integer getBudgetTypeId();
     Integer getGroupId();
     String getName();
     Boolean getRequired();

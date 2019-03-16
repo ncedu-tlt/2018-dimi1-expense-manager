@@ -23,9 +23,18 @@ $(document).ready(function() {
             p[i].style.color = 'green';
         }
      }
-
-
 });
+
+function deleteAccount(value)
+{
+    $("#modalDelete").on('show.bs.modal', function(e) {
+
+        var accountId = value;
+        var modal = $(this);
+        document.getElementById("modDelete").innerHTML = 'Delete Account?';
+        modal.find('.accountId input').val(accountId);
+    });
+}
 
 function getValue(value) {
 
@@ -68,35 +77,21 @@ function toggleText(button_id){
 
 function validatePurse()
 {
-   var uname=document.purseForm.balance.value;
-
-   if(uname == "")
-   {
-       alert("test");
-      return false;
-
-   }
-   else
-   {
-        alert( '111' );
-   }
-
-}
-function validatePurse()
-{
        var ghost = document.getElementById("txtHiddenCardNumber");
-       var balance=document.purseForm.balance.value;
+       var balance = document.purseForm.balance.value;
        var ghost1 = document.purseForm.txtHiddenCardNumber.value;
 
-       var dotNumbers = /^\d+.?\d+$/;
+
+
+       var dotNumbers = /^\d.|\d+$/;
        var numbers = /^\d+$/;
-       if(balance == "")
+       if(balance == "" || balance < 1)
        {
-           document.getElementById("errors").innerHTML = 'You have not entered a username or password!';
+           document.getElementById('errors').innerHTML = 'Invalid balance! <br> Example of a balance entry 1000.59';
            $('#modalPurse').modal('hide');
            $('#modalError').modal('show');
-           return false;
 
+           return false;
        }
        if(dotNumbers.test(balance) == false)
        {

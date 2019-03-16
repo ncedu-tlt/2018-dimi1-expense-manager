@@ -2,12 +2,9 @@ package implementations;
 
 import interfaces.*;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
 
-import java.math.BigInteger;
+import java.math.BigDecimal;
 import java.sql.Date;
-import java.sql.SQLException;
-import java.sql.ResultSet;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -20,7 +17,7 @@ public class DatabaseWork {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    public Integer checkExist(String query, BigInteger id) {
+    public Integer checkExist(String query, Integer id) {
         Integer checkResult = jdbcTemplate.queryForObject(query, Integer.class, id);
         if(checkResult != 0){
             return 1;
@@ -28,39 +25,39 @@ public class DatabaseWork {
         return 0;
     }
 
-    public BigInteger getUniqPersonId(){
+    public Integer getUniqPersonId(){
         String qwr = "SELECT max(person_id) AS id FROM person";
         Integer uniqPersonId = jdbcTemplate.queryForObject(qwr, Integer.class);
-        return BigInteger.valueOf(uniqPersonId+1);
+        return uniqPersonId+1;
     }
 
-    public BigInteger getUniqAccountId(){
+    public Integer getUniqAccountId(){
         String qwr = "SELECT max(account_id) AS id FROM accounts";
         Integer uniqAccountId = jdbcTemplate.queryForObject(qwr, Integer.class);
-        return BigInteger.valueOf(uniqAccountId+1);
+        return uniqAccountId+1;
     }
 
-    public BigInteger getUniqBudgetTypeId(){
+    public Integer getUniqBudgetTypeId(){
         String qwr = "SELECT max(budget_type_id) AS id FROM budget_type";
         Integer uniqBudgetTypeId = jdbcTemplate.queryForObject(qwr, Integer.class);
-        return BigInteger.valueOf(uniqBudgetTypeId+1);
+        return uniqBudgetTypeId+1;
     }
 
-    public BigInteger getUniqBudgetId(){
+    public Integer getUniqBudgetId(){
         String qwr = "SELECT max(budget_id) AS id FROM budget";
         Integer uniqBudgetId = jdbcTemplate.queryForObject(qwr, Integer.class);
-        return BigInteger.valueOf(uniqBudgetId+1);
+        return uniqBudgetId+1;
     }
 
-    public BigInteger getUniqPlanBudgetId(){
+    public Integer getUniqPlanBudgetId(){
         String qwr = "SELECT max(plan_budget_id) AS id FROM plan_budget";
         Integer uniqPlanBudgetId = jdbcTemplate.queryForObject(qwr, Integer.class);
-        return BigInteger.valueOf(uniqPlanBudgetId+1);
+        return uniqPlanBudgetId+1;
     }
 
     public Person getPersonByLogin(String login){
         String sql = "SELECT person_id AS id FROM person where login = ?";
-        BigInteger personId = jdbcTemplate.queryForObject(sql, BigInteger.class, login);
+        Integer personId = jdbcTemplate.queryForObject(sql, Integer.class, login);
         Person person = new PersonImpl(jdbcTemplate);
         person.load(personId);
         return person;
@@ -70,8 +67,8 @@ public class DatabaseWork {
         List<Person> persL = new ArrayList<>();
 
         String qwr = "SELECT person_id AS id FROM person";
-        List<BigInteger> personsIds = jdbcTemplate.queryForList(qwr, BigInteger.class);
-        for(BigInteger personId : personsIds){
+        List<Integer> personsIds = jdbcTemplate.queryForList(qwr, Integer.class);
+        for(Integer personId : personsIds){
             Person person = new PersonImpl(jdbcTemplate);
             person.load(personId);
             persL.add(person);
@@ -83,8 +80,8 @@ public class DatabaseWork {
         List<Accounts> accL = new ArrayList<>();
 
         String qwr = "SELECT account_id AS id FROM accounts";
-        List<BigInteger> accountsIds = jdbcTemplate.queryForList(qwr, BigInteger.class);
-        for(BigInteger accountId : accountsIds){
+        List<Integer> accountsIds = jdbcTemplate.queryForList(qwr, Integer.class);
+        for(Integer accountId : accountsIds){
             Accounts account = new AccountsImpl(jdbcTemplate);
             account.load(accountId);
             accL.add(account);
@@ -96,8 +93,8 @@ public class DatabaseWork {
         List<BudgetType> budgetTypeL = new ArrayList<>();
 
         String qwr = "SELECT budget_type_id AS id FROM budget_type";
-        List<BigInteger> budgetTypesIds = jdbcTemplate.queryForList(qwr, BigInteger.class);
-        for(BigInteger budgetTypeId : budgetTypesIds){
+        List<Integer> budgetTypesIds = jdbcTemplate.queryForList(qwr, Integer.class);
+        for(Integer budgetTypeId : budgetTypesIds){
             BudgetType budgetType = new BudgetTypeImpl(jdbcTemplate);
             budgetType.load(budgetTypeId);
             budgetTypeL.add(budgetType);
@@ -109,8 +106,8 @@ public class DatabaseWork {
         List<Budget> budgetL = new ArrayList<>();
 
         String qwr = "SELECT budget_id AS id FROM budget";
-        List<BigInteger> budgetsIds = jdbcTemplate.queryForList(qwr, BigInteger.class);
-        for(BigInteger budgetId : budgetsIds){
+        List<Integer> budgetsIds = jdbcTemplate.queryForList(qwr, Integer.class);
+        for(Integer budgetId : budgetsIds){
             Budget budget = new BudgetImpl(jdbcTemplate);
             budget.load(budgetId);
             budgetL.add(budget);
@@ -122,8 +119,8 @@ public class DatabaseWork {
         List<PlanBudget> planBudgetL = new ArrayList<>();
 
         String qwr = "SELECT plan_budget_id AS id FROM plan_budget";
-        List<BigInteger> planBudgetsIds = jdbcTemplate.queryForList(qwr, BigInteger.class);
-        for(BigInteger planBudgetId : planBudgetsIds){
+        List<Integer> planBudgetsIds = jdbcTemplate.queryForList(qwr, Integer.class);
+        for(Integer planBudgetId : planBudgetsIds){
             PlanBudget planBudget = new PlanBudgetImpl(jdbcTemplate);
             planBudget.load(planBudgetId);
             planBudgetL.add(planBudget);
@@ -158,13 +155,37 @@ public class DatabaseWork {
         List<Accounts> listAccounts = new ArrayList<Accounts>();
         Person person = getPersonByLogin(personId);
         String qwr = "SELECT account_id AS id FROM accounts where person_id_fk = '"+ person.getPersonId() + "'";
-        List<BigInteger> accountsIds = jdbcTemplate.queryForList(qwr, BigInteger.class);
-        for(BigInteger accountId : accountsIds){
+        List<Integer> accountsIds = jdbcTemplate.queryForList(qwr, Integer.class);
+        for(Integer accountId : accountsIds){
             Accounts account = new AccountsImpl(jdbcTemplate);
             account.load(accountId);
             listAccounts.add(account);
         }
         return listAccounts;
+    }
+
+    public void deleteAccount(String personId, String id)
+    {
+        Person person = getPersonByLogin(personId);
+        String qwr = "SELECT account_id AS id FROM accounts where person_id_fk = '"+ person.getPersonId() + "' and account_id = '"+ id +"'";
+        List<Integer> accountsIds = jdbcTemplate.queryForList(qwr, Integer.class);
+        for(Integer accountId : accountsIds){
+            Accounts account = new AccountsImpl(jdbcTemplate);
+            account.load(accountId);
+            account.delete();
+        }
+    }
+
+    public void addAccount(String personId, String cardNumber, String currency, BigDecimal balance, String description)
+    {
+        Person person = getPersonByLogin(personId);
+        AccountsImpl accounts = new AccountsImpl(jdbcTemplate);
+        accounts.setPersonId(person.getPersonId());
+        accounts.setAccountNumber(cardNumber);
+        accounts.setCurrency(currency);
+        accounts.setBalance(balance);
+        accounts.setDescription(description);
+        accounts.create();
     }
 
     public List<Report1> getReport1(){

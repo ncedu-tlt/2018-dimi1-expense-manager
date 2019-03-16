@@ -5,7 +5,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -13,7 +12,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Report3 {
-    private BigInteger id;
+    private Integer id;
     private Date date;
     private BigDecimal sum;
     private String description;
@@ -42,7 +41,7 @@ public class Report3 {
                    plans.get(i).getOperationDate().before(criterialEndDate)){
                System.out.println(plans.get(i).getOperationDate());
                Report3 obj = new Report3(jdbcTemplate);
-               obj.setId(BigInteger.valueOf(plans.get(i).getBudgetTypeId()));
+               obj.setId(Integer.valueOf(plans.get(i).getBudgetTypeId()));
                obj.setDate(plans.get(i).getOperationDate());
                obj.setDescription(plans.get(i).getDescription());
                obj.setSum(plans.get(i).getChargeValue());
@@ -70,7 +69,7 @@ public class Report3 {
                                }
                                while(counter<=plans.get(i).getRepeatCount()*incr){
                                    Report3 obj = new Report3(jdbcTemplate);
-                                   obj.setId(BigInteger.valueOf(plans.get(i).getBudgetTypeId()));
+                                   obj.setId(Integer.valueOf(plans.get(i).getBudgetTypeId()));
                                    instance.add(Calendar.DAY_OF_MONTH, 1);
                                    Date currentDate = instance.getTime();
                                    if(plans.get(i).getEndDate() != null && currentDate.after(criterialEndDate)){
@@ -89,7 +88,7 @@ public class Report3 {
                                    Date currentDate = instance.getTime();
                                    while (currentDate.before(plans.get(i).getEndDate())) {
                                        Report3 obj = new Report3(jdbcTemplate);
-                                       obj.setId(BigInteger.valueOf(plans.get(i).getBudgetTypeId()));
+                                       obj.setId(Integer.valueOf(plans.get(i).getBudgetTypeId()));
                                        instance.add(Calendar.DAY_OF_MONTH, 1);
                                        currentDate = instance.getTime();
                                        obj.setDate(currentDate);
@@ -167,7 +166,7 @@ public class Report3 {
         }
     }
 
-    public BigInteger getId() {
+    public Integer getId() {
         return id;
     }
 
@@ -179,7 +178,7 @@ public class Report3 {
 
     public Date getDate() { return date;}
 
-    public void setId(BigInteger id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

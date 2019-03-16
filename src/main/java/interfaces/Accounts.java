@@ -4,7 +4,7 @@ package interfaces;
         import java.math.BigInteger;
 
 public interface Accounts extends Entity {
-    BigInteger getAccountId();
+    Integer getAccountId();
     Integer getPersonId();
     String getCurrency();
     BigDecimal getBalance();

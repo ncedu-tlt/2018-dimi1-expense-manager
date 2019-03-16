@@ -12,11 +12,11 @@ CREATE TABLE Person(
 CREATE TABLE Accounts(
   account_id serial PRIMARY KEY not null,
   account_number VARCHAR(16),
-  person_id_fk INTEGER(10),
+  person_id_fk INTEGER(20),
   currency VARCHAR2(3),
   balance DECIMAL(7,2),
   description VARCHAR(350),
-  FOREIGN KEY (person_id_fk) REFERENCES Person(person_id)
+  FOREIGN KEY (person_id_fk) REFERENCES Person(person_id) ON DELETE CASCADE
 );
 
 CREATE TABLE Budget_type (
@@ -35,8 +35,8 @@ CREATE TABLE Budget (
   account_id_fk INTEGER(10),
   operation_date DATE,
   charge_value DECIMAL(7, 2),
-  FOREIGN KEY (budget_type_id_fk) REFERENCES Budget_type(budget_type_id),
-  FOREIGN KEY (account_id_fk) REFERENCES Accounts(account_id)
+  FOREIGN KEY (budget_type_id_fk) REFERENCES Budget_type(budget_type_id) ON DELETE CASCADE,
+  FOREIGN KEY (account_id_fk) REFERENCES Accounts(account_id) ON DELETE CASCADE
 );
 
 CREATE TABLE Plan_budget (
@@ -51,6 +51,6 @@ CREATE TABLE Plan_budget (
   repeat_count INTEGER(3),
   start_date DATE,
   end_date DATE,
-  FOREIGN KEY (budget_type_id_fk) REFERENCES Budget_type(budget_type_id),
-  FOREIGN KEY (account_id_fk) REFERENCES Accounts(account_id)
+  FOREIGN KEY (budget_type_id_fk) REFERENCES Budget_type(budget_type_id) ON DELETE CASCADE,
+  FOREIGN KEY (account_id_fk) REFERENCES Accounts(account_id) ON DELETE CASCADE
 );
