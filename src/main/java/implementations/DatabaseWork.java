@@ -5,12 +5,11 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 
 import java.math.BigInteger;
-import java.sql.Date;
-import java.sql.SQLException;
 import java.sql.ResultSet;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 public class DatabaseWork {
@@ -219,11 +218,22 @@ public class DatabaseWork {
         List<PlanBudget> planBudgetL = getAllPlanBudgets();
         List<Report3> report3L = new ArrayList<>();
         Report3 rep3 = new Report3(jdbcTemplate);
-        DateTimeFormatter format = DateTimeFormatter.ofPattern("dd.MM.yyyy");
-        LocalDate startLocal = LocalDate.parse("03.01.2019", format);
-        LocalDate endLocal = LocalDate.parse("01.04.2019", format);
-        Date start = Date.valueOf(startLocal);
-        Date end = Date.valueOf(endLocal);
+        Calendar calendar = new GregorianCalendar();
+        calendar.set(Calendar.YEAR, 2019);
+        calendar.set(Calendar.MONTH, 2);
+        calendar.set(Calendar.DAY_OF_MONTH, 2);
+        calendar.set(Calendar.HOUR, 22);
+        calendar.set(Calendar.MINUTE, 30);
+        java.util.Date start = calendar.getTime();
+
+        calendar.set(Calendar.YEAR, 2019);
+        calendar.set(Calendar.MONTH, 4);
+        calendar.set(Calendar.DAY_OF_MONTH, 3);
+        calendar.set(Calendar.HOUR, 3);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        java.util.Date end = calendar.getTime();
+
         rep3.getReportRow(planBudgetL, report3L, start, end);
         return report3L;
     }
