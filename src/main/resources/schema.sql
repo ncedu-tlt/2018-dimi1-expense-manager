@@ -51,6 +51,7 @@ CREATE TABLE Plan_budget (
   repeat_count INTEGER(3),
   start_date DATE,
   end_date DATE,
+  spliter BOOLEAN,
   FOREIGN KEY (budget_type_id_fk) REFERENCES Budget_type(budget_type_id) ON DELETE CASCADE,
   FOREIGN KEY (account_id_fk) REFERENCES Accounts(account_id) ON DELETE CASCADE
 );

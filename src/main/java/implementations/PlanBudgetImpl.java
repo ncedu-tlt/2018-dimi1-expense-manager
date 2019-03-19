@@ -19,6 +19,7 @@ public class PlanBudgetImpl implements PlanBudget {
     private Integer repeatCount;
     private Date startDate;
     private Date endDate;
+    private Boolean spliter;
     private JdbcTemplate jdbcTemplate;
 
     public PlanBudgetImpl(JdbcTemplate jdbcTemplate){ this.jdbcTemplate = jdbcTemplate; }
@@ -26,10 +27,10 @@ public class PlanBudgetImpl implements PlanBudget {
     @Override
     public void create() {
         String insertPlanBudg = "INSERT INTO plan_budget (plan_budget_id, operation_type, budget_type_id_fk, description, " +
-                "account_id_fk, operation_date, charge_value, regular_mask, repeat_count, start_date, end_date) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                "account_id_fk, operation_date, charge_value, regular_mask, repeat_count, start_date, end_date, spliter) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         jdbcTemplate.update(insertPlanBudg, planBudgetId, operationType, budgetTypeId, description,
-                accountId, operationDate, chargeValue, regularMask, repeatCount, startDate, endDate);
+                accountId, operationDate, chargeValue, regularMask, repeatCount, startDate, endDate, spliter);
     }
 
     @Override
@@ -42,10 +43,10 @@ public class PlanBudgetImpl implements PlanBudget {
     public void update() {
         String updatePlanBudg = "UPDATE plan_budget SET operation_type = ?, budget_type_id_fk = ?, description = ?, " +
                 "account_id_fk = ?, operation_date = ?, charge_value = ?, regular_mask = ?, " +
-                "repeat_count = ?, start_date = ?, end_date = ?" +
+                "repeat_count = ?, start_date = ?, end_date = ?, spliter = ? " +
                 "WHERE plan_budget_id = ?";
         jdbcTemplate.update(updatePlanBudg, operationType, budgetTypeId, description, accountId,
-                operationDate, chargeValue, regularMask, repeatCount, startDate, endDate, planBudgetId);
+                operationDate, chargeValue, regularMask, repeatCount, startDate, endDate, spliter, planBudgetId);
     }
 
     @Override
@@ -55,7 +56,7 @@ public class PlanBudgetImpl implements PlanBudget {
         if(checkResult != 0){
             String dataPlanBudget = "SELECT operation_type, budget_type_id_fk, description," +
                     "account_id_fk, operation_date, charge_value, regular_mask," +
-                    "repeat_count, start_date, end_date " +
+                    "repeat_count, start_date, end_date, spliter " +
                     "FROM plan_budget WHERE plan_budget_id = ?";
             Map result = jdbcTemplate.queryForMap(dataPlanBudget, id);
             this.planBudgetId = id;
@@ -69,6 +70,7 @@ public class PlanBudgetImpl implements PlanBudget {
             this.repeatCount = (Integer) result.get("REPEAT_COUNT");
             this.startDate = (Date) result.get("START_DATE");
             this.endDate = (Date) result.get("END_DATE");
+            this.spliter = (Boolean) result.get("SPLITER");
             return true;
         } else {
             System.out.println("Plan budget with the specified ID is not in the table PLAN_BUDGET");
@@ -179,4 +181,9 @@ public class PlanBudgetImpl implements PlanBudget {
     public void setEndDate(Date endDate) {
         this.endDate = endDate;
     }
+
+    @Override
+    public Boolean getSpliter() { return spliter; }
+
+    public void setSpliter(Boolean spliter) { this.spliter = spliter; }
 }
