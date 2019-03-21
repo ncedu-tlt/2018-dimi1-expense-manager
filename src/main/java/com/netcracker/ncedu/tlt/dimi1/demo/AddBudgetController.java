@@ -5,7 +5,8 @@ import implementations.BudgetImpl;
 import implementations.BudgetTypeImpl;
 import interfaces.Accounts;
 import interfaces.BudgetType;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Controller;
@@ -17,7 +18,7 @@ import java.util.Date;
 @Controller
 public class AddBudgetController {
     private JdbcTemplate jdbcTemplate;
-    private static final Logger log = Logger.getLogger(AddBudgetController.class);
+    Logger log = LoggerFactory.getLogger(AddBudgetController.class);
 
     @Autowired
     AddBudgetController(JdbcTemplate jdbcTemplate){ this.jdbcTemplate = jdbcTemplate; }

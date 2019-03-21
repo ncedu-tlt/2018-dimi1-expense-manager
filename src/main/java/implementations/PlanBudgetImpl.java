@@ -2,7 +2,8 @@ package implementations;
 
 import interfaces.PlanBudget;
 import lombok.Data;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.math.BigDecimal;
@@ -24,7 +25,7 @@ public class PlanBudgetImpl implements PlanBudget {
     private Date endDate;
     private Boolean spliter;
     private JdbcTemplate jdbcTemplate;
-    private static final Logger log = Logger.getLogger(PlanBudgetImpl.class);
+    Logger log = LoggerFactory.getLogger(PlanBudgetImpl.class);
 
     public PlanBudgetImpl(JdbcTemplate jdbcTemplate){ this.jdbcTemplate = jdbcTemplate; }
 

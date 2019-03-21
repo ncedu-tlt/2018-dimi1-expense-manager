@@ -1,0 +1,45 @@
+#server.address=0.0.0.0
+#server.port=8080
+logging:
+  file: log/log.txt
+spring:
+  profiles:
+    active: dev
+  mvc:
+    view:
+      prefix: /WEB-INF/jsp/
+      suffix: .jsp
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+      settings:
+        web-allow-others: true
+  datasource:
+    sql-script-encoding: UTF-8
+
+#spring.security.enabled = false
+#management.security.enabled = false
+#security.basic.enabled = false
+security:
+  headers:
+    frame: false
+
+---
+spring:
+  profiles:
+    active: dev
+
+logging:
+  level:
+    com.netcracker.ncedu.tlt.dimi1.demo: info
+    com.springframework: info
+
+---
+spring:
+  profiles:
+    active: prod
+logging:
+  level:
+    com.netcracker.ncedu.tlt.dimi1.demo: error
+    com.springframework: error

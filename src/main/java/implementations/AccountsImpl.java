@@ -2,7 +2,8 @@ package implementations;
 
 import interfaces.Accounts;
 import lombok.Data;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.math.BigDecimal;
@@ -18,7 +19,7 @@ public class AccountsImpl implements Accounts {
     private BigDecimal balance;
     private String description;
     private JdbcTemplate jdbcTemplate;
-    private static final Logger log = Logger.getLogger(AccountsImpl.class);
+    Logger log = LoggerFactory.getLogger(AccountsImpl.class);
 
     Scanner in = new Scanner(System.in);
 

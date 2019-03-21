@@ -2,7 +2,8 @@ package implementations;
 
 import interfaces.BudgetType;
 import lombok.Data;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.math.BigDecimal;
@@ -16,8 +17,7 @@ public class BudgetTypeImpl implements BudgetType {
     private Boolean required;
     private BigDecimal checkMax;
     private JdbcTemplate jdbcTemplate;
-    private static final Logger log = Logger.getLogger(BudgetTypeImpl.class);
-
+    Logger log = LoggerFactory.getLogger(BudgetTypeImpl.class);
     public BudgetTypeImpl(JdbcTemplate jdbcTemplate){ this.jdbcTemplate = jdbcTemplate; }
 
     @Override

@@ -1,7 +1,8 @@
 package com.netcracker.ncedu.tlt.dimi1.demo;
 
 import implementations.BudgetTypeImpl;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Controller;
@@ -12,7 +13,7 @@ import java.math.BigDecimal;
 @Controller
 public class UpdateBudgetTypeController {
     private JdbcTemplate jdbcTemplate;
-    private static final Logger log = Logger.getLogger(UpdateBudgetTypeController.class);
+    Logger log = LoggerFactory.getLogger(UpdateBudgetTypeController.class);
 
     @Autowired
     UpdateBudgetTypeController(JdbcTemplate jdbcTemplate){ this.jdbcTemplate = jdbcTemplate; }

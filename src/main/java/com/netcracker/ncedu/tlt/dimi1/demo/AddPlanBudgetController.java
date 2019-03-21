@@ -1,9 +1,13 @@
 package com.netcracker.ncedu.tlt.dimi1.demo;
 
-import implementations.*;
+import implementations.AccountsImpl;
+import implementations.BudgetTypeImpl;
+import implementations.DatabaseWork;
+import implementations.PlanBudgetImpl;
 import interfaces.Accounts;
 import interfaces.BudgetType;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Controller;
@@ -15,7 +19,7 @@ import java.util.Date;
 @Controller
 public class AddPlanBudgetController {
     private JdbcTemplate jdbcTemplate;
-    private static final Logger log = Logger.getLogger(AddPlanBudgetController.class);
+    Logger log = LoggerFactory.getLogger(AddPlanBudgetController.class);
 
     @Autowired
     AddPlanBudgetController(JdbcTemplate jdbcTemplate){ this.jdbcTemplate = jdbcTemplate; }

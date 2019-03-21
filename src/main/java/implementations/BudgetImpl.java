@@ -2,12 +2,14 @@ package implementations;
 
 import interfaces.Budget;
 import lombok.Data;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.Map;
+
 
 @Data
 public class BudgetImpl implements Budget {
@@ -19,7 +21,7 @@ public class BudgetImpl implements Budget {
     private Date operationDate;
     private BigDecimal chargeValue;
     private JdbcTemplate jdbcTemplate;
-    private static final Logger log = Logger.getLogger(BudgetImpl.class);
+    Logger log = LoggerFactory.getLogger(BudgetImpl.class);
 
     public BudgetImpl(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;

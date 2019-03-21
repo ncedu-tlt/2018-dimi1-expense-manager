@@ -2,7 +2,8 @@ package implementations;
 
 import interfaces.Person;
 import lombok.Data;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.time.LocalDate;
@@ -15,7 +16,7 @@ public class PersonImpl implements Person {
     private String login, pass, email, phonenumber, description, access;
     private Date regDate;
     private JdbcTemplate jdbcTemplate;
-    private static final Logger log = Logger.getLogger(PersonImpl.class);
+    Logger log = LoggerFactory.getLogger(PersonImpl.class);
 
     public PersonImpl(JdbcTemplate jdbcTemplate){ this.jdbcTemplate = jdbcTemplate;  }
 

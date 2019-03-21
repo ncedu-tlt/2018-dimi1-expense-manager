@@ -6,7 +6,8 @@ import implementations.DatabaseWork;
 import implementations.PlanBudgetImpl;
 import interfaces.Accounts;
 import interfaces.BudgetType;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Controller;
@@ -18,7 +19,7 @@ import java.util.Date;
 @Controller
 public class UpdatePlanBudgetController {
     private JdbcTemplate jdbcTemplate;
-    private static final Logger log = Logger.getLogger(UpdateBudgetController.class);
+    Logger log = LoggerFactory.getLogger(UpdatePlanBudgetController.class);
 
     @Autowired
     UpdatePlanBudgetController(JdbcTemplate jdbcTemplate){ this.jdbcTemplate = jdbcTemplate; }

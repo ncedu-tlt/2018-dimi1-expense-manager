@@ -1,7 +1,8 @@
 package implementations;
 
 import interfaces.*;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 
@@ -14,7 +15,7 @@ import java.util.List;
 
 public class DatabaseWork {
     private JdbcTemplate jdbcTemplate;
-    private static final Logger log = Logger.getLogger(DatabaseWork.class);
+    Logger log = LoggerFactory.getLogger(DatabaseWork.class);
 
     public DatabaseWork(JdbcTemplate jdbcTemplate){
         this.jdbcTemplate = jdbcTemplate;
