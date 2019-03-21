@@ -1,18 +1,22 @@
 package implementations;
 
 import interfaces.BudgetType;
+import lombok.Data;
+import org.apache.log4j.Logger;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.math.BigDecimal;
 import java.util.Map;
 
+@Data
 public class BudgetTypeImpl implements BudgetType {
     private Integer budgetTypeId;
     private Integer groupId;
     private String name;
-    private Boolean isRequired;
+    private Boolean required;
     private BigDecimal checkMax;
     private JdbcTemplate jdbcTemplate;
+    private static final Logger log = Logger.getLogger(BudgetTypeImpl.class);
 
     public BudgetTypeImpl(JdbcTemplate jdbcTemplate){ this.jdbcTemplate = jdbcTemplate; }
 
@@ -20,7 +24,7 @@ public class BudgetTypeImpl implements BudgetType {
     public void create() {
         String insertBudgetType = "INSERT INTO budget_type (budget_type_id, group_id, name, required, check_max) " +
                 "VALUES (?, ?, ?, ?, ?)";
-        jdbcTemplate.update(insertBudgetType, budgetTypeId, groupId, name, isRequired, checkMax);
+        jdbcTemplate.update(insertBudgetType, budgetTypeId, groupId, name, required, checkMax);
     }
 
     @Override
@@ -31,7 +35,7 @@ public class BudgetTypeImpl implements BudgetType {
         DatabaseWork check = new DatabaseWork(jdbcTemplate);
         if(check.checkExist(checkQuery, budgetTypeId) != 0 || check.checkExist(checkPlanBudg, budgetTypeId) != 0 ||
                 check.checkExist(checkBudg, budgetTypeId) != 0){
-            System.out.println("This record has a link in the other table(s).\nDelete all related entries first.");
+            log.info("This record has a link in the other table(s). Delete all related entries first.");
             return;
         } else {
             String deletBudgetType = "DELETE FROM budget_type WHERE budget_type_id = ?";
@@ -44,7 +48,7 @@ public class BudgetTypeImpl implements BudgetType {
         String updateBudgetType = "UPDATE budget_type SET group_id = ?, name = ?, " +
                 "required = ?, check_max = ? " +
                 "WHERE budget_type_id = ?";
-        jdbcTemplate.update(updateBudgetType, groupId, name, isRequired, checkMax, budgetTypeId);
+        jdbcTemplate.update(updateBudgetType, groupId, name, required, checkMax, budgetTypeId);
     }
 
     @Override
@@ -57,11 +61,11 @@ public class BudgetTypeImpl implements BudgetType {
             this.budgetTypeId = id;
             this.groupId = (Integer)result.get("GROUP_ID");//Заменила тип на Integer
             this.name = (String)result.get("NAME");
-            this.isRequired = (Boolean) result.get("REQUIRED");
+            this.required = (Boolean) result.get("REQUIRED");
             this.checkMax = (BigDecimal)result.get("CHECK_MAX");//Заменила тип на BigDecimal
             return true;
         } else {
-            System.out.println("Budget type with the specified ID is not in the table BUDGET_TYPE");
+            log.info("Budget type with the specified ID is not in the table BUDGET_TYPE");
         }
         return false;
     }
@@ -74,14 +78,9 @@ public class BudgetTypeImpl implements BudgetType {
         if(checkGroup == checkExist){
             return true;
         } else {
-            System.out.println("The group with the specified id is missing...");
+            log.info("The group with the specified id is missing...");
         }
         return false;
-    }
-
-    @Override
-    public Integer getBudgetTypeId() {
-        return budgetTypeId;
     }
 
     public void createUniqId(){
@@ -89,43 +88,4 @@ public class BudgetTypeImpl implements BudgetType {
         budgetTypeId = dbObj.getUniqBudgetTypeId();
     }
 
-    public void setBudgetTypeId(Integer budgetTypeId) {
-        this.budgetTypeId = budgetTypeId;
-    }
-
-    @Override
-    public Integer getGroupId() {
-        return groupId;
-    }
-
-    public void setGroupId(Integer groupId) {
-        this.groupId = groupId;
-    }
-
-    @Override
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    @Override
-    public Boolean getRequired() {
-        return isRequired;
-    }
-
-    public void setRequired(Boolean required) {
-        isRequired = required;
-    }
-
-    @Override
-    public BigDecimal getCheckMax() {
-        return checkMax;
-    }
-
-    public void setCheckMax(BigDecimal checkMax) {
-        this.checkMax = checkMax;
-    }
 }

@@ -1,12 +1,15 @@
 package implementations;
 
 import interfaces.PlanBudget;
+import lombok.Data;
+import org.apache.log4j.Logger;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.Map;
 
+@Data
 public class PlanBudgetImpl implements PlanBudget {
     private Integer planBudgetId;
     private String operationType;
@@ -21,6 +24,7 @@ public class PlanBudgetImpl implements PlanBudget {
     private Date endDate;
     private Boolean spliter;
     private JdbcTemplate jdbcTemplate;
+    private static final Logger log = Logger.getLogger(PlanBudgetImpl.class);
 
     public PlanBudgetImpl(JdbcTemplate jdbcTemplate){ this.jdbcTemplate = jdbcTemplate; }
 
@@ -73,14 +77,9 @@ public class PlanBudgetImpl implements PlanBudget {
             this.spliter = (Boolean) result.get("SPLITER");
             return true;
         } else {
-            System.out.println("Plan budget with the specified ID is not in the table PLAN_BUDGET");
+            log.info("Plan budget with the specified ID is not in the table PLAN_BUDGET");
         }
         return false;
-    }
-
-    @Override
-    public Integer getPlanBudgetId() {
-        return planBudgetId;
     }
 
     public void createUniqId(){
@@ -88,102 +87,4 @@ public class PlanBudgetImpl implements PlanBudget {
         planBudgetId = dbObj.getUniqPlanBudgetId();
     }
 
-    public void setPlanBudgetId(Integer planBudgetId) {
-        this.planBudgetId = planBudgetId;
-    }
-
-    @Override
-    public String getOperationType() {
-        return operationType;
-    }
-
-    public void setOperationType(String operationType) {
-        this.operationType = operationType;
-    }
-
-    @Override
-    public Integer getBudgetTypeId() {
-        return budgetTypeId;
-    }
-
-    public void setBudgetTypeId(Integer budgetTypeId) {
-        this.budgetTypeId = budgetTypeId;
-    }
-
-    @Override
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    @Override
-    public Integer getAccountId() {
-        return accountId;
-    }
-
-    public void setAccountId(Integer accountId) {
-        this.accountId = accountId;
-    }
-
-    @Override
-    public Date getOperationDate() {
-        return operationDate;
-    }
-
-    public void setOperationDate(Date operationDate) {
-        this.operationDate = operationDate;
-    }
-
-    @Override
-    public BigDecimal getChargeValue() {
-        return chargeValue;
-    }
-
-    public void setChargeValue(BigDecimal chargeValue) {
-        this.chargeValue = chargeValue;
-    }
-
-    @Override
-    public String getRegularMask() {
-        return regularMask;
-    }
-
-    public void setRegularMask(String regularMask) {
-        this.regularMask = regularMask;
-    }
-
-    @Override
-    public Integer getRepeatCount() {
-        return repeatCount;
-    }
-
-    public void setRepeatCount(Integer repeatCount) {
-        this.repeatCount = repeatCount;
-    }
-
-    @Override
-    public Date getStartDate() {
-        return startDate;
-    }
-
-    public void setStartDate(Date startDate) {
-        this.startDate = startDate;
-    }
-
-    @Override
-    public Date getEndDate() {
-        return endDate;
-    }
-
-    public void setEndDate(Date endDate) {
-        this.endDate = endDate;
-    }
-
-    @Override
-    public Boolean getSpliter() { return spliter; }
-
-    public void setSpliter(Boolean spliter) { this.spliter = spliter; }
 }

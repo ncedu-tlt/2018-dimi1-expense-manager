@@ -1,6 +1,7 @@
 package implementations;
 
 import interfaces.PlanBudget;
+import lombok.Data;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.scheduling.support.CronSequenceGenerator;
@@ -11,6 +12,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
+@Data
 public class Report3 {
     private Integer id;
     private Date date;
@@ -149,29 +151,4 @@ public class Report3 {
         }
     }
 
-    public Integer getId() {
-        return id;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public BigDecimal getSum() { return sum; }
-
-    public Date getDate() { return date;}
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public void setSum(BigDecimal sum) {
-        this.sum = sum;
-    }
-
-    public  void setDate(Date date) { this.date = date; }
 }
