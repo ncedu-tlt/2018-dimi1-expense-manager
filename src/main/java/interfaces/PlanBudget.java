@@ -5,7 +5,7 @@ import java.math.BigInteger;
 import java.util.Date;
 
 public interface PlanBudget extends Entity {
-    BigInteger getPlanBudgetId();
+    Integer getPlanBudgetId();
     String getOperationType();
     Integer getBudgetTypeId();
     String getDescription();

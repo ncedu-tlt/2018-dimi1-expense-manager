@@ -4,7 +4,7 @@ import java.math.BigInteger;
 import java.util.Date;
 
 public interface Person extends Entity {
-    BigInteger getPersonId();
+    Integer getPersonId();
     String getLogin();
     String getPass();
     String getEmail();
