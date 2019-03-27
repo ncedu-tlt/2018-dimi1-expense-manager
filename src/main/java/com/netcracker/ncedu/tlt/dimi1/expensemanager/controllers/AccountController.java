@@ -29,6 +29,8 @@ public class AccountController {
         DatabaseWork dbw = new DatabaseWork(jdbcTemplate);
         User user = (User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         model.addAttribute("accounts", dbw.getByPersonIdAccounts(user.getUsername()));
+        model.addAttribute("tables", dbw.getDBTablesAsJsonArray().toString());
+        model.addAttribute("relations", dbw.getDBTablesRelationsAsJsonArray().toString());
         return "menu";
     }
 

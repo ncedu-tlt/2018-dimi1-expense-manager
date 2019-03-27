@@ -3,13 +3,19 @@ package com.netcracker.ncedu.tlt.dimi1.expensemanager.tools;
 import com.netcracker.ncedu.tlt.dimi1.expensemanager.interfaces.*;
 import com.netcracker.ncedu.tlt.dimi1.expensemanager.implementations.*;
 import com.netcracker.ncedu.tlt.dimi1.expensemanager.reports.*;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public class DatabaseWork {
     private JdbcTemplate jdbcTemplate;
@@ -260,5 +266,60 @@ public class DatabaseWork {
         rep3.getReportRow(planBudgetL, report3L, start, end);
         return report3L;
     }
+
+    public Collection<String> getDBTablesAsJsonArray()
+    {
+        List<Map<String, Object>> dataBaseColumns = jdbcTemplate.queryForList(QUERY_GET_DATA_BASE_COLUMNS);
+
+        Map<Integer, JSONObject> tables = new HashMap<>();
+        for(Map<String, Object> dbColumn : dataBaseColumns)
+        {
+            Integer tableId = (Integer) dbColumn.get("TABLE_ID");
+            String tableName = (String) dbColumn.get("TABLE_NAME");
+            String columnName = (String) dbColumn.get("COLUMN_NAME");
+            String columnType = (String) dbColumn.get("COLUMN_TYPE");
+
+            JSONObject table = tables.computeIfAbsent( tableId, k -> new JSONObject().put("key", tableId).put("name", tableName).put("properties", new JSONArray()) );
+            table.getJSONArray("properties").put( new JSONObject().put("name", columnName).put("type", columnType) );
+        }
+
+        return tables.values()
+                .stream()
+                .map(JSONObject::toString)
+                .collect(Collectors.toList());
+    }
+
+    public Collection<String> getDBTablesRelationsAsJsonArray()
+    {
+        return jdbcTemplate.queryForList(QUERY_GET_DATA_BASE_TABLES_RELATIONS).stream()
+                .map(JSONObject::new)
+                .map(JSONObject::toString)
+                .collect(Collectors.toList());
+    }
+
+    private static final String QUERY_GET_DATA_BASE_COLUMNS =
+            "select tables.id as table_id,\n" +
+            "       tables.table_name as table_name,\n" +
+            "       columns.column_name as column_name,\n" +
+            "       decode(columns.sequence_name, null, columns.column_type, 'SERIAL') as column_type\n" +
+            "  from information_schema.tables tables,\n" +
+            "       information_schema.columns columns \n" +
+            " where tables.id > 0 /* User Tables */\n" +
+            "   and tables.table_name = columns.table_name" +
+            " order by columns.sequence_name nulls last /* SERIAL type first */";
+
+    private static final String QUERY_GET_DATA_BASE_TABLES_RELATIONS =
+            "select from_table.id as \"from\",\n" +
+            "       to_table.id as \"to\",\n" +
+            "       'generalization' as \"relationship\"\n" +
+            "  from information_schema.key_column_usage cu,\n" +
+            "       information_schema.referential_constraints rc,\n" +
+            "       information_schema.indexes ix,\n" +
+            "       information_schema.tables from_table,\n" +
+            "       information_schema.tables to_table\n" +
+            " where cu.constraint_name = rc.constraint_name\n" +
+            "   and ix.index_name = rc.unique_constraint_name\n" +
+            "   and from_table.table_name = cu.table_name\n" +
+            "   and to_table.table_name = ix.table_name";
 }
 
