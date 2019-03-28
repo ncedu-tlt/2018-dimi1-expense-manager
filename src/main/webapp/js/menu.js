@@ -23,6 +23,8 @@ $(document).ready(function() {
             p[i].style.color = 'green';
         }
      }
+
+     gojsinit();
 });
 
 function deleteAccount(value)

@@ -1,5 +1,6 @@
 package com.netcracker.ncedu.tlt.dimi1.expensemanager.controllers;
 
+import com.netcracker.ncedu.tlt.dimi1.expensemanager.tools.DatabaseWork;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Controller;
@@ -19,6 +20,9 @@ public class IndexController {
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
     String home(ModelMap model) {
+        DatabaseWork databaseWork = new DatabaseWork(jdbcTemplate);
+        model.addAttribute("tables", databaseWork.getDBTablesAsJsonArray().toString());
+        model.addAttribute("relations", databaseWork.getDBTablesRelationsAsJsonArray().toString());
         return "menu";
     }
 }

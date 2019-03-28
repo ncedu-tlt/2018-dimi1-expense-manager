@@ -13,18 +13,15 @@
    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous"></link>
    <link href="/css/menu.css" rel="stylesheet" type="text/css"/></link>
 
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
-
-
    <!-- jQuery first, then Tether, then Bootstrap JS. -->
-   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
-   <script src="https://code.jquery.com/jquery-3.3.1.js" crossorigin="anonymous"></script>
-   <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+
+   <!-- GoJS framework version 2.0 -->
+   <script src="/js/go.js"></script>
 
    <script src="/js/menu.js" rel="stylesheet" type="text/javascript"></script>
-   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
    <script src="https://www.google.com/jsapi"></script>
 
     <div class="modal fade" id="modalError" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
@@ -183,6 +180,7 @@
         </div>
     </div>
 
+<jsp:include page="modal_db_structure.jsp" />
 
 <body>
     <nav class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow"></nav>
@@ -201,6 +199,25 @@
                 <li class="nav-item">
                     <a class="nav-link" href="/accounts?showModal" id="btnModal">Purse</a>
                 </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownReportsMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Reports
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdownReportsMenuLink">
+                        <a class="dropdown-item" href="/showReport1">Report by Category</a>
+                        <a class="dropdown-item" href="/showReport2">Mandatory/Optional</a>
+                        <a class="dropdown-item" href="/showReport3">Planned expenses</a>
+                    </div>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownToolsMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Tools
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdownToolsMenuLink">
+                        <a class="dropdown-item" href="/h2-console">H2 Console</a>
+                        <a class="dropdown-item" href="#" id="db_structure_button">DB Structure</a>
+                    </div>
+                </li>
             </ul>
         </div>
         <ul class="navbar-nav sing-right">
@@ -211,4 +228,14 @@
         </ul>
     </nav>
 </body>
+
+<script>
+    $("#db_structure_button").click(function() {
+        $('#modal_db_structure').modal('show');
+        $('#modal_db_structure').on('shown.bs.modal', function() {
+            myDiagram.requestUpdate();
+        });
+    });
+</script>
+
 </html>
