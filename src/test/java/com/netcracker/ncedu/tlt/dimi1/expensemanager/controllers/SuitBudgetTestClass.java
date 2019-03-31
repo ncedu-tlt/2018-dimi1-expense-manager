@@ -1,4 +1,4 @@
-package com.netcracker.ncedu.tlt.dimi1.expensemanager;
+package com.netcracker.ncedu.tlt.dimi1.expensemanager.controllers;
 
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
@@ -9,6 +9,6 @@ import org.junit.runners.Suite;
         UpdateBudgetControllerTest.class,
         DeleteBudgetControllerTest.class
 })
-public class SuitTestClass {
+public class SuitBudgetTestClass {
 
 }

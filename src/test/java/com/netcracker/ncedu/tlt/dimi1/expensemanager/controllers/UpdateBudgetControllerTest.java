@@ -1,6 +1,6 @@
-package com.netcracker.ncedu.tlt.dimi1.expensemanager;
+package com.netcracker.ncedu.tlt.dimi1.expensemanager.controllers;
 
-import com.netcracker.ncedu.tlt.dimi1.expensemanager.controllers.BudgetController;
+import com.netcracker.ncedu.tlt.dimi1.expensemanager.ExpenseManagerApplication;
 import com.netcracker.ncedu.tlt.dimi1.expensemanager.implementations.BudgetImpl;
 import com.netcracker.ncedu.tlt.dimi1.expensemanager.interfaces.Budget;
 import org.junit.Assert;
@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.hamcrest.SelfDescribing;
 
 //import org.hamcrest.SelfDescribing;
 
@@ -44,6 +45,11 @@ public class UpdateBudgetControllerTest {
         Assert.assertNotEquals(objCheck.getDescription(), "UPDATED");
 
         obj.updateBudget(lastId, objCheck.getOperationType(), 4, "UPDATED",
+                15, objCheck.getOperationDate(), objCheck.getChargeValue());
+        objCheck.load(lastId);
+        Assert.assertNotEquals(objCheck.getDescription(), "UPDATED");
+
+        obj.updateBudget(lastId+1, objCheck.getOperationType(), 4, "UPDATED",
                 15, objCheck.getOperationDate(), objCheck.getChargeValue());
         objCheck.load(lastId);
         Assert.assertNotEquals(objCheck.getDescription(), "UPDATED");

@@ -17,12 +17,12 @@ public class BudgetTypeController {
     Logger log = LoggerFactory.getLogger(BudgetTypeController.class);
 
     @Autowired
-    BudgetTypeController(JdbcTemplate jdbcTemplate){ this.jdbcTemplate = jdbcTemplate; }
+    public BudgetTypeController(JdbcTemplate jdbcTemplate){ this.jdbcTemplate = jdbcTemplate; }
 
     @RequestMapping(value = "/addNewBudgetType")
-    String addNewBudgetType(
+    public String addNewBudgetType(
             @RequestParam(value = "name") String name,
-            @RequestParam(value = "required") boolean required,
+            @RequestParam(value = "required") Boolean required,
             @RequestParam(value = "checkMax") BigDecimal checkMax){
         BudgetTypeImpl budgetTypeForAdd = new BudgetTypeImpl(jdbcTemplate);
         budgetTypeForAdd.createUniqId();
@@ -36,10 +36,10 @@ public class BudgetTypeController {
     }
 
     @RequestMapping(value = "/addBudgetType")
-    String addBudgetType(
+    public String addBudgetType(
             @RequestParam(value = "groupId") Integer groupId,
             @RequestParam(value = "name") String name,
-            @RequestParam(value = "required") boolean required,
+            @RequestParam(value = "required") Boolean required,
             @RequestParam(value = "checkMax") BigDecimal checkMax){
         BudgetTypeImpl budgetTypeForAdd = new BudgetTypeImpl(jdbcTemplate);
         if(budgetTypeForAdd.isGroupExsist(groupId)){
@@ -59,7 +59,7 @@ public class BudgetTypeController {
     }
 
     @RequestMapping(value = "deleteBudgetType")
-    String deleteBudgetType(Integer budgetTypeId){
+    public String deleteBudgetType(Integer budgetTypeId){
         BudgetTypeImpl budgetTypeForDelete = new BudgetTypeImpl(jdbcTemplate);
         if(budgetTypeForDelete.load(budgetTypeId)){
             budgetTypeForDelete.delete();
@@ -71,7 +71,7 @@ public class BudgetTypeController {
     }
 
     @RequestMapping(value = "updateBudgetType")
-    String updateBudgetType(Integer budgetTypeId, Integer groupId, String name, boolean isRequired, BigDecimal checkMax){
+    public String updateBudgetType(Integer budgetTypeId, Integer groupId, String name, Boolean isRequired, BigDecimal checkMax){
         BudgetTypeImpl budgetTypeForUpdate = new BudgetTypeImpl(jdbcTemplate);
         if(budgetTypeForUpdate.load(budgetTypeId)){
             budgetTypeForUpdate.setBudgetTypeId(budgetTypeId);

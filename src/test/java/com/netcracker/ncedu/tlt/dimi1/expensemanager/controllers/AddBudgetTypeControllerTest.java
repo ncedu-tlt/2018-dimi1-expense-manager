@@ -1,51 +1,56 @@
-package com.netcracker.ncedu.tlt.dimi1.demo;
+package com.netcracker.ncedu.tlt.dimi1.expensemanager.controllers;
 
-import com.netcracker.ncedu.tlt.dimi1.expensemanager.controllers.BudgetTypeController;
+import com.netcracker.ncedu.tlt.dimi1.expensemanager.ExpenseManagerApplication;
+import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.web.servlet.MockMvc;
 import org.hamcrest.SelfDescribing;
 
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.mock;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+//import org.hamcrest.SelfDescribing;
 
 /*@RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)*/
-@RunWith(SpringRunner.class)
-@WebMvcTest(BudgetTypeController.class)
 /*@RunWith(SpringRunner.class)
-@ContextConfiguration(classes = DemoApplication.class)*/
+@WebMvcTest(BudgetTypeController.class)*/
+@RunWith(SpringRunner.class)
+@ContextConfiguration(classes = ExpenseManagerApplication.class)
 public class AddBudgetTypeControllerTest {
 
-    @LocalServerPort
-    private int port;
-
-    /*@Autowired
-    JdbcTemplate jdbcTemplate;
-*/
+    /*@LocalServerPort
+    private int port;*/
 
     @Autowired
+    JdbcTemplate jdbcTemplate;
+
+    private BudgetTypeController obj;
+    private Integer lastId;
+
+    @Before
+    public void setJdbcTemplate(){
+        obj = new BudgetTypeController(jdbcTemplate);
+        lastId = jdbcTemplate.queryForObject("SELECT max(budget_type_id) FROM budget_type", Integer.class);
+    }
+
+    /*@Autowired
     private MockMvc mockMvc;
     private TestRestTemplate restTemplate = new TestRestTemplate();
 
     @MockBean
-    private BudgetTypeController addBudgetTypeController;
-
-    //TODO протестировать сами java-методы, а  не контроллеры. От контроллеров можно получить ответ с кодом 200, означающий запуск контроллера
+    private BudgetTypeController addBudgetTypeController;*/
 
     //@Test
     @org.junit.Test
     public void addNewBudgetType() throws Exception {
+        obj.addNewBudgetType("GOOD TEST", null, null);
+        lastId = jdbcTemplate.queryForObject("SELECT max(budget_type_id) FROM budget_type", Integer.class);
+        String res = jdbcTemplate.queryForObject("SELECT name FROM budget_type " +
+                "WHERE budget_type_id = ?", String.class, lastId);
+        Assert.assertEquals(res, "GOOD TEST");
         /*when(addBudgetTypeController.addNewBudgetType("test", false, null)).thenReturn("d");
         this.mockMvc.perform(get("/addNewBudgetType")).andDo(print()).andExpect(status().isOk());
         String url = "http://localhost:" + this.port;
@@ -59,7 +64,7 @@ public class AddBudgetTypeControllerTest {
                 .build().toUri();
         this.restTemplate.getForEntity(uri, Void.class);*/
 
-        mockMvc.perform(get("/addNewBudgetType?name=test&required=false")).andExpect(status().isOk());
+        /*mockMvc.perform(get("/addNewBudgetType?name=test&required=false")).andExpect(status().isOk());*/
 
 
         /*BudgetTypeImpl o = mock(BudgetTypeImpl.class);
@@ -75,6 +80,11 @@ public class AddBudgetTypeControllerTest {
 
     @Test
     public void addBudgetType() {
+        obj.addBudgetType(4, "GOOD TEST2", null, null);
+        lastId = jdbcTemplate.queryForObject("SELECT max(budget_type_id) FROM budget_type", Integer.class);
+        String res = jdbcTemplate.queryForObject("SELECT name FROM budget_type " +
+                "WHERE budget_type_id = ?", String.class, lastId);
+        Assert.assertEquals(res, "GOOD TEST2");
         /*String url = "http://localhost:" + this.port;
         URI uri = UriComponentsBuilder.fromHttpUrl(url).path("/addBudgetType")
                 .queryParam("groupId", "1")

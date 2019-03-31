@@ -1,5 +1,6 @@
-package com.netcracker.ncedu.tlt.dimi1.expensemanager;
+package com.netcracker.ncedu.tlt.dimi1.expensemanager.controllers;
 
+import com.netcracker.ncedu.tlt.dimi1.expensemanager.ExpenseManagerApplication;
 import com.netcracker.ncedu.tlt.dimi1.expensemanager.controllers.BudgetController;
 import org.junit.Assert;
 import org.junit.Before;
@@ -9,8 +10,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.hamcrest.SelfDescribing;
-
-import java.util.List;
 
 //import org.hamcrest.SelfDescribing;
 
@@ -60,33 +59,34 @@ public class AddBudgetControllerTest {
     @org.junit.Test
     public void addBudgetTest() {
 
-        //TODO Создать оюъект контроллера и проверять именно метожы контроллера со всеми  входными параметрами - пропустит или нет создание
-        //TODO Можно попробовать использовать аннотацию @Before для инициализации всех параметром, но это не точно
-
         //Boolean actualResult = false;
         obj.addBudget(null, 4, "GOOD TEST",
                 5, null, null);
-        List<String> res = jdbcTemplate.queryForList("SELECT description FROM budget", String.class);
-        Assert.assertEquals(res.get(res.size()-1), "GOOD TEST");
         lastId = jdbcTemplate.queryForObject("SELECT max(budget_id) FROM budget", Integer.class);
+        String res = jdbcTemplate.queryForObject("SELECT description FROM budget " +
+                "WHERE budget_id = ?", String.class, lastId);
+        Assert.assertEquals(res, "GOOD TEST");
         /*if(res.get(res.size()-1) == "GOOD TEST"){
             actualResult=true;
         }
         Assert.assertEquals(expectedResult, actualResult);*/
         obj.addBudget(null, 4, "WRONG TEST",
                 7, null, null);
-        res = jdbcTemplate.queryForList("SELECT description FROM budget", String.class);
-        Assert.assertNotEquals(res.get(res.size()-1), "WRONG TEST");
+        res = jdbcTemplate.queryForObject("SELECT description FROM budget " +
+                "WHERE budget_id = ?", String.class, lastId);
+        Assert.assertNotEquals(res, "WRONG TEST");
 
         obj.addBudget(null, 5, "WRONG TEST",
                 2, null, null);
-        res = jdbcTemplate.queryForList("SELECT description FROM budget", String.class);
-        Assert.assertNotEquals(res.get(res.size()-1), "WRONG TEST");
+        res = jdbcTemplate.queryForObject("SELECT description FROM budget " +
+                "WHERE budget_id = ?", String.class, lastId);
+        Assert.assertNotEquals(res, "WRONG TEST");
 
         obj.addBudget(null, 5, "WRONG TEST",
                 7, null, null);
-        res = jdbcTemplate.queryForList("SELECT description FROM budget", String.class);
-        Assert.assertNotEquals(res.get(res.size()-1), "WRONG TEST");
+        res = jdbcTemplate.queryForObject("SELECT description FROM budget " +
+                "WHERE budget_id = ?", String.class, lastId);
+        Assert.assertNotEquals(res, "WRONG TEST");
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

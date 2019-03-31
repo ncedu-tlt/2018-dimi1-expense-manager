@@ -1,5 +1,6 @@
-package com.netcracker.ncedu.tlt.dimi1.expensemanager;
+package com.netcracker.ncedu.tlt.dimi1.expensemanager.controllers;
 
+import com.netcracker.ncedu.tlt.dimi1.expensemanager.ExpenseManagerApplication;
 import com.netcracker.ncedu.tlt.dimi1.expensemanager.controllers.BudgetController;
 import com.netcracker.ncedu.tlt.dimi1.expensemanager.implementations.BudgetImpl;
 import com.netcracker.ncedu.tlt.dimi1.expensemanager.interfaces.Budget;
@@ -32,7 +33,6 @@ public class DeleteBudgetControllerTest {
 
     @org.junit.Test
     public void deleteBudgetTest() {
-        System.out.println(lastId);
         obj.deleteBudget(lastId);
         Budget objCheck = new BudgetImpl(jdbcTemplate);
         Assert.assertFalse(objCheck.load(lastId));
