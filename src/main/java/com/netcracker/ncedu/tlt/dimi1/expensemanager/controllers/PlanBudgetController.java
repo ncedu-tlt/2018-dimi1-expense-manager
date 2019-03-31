@@ -22,10 +22,10 @@ public class PlanBudgetController {
     Logger log = LoggerFactory.getLogger(PlanBudgetController.class);
 
     @Autowired
-    PlanBudgetController(JdbcTemplate jdbcTemplate){ this.jdbcTemplate = jdbcTemplate; }
+    public PlanBudgetController(JdbcTemplate jdbcTemplate){ this.jdbcTemplate = jdbcTemplate; }
 
     @RequestMapping(value = "/addPlanBudget")
-    String addPlanBudget(String operationType, Integer budgetTypeId, String description,
+    public String addPlanBudget(String operationType, Integer budgetTypeId, String description,
                      Integer accountId, Date operationDate, BigDecimal chargeValue,
                      String regularMask, Integer repeatCount, Date startDate, Date endDate, Boolean spliter){
         PlanBudgetImpl planBudgetForAdd = new PlanBudgetImpl(jdbcTemplate);
@@ -38,6 +38,8 @@ public class PlanBudgetController {
                 log.info("Adding a new plan budget failed. An OPERATION_DATE or START_DATE field must be filled");
             } else if(operationDate != null && startDate != null){
                 log.info("Adding a new plan budget failed. Only one field OPERATION_DATE or START_DATE must be filled");
+            } else if(operationDate != null && (regularMask == null || regularMask.equals(""))){
+                log.info("Adding a new plan budget failed. Field REGULAR_MASK must be filled");
             } else if(startDate != null && (regularMask == null || regularMask.equals(""))){
                 log.info("Adding a new plan budget failed. Field REGULAR_MASK must be filled");
             } else {
@@ -67,7 +69,7 @@ public class PlanBudgetController {
     }
 
     @RequestMapping(value = "deletePlanBudget")
-    String deletePlanBudget(Integer budgetId){
+    public String deletePlanBudget(Integer budgetId){
         PlanBudgetImpl planBudgetForDelete = new PlanBudgetImpl(jdbcTemplate);
         if(planBudgetForDelete.load(budgetId)){
             planBudgetForDelete.delete();
@@ -79,7 +81,7 @@ public class PlanBudgetController {
     }
 
     @RequestMapping(value = "/updatePlanBudget")
-    String updatePlanBudget(Integer planBudgetId, String operationType, Integer budgetTypeId, String description,
+    public String updatePlanBudget(Integer planBudgetId, String operationType, Integer budgetTypeId, String description,
                             Integer accountId, Date operationDate, BigDecimal chargeValue,
                             String regularMask, Integer repeatCount, Date startDate, Date endDate, Boolean spliter){
         PlanBudgetImpl planBudgetForUpdate = new PlanBudgetImpl(jdbcTemplate);
@@ -92,6 +94,8 @@ public class PlanBudgetController {
                 log.info("Updating a plan budget failed. An OPERATION_DATE or START_DATE field must be filled");
             } else if(operationDate != null && startDate != null){
                 log.info("Updating a plan budget failed. Only one field OPERATION_DATE or START_DATE must be filled");
+            } else if(operationDate != null && (regularMask == null || regularMask.equals(""))){
+                log.info("Updating a plan budget failed. Field REGULAR_MASK must be filled");
             } else if(startDate != null && (regularMask == null || regularMask.equals(""))){
                 log.info("Updating a plan budget failed. Field REGULAR_MASK must be filled");
             } else {
