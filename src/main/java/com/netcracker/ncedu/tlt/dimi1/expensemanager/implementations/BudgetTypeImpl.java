@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Map;
 
 @Data
@@ -72,11 +73,11 @@ public class BudgetTypeImpl implements BudgetType {
     }
 
     public boolean isGroupExsist(int checkGroup){
-        String qwr = "SELECT budget_type_id, group_id " +
+        String qwr = "SELECT budget_type_id " +
                 "FROM budget_type " +
                 "WHERE group_id IS NULL";
-        Integer checkExist = jdbcTemplate.queryForObject(qwr, Integer.class);
-        if(checkGroup == checkExist){
+        List<Integer> checkExist = jdbcTemplate.queryForList(qwr, Integer.class);
+        if(checkExist.contains(checkGroup)){
             return true;
         } else {
             log.info("The group with the specified id is missing...");

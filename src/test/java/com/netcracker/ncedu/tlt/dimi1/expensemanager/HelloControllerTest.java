@@ -1,4 +1,4 @@
-package com.netcracker.ncedu.tlt.dimi1.demo;
+package com.netcracker.ncedu.tlt.dimi1.expensemanager;
 
 import com.netcracker.ncedu.tlt.dimi1.expensemanager.controllers.HelloController;
 import org.junit.Test;

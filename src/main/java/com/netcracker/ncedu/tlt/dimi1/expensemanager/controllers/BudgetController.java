@@ -21,15 +21,15 @@ public class BudgetController {
     Logger log = LoggerFactory.getLogger(BudgetController.class);
 
     @Autowired
-    BudgetController(JdbcTemplate jdbcTemplate){ this.jdbcTemplate = jdbcTemplate; }
+    public BudgetController(JdbcTemplate jdbcTemplate){ this.jdbcTemplate = jdbcTemplate; }
 
     @RequestMapping(value = "/addBudget")
-    String addBudget(String operationType, Integer budgetTypeId, String description,
-                     Integer accountId, Date operationDate, BigDecimal chargeValue){
+    public String addBudget(String operationType, Integer budgetTypeId, String description,
+                            Integer accountId, Date operationDate, BigDecimal chargeValue){
         BudgetImpl budgetForAdd = new BudgetImpl(jdbcTemplate);
-        BudgetType objForCheckBT = new BudgetTypeImpl(jdbcTemplate);
+        BudgetTypeImpl objForCheckBT = new BudgetTypeImpl(jdbcTemplate);
         Accounts objForCheckAcc = new AccountsImpl(jdbcTemplate);
-        boolean isBudgTRight = objForCheckBT.load(budgetTypeId), isAccRight = objForCheckAcc.load(accountId);
+        boolean isBudgTRight = objForCheckBT.isGroupExsist(budgetTypeId), isAccRight = objForCheckAcc.load(accountId);
         if(isBudgTRight && isAccRight){
             budgetForAdd.createUniqId();
             budgetForAdd.setOperationType(operationType);
@@ -49,7 +49,7 @@ public class BudgetController {
     }
 
     @RequestMapping(value = "deleteBudget")
-    String deleteBudget(Integer budgetId){
+    public String deleteBudget(Integer budgetId){
         BudgetImpl budgetForDelete = new BudgetImpl(jdbcTemplate);
         if(budgetForDelete.load(budgetId)){
             budgetForDelete.delete();
@@ -61,12 +61,13 @@ public class BudgetController {
     }
 
     @RequestMapping(value = "updateBudget")
-    String updateBudget(Integer budgetId, String operationType, Integer budgetTypeId, String description,
+    public String updateBudget(Integer budgetId, String operationType, Integer budgetTypeId, String description,
                         Integer accountId, Date operationDate, BigDecimal chargeValue) {
         BudgetImpl budgetForUpdate = new BudgetImpl(jdbcTemplate);
         BudgetType objForCheckBT = new BudgetTypeImpl(jdbcTemplate);
         Accounts objForCheckAcc = new AccountsImpl(jdbcTemplate);
-        boolean isBudgTRight = objForCheckBT.load(budgetTypeId), isAccRight = objForCheckAcc.load(accountId);
+        boolean isBudgTRight = ((BudgetTypeImpl) objForCheckBT).isGroupExsist(budgetTypeId),
+                isAccRight = objForCheckAcc.load(accountId);
         if (budgetForUpdate.load(budgetId)) {
             if (isBudgTRight && isAccRight) {
                 budgetForUpdate.setBudgetId(budgetId);
