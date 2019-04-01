@@ -84,7 +84,7 @@
         <tr>
             <td>plan_budget_id</td><td>operation_type</td><td>budget_type_id_fk</td><td>description</td><td>account_id_fk</td>
             <td>operation_date</td><td>charge_value</td><td>regular_mask</td><td>repeat_count</td><td>start_date</td>
-            <td>end_date</td><td>split</td>
+            <td>end_date</td>
         </tr>
         <c:forEach items="${plan_budgets}" var="plan_budget">
             <tr>
@@ -99,13 +99,12 @@
                 <td>${plan_budget.getRepeatCount()}</td>
                 <td>${plan_budget.getStartDate()}</td>
                 <td>${plan_budget.getEndDate()}</td>
-                <td>${plan_budget.getSpliter()}</td>
             </tr>
         </c:forEach>
     </table>
 
 
-    <form align="center" method="GET" action="/showReport1">
+    <form align="center" method="GET" action="/showReport1/2">
         <p>
             <input type="submit" value="Report1"/>
         </p>

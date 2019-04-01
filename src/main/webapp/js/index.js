@@ -13,6 +13,7 @@ $( document ).ready( function() {
         { image: './picture/springboot.png', width: '40', height: '40', url: 'https://spring.io/projects/spring-boot', target: '_blank', tooltip: 'Spring Boot' },
         { image: './picture/tomcat.png', width: '40', height: '40', url: 'http://tomcat.apache.org/', target: '_blank', tooltip: 'Apache Tomcat' },
         { image: './picture/jquery.png', width: '40', height: '40', url: 'https://jquery.com/', target: '_blank', tooltip: 'jQuery' },
+        { image: './picture/canvas.png', width: '50', height: '50', url: 'https://canvasjs.com/', target: '_blank', tooltip: 'canvasJS' },
     ];
     var settings = {
         entries: entries,

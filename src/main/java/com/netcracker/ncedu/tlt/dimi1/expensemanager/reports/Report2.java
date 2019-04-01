@@ -58,14 +58,36 @@ public class Report2 {
         }
     }
 
-    public void setTotalSum(boolean required){
-        String getTotalSum = "SELECT SUM(charge_value) AS sum " +
-                "FROM budget, budget_type " +
-                "WHERE budget_type_id_fk NOT IN (" +
-                "SELECT budget_type_id FROM budget_type WHERE group_id = 11 AND 11) " +
-                "AND budget.budget_type_id_fk = budget_type.budget_type_id " +
-                "AND budget_type.required = ?";
-        totalSum = jdbcTemplate.queryForObject(getTotalSum, Double.class, required);
+    public void getReportPersonRow(Integer personId, int accountId, List<Report2> rL, boolean required) {
+        String rep2 = "select b1.budget_type_id, b1.name, b1.required, sum(budget.charge_value) as summa from person \n" +
+                "left join accounts on person_id = accounts.person_id_fk\n" +
+                "right join budget on budget.account_id_fk = accounts.account_id\n" +
+                "left join budget_type as b1 on budget.budget_type_id_fk = b1.budget_type_id\n" +
+                "where person_id = ? and account_id = ? and b1.required = ?\n" +
+                "and group_id < 11" +
+                "group by b1.budget_type_id;";
+        Object[] args = new Object[]{
+                personId, accountId, required
+        };
+        RowMapper<Report2> rowMapper = new Report2RowMapper(jdbcTemplate);
+        List<Report2> getRows = jdbcTemplate.query(rep2, args, rowMapper);
+        for(Report2 i : getRows){
+            rL.add(i);
+        }
+    }
+
+    public void setTotalSum(Integer personId, int accountId, boolean required){
+        String getTotalSum = "select sum(summa) as totalSumma\n" +
+                "from (select b1.budget_type_id, b1.name, b1.required, sum(budget.charge_value) as summa from person \n" +
+                "left join accounts on person_id = accounts.person_id_fk\n" +
+                "right join budget on budget.account_id_fk = accounts.account_id\n" +
+                "left join budget_type as b1 on budget.budget_type_id_fk = b1.budget_type_id\n" +
+                "where person_id = ? and account_id = ? and b1.required = ? and b1.group_id < 11\n" +
+                "group by b1.budget_type_id)";
+        Object[] args = new Object[]{
+                personId, accountId, required
+        };
+        totalSum = jdbcTemplate.queryForObject(getTotalSum, args, Double.class);
     }
 
     public Double getTotalSum(){

@@ -69,6 +69,8 @@ INSERT INTO Budget (budget_id, operation_type, budget_type_id_fk, description, a
                         VALUES (1011, 'Безнал', 3, '', 4, TO_DATE('25.11.2018', 'dd.mm.yyyy'), 110);
 INSERT INTO Budget (budget_id, operation_type, budget_type_id_fk, description, account_id_fk, operation_date, charge_value)
                         VALUES (1012, 'Безнал', 1, 'Запись для проверки работы Report1', 4, TO_DATE('30.11.2018', 'dd.mm.yyyy'), 200);
+INSERT INTO Budget (budget_id, operation_type, budget_type_id_fk, description, account_id_fk, operation_date, charge_value)
+                        VALUES (1013, 'Безнал', 10, '', 2, TO_DATE('28.11.2018', 'dd.mm.yyyy'), 1200);
 
 INSERT INTO Plan_budget (plan_budget_id, operation_type, budget_type_id_fk,
                                               description, account_id_fk, operation_date, charge_value,

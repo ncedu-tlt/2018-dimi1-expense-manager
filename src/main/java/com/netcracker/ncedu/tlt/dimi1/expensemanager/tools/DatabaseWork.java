@@ -195,50 +195,44 @@ public class DatabaseWork {
         accounts.create();
     }
 
-    public List<Report1> getReport1(){
-        List<Report1> report1L = new ArrayList<>();
+    public List<Report1> getReport1(Integer personId, Integer accountId){
+        List<Report1> report1L = new ArrayList<Report1>();
         Report1 repObj = new Report1(jdbcTemplate);
-        List<Integer> expenseGroups = repObj.getAllExpenseGroups();
-        for(int i=0; i<expenseGroups.size(); i++){
-            repObj.getReportRow(expenseGroups.get(i), report1L);
-        }
-        repObj.setTotalSum();
+        repObj.getReportPersonRow(personId, accountId, report1L);
+        repObj.setTotalSum(personId, accountId);
+
         for(int i=0; i<report1L.size(); i++){
             report1L.get(i).setPercent(report1L.get(i).getSum(), repObj.getTotalSum());
         }
         return report1L;
     }
 
-    public Double getTotalSum(){
+    public Double getTotalSum(Integer personId, Integer accountId){
         Report1 repObj = new Report1(jdbcTemplate);
-        repObj.setTotalSum();
+        repObj.setTotalSum(personId, accountId);
         Double totSum = repObj.getTotalSum();
         return totSum;
     }
 
-    public List<Report2> getReport2Required(){
-        List<Report2> report2L = new ArrayList<>();
+    public List<Report2> getReport2Required(Integer personId, Integer accountId){
+        List<Report2> report2L = new ArrayList<Report2>();
         Report2 repObj = new Report2(jdbcTemplate);
-        List<Integer> expenseGroups = repObj.getAllExpenseGroups();
-        for(int i=0; i<expenseGroups.size(); i++){
-            repObj.getReportRow(expenseGroups.get(i), report2L, true);
-        }
+        repObj.getReportPersonRow(personId, accountId, report2L, true);
+
         return report2L;
     }
 
-    public List<Report2> getReport2Unrequired(){
-        List<Report2> report2L = new ArrayList<>();
+    public List<Report2> getReport2Unrequired(Integer personId, Integer accountId){
+        List<Report2> report2L = new ArrayList<Report2>();
         Report2 repObj = new Report2(jdbcTemplate);
-        List<Integer> expenseGroups = repObj.getAllExpenseGroups();
-        for(int i=0; i<expenseGroups.size(); i++){
-            repObj.getReportRow(expenseGroups.get(i), report2L, false);
-        }
+        repObj.getReportPersonRow(personId, accountId, report2L, false);
+
         return report2L;
     }
 
-    public Double getTotalSum(boolean required){
+    public Double getTotalSum(Integer personId, Integer accountId, boolean required){
         Report2 repObj = new Report2(jdbcTemplate);
-        repObj.setTotalSum(required);
+        repObj.setTotalSum(personId, accountId, required);
         Double totSum = repObj.getTotalSum();
         return totSum;
     }

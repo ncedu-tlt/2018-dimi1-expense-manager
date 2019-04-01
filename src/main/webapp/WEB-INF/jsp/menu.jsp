@@ -101,8 +101,8 @@
                                     <td>${account.getCurrency()}</td>
                                     <td>${account.getBalance()}</td>
                                     <td><p>${account.getDescription()}</p></td>
-                                    <td><a href="/budget/${account.getAccountId()}" class="btn btn-primary"
-                                           role="button" aria-pressed="true">budget</a></button>
+                                    <td><a href="/showReport1/${account.getAccountId()}" class="btn btn-primary"
+                                           role="button" aria-pressed="true">Report1</a></button>
                                     </td>
                                     <td>
                                         <input type="hidden" id="accountId" name="accountId"
