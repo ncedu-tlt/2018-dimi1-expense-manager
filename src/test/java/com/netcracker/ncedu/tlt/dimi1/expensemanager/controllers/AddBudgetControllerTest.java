@@ -28,47 +28,16 @@ public class AddBudgetControllerTest {
         lastId = jdbcTemplate.queryForObject("SELECT max(budget_id) FROM budget", Integer.class);
     }
 
-    /*String operationType, description;
-    Integer budgetTypeId, accountId;
-    Date operationDate;
-    BigDecimal chargeValue;
-    Boolean expectedResult;
-
-    public BudgetControllerTest(String operationType, Integer budgetTypeId, String description,
-                                Integer accountId, Date operationDate, BigDecimal chargeValue,
-                                Boolean result){
-        this.operationType = operationType;
-        this.budgetTypeId = budgetTypeId;
-        this.description = description;
-        this.accountId = accountId;
-        this.operationDate = operationDate;
-        this.chargeValue = chargeValue;
-        this.expectedResult = result;
-
-    }
-
-    @Parameterized.Parameters
-    public static Collection<Object[]> data(){
-        return Arrays.asList(new Object[][]{
-                {null, 4, "GOOD TEST", 5, null, null, true},
-                {null, 3, "WRONG TEST", 3, null, null, false}
-        });
-    }*/
-
     @org.junit.Test
     public void addBudgetTest() {
 
-        //Boolean actualResult = false;
         obj.addBudget(null, 4, "GOOD TEST",
                 5, null, null);
         lastId = jdbcTemplate.queryForObject("SELECT max(budget_id) FROM budget", Integer.class);
         String res = jdbcTemplate.queryForObject("SELECT description FROM budget " +
                 "WHERE budget_id = ?", String.class, lastId);
         Assert.assertEquals(res, "GOOD TEST");
-        /*if(res.get(res.size()-1) == "GOOD TEST"){
-            actualResult=true;
-        }
-        Assert.assertEquals(expectedResult, actualResult);*/
+        
         obj.addBudget(null, 4, "WRONG TEST",
                 7, null, null);
         res = jdbcTemplate.queryForObject("SELECT description FROM budget " +
@@ -86,44 +55,6 @@ public class AddBudgetControllerTest {
         res = jdbcTemplate.queryForObject("SELECT description FROM budget " +
                 "WHERE budget_id = ?", String.class, lastId);
         Assert.assertNotEquals(res, "WRONG TEST");
-
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        /*Logger log = LoggerFactory.getLogger(BudgetControllerTest.class);
-
-        BudgetImpl b = new BudgetImpl(jdbcTemplate);
-        b.createUniqId();
-        b.setDescription("GOOD TEST");
-        b.setAccountId(5);
-        b.create();
-        List<Integer> res = jdbcTemplate.queryForList("SELECT budget_id FROM budget", Integer.class);
-        Integer id = b.getBudgetId();
-        //Assert.assertNotNull(id);
-        if(b.load(id)){
-            log.info("Record was created and added to the database");
-        } else{
-            log.info("Record wasn't created and didn't added to the database");
-        }
-        Assert.assertEquals(res.get(res.size()-1), id);
-
-        b.createUniqId();
-        b.setDescription("WRONG TEST");
-        b.setAccountId(10);
-        res = jdbcTemplate.queryForList("SELECT budget_id FROM budget", Integer.class);
-        id = b.getBudgetId();
-        if(b.load(id)){
-            log.info("Record was created and added to the database");
-        } else{
-            log.info("Record wasn't created and didn't added to the database");
-        }
-        Assert.assertNotEquals(res.get(res.size()-1), id);*/
-////////////////////////////////////////////////////////////////////////////////////////////////////
-        /*BudgetImpl o = mock(BudgetImpl.class);
-        o.createUniqId();
-        o.setDescription("TEST");
-        o.create();
-        boolean res = o.load(1013);
-        assertEquals(true, res);*/
 
     }
 }
