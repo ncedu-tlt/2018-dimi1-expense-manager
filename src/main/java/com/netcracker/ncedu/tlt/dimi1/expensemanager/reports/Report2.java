@@ -69,5 +69,4 @@ public class Report2 {
                 "AND budget_type.required = ?";
         totalSum = jdbcTemplate.queryForObject(getTotalSum, Double.class, required);
     }
-
 }

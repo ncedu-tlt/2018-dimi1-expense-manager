@@ -74,7 +74,7 @@ public class Report3 {
                                }
                            }
                        } else if (plans.get(i).getRepeatCount() == null) {
-                           Date end;
+                           Date end = new Date();
                            if (plans.get(i).getEndDate() != null) {
                                if (plans.get(i).getEndDate().before(criterialEndDate) ||
                                        plans.get(i).getEndDate().equals(criterialEndDate)) {
@@ -107,8 +107,7 @@ public class Report3 {
     }
 
     public int getCoef(String regM, boolean isSplit){
-        String minutes;
-        String hours;
+        String minutes, hours;
         String[] mask = regM.split(" ");
         minutes = mask[1];
         hours = mask[2];
@@ -149,5 +148,5 @@ public class Report3 {
             rL.add(i);
         }
     }
-
 }
+

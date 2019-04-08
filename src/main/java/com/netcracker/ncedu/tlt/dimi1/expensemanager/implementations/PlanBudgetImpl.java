@@ -26,6 +26,7 @@ public class PlanBudgetImpl implements PlanBudget {
     private Date endDate;
     private Boolean spliter;
     private JdbcTemplate jdbcTemplate;
+
     Logger log = LoggerFactory.getLogger(PlanBudgetImpl.class);
 
     public PlanBudgetImpl(JdbcTemplate jdbcTemplate){ this.jdbcTemplate = jdbcTemplate; }
@@ -88,5 +89,4 @@ public class PlanBudgetImpl implements PlanBudget {
         DatabaseWork dbObj = new DatabaseWork(jdbcTemplate);
         planBudgetId = dbObj.getUniqPlanBudgetId();
     }
-
 }

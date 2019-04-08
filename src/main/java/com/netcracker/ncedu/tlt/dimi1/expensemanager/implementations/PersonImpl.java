@@ -17,6 +17,7 @@ public class PersonImpl implements Person {
     private String login, pass, email, phonenumber, description, access;
     private Date regDate;
     private JdbcTemplate jdbcTemplate;
+
     Logger log = LoggerFactory.getLogger(PersonImpl.class);
 
     public PersonImpl(JdbcTemplate jdbcTemplate){ this.jdbcTemplate = jdbcTemplate;  }

@@ -11,6 +11,7 @@ import java.math.BigDecimal;
 import java.util.Map;
 import java.util.Scanner;
 
+
 @Data
 public class AccountsImpl implements Accounts {
     private Integer accountId;
@@ -20,6 +21,7 @@ public class AccountsImpl implements Accounts {
     private BigDecimal balance;
     private String description;
     private JdbcTemplate jdbcTemplate;
+  
     Logger log = LoggerFactory.getLogger(AccountsImpl.class);
 
     Scanner in = new Scanner(System.in);
@@ -28,23 +30,16 @@ public class AccountsImpl implements Accounts {
 
     @Override
     public void create() {
-        String insertAccount = "INSERT INTO accounts (account_id, account_number, person_id_fk, currency, balance, description) " +
-                "VALUES (?, ?, ?, ?, ?, ?)";
-        jdbcTemplate.update(insertAccount, accountId, accountNumber, personId, currency, balance, description);
+        String insertAccount = "INSERT INTO accounts (account_number, person_id_fk, currency, balance, description) " +
+                "VALUES (?, ?, ?, ?, ?)";
+        jdbcTemplate.update(insertAccount, accountNumber, personId, currency, balance, description);
     }
 
     @Override
     public void delete(){
-        String checkBudget = "SELECT COUNT(*) AS cnt FROM budget WHERE account_id_fk = ?";
-        String checkPlanBudg = "SELECT COUNT(*) AS cnt FROM Plan_budget WHERE account_id_fk = ?";
         DatabaseWork check = new DatabaseWork(jdbcTemplate);
-        if(check.checkExist(checkBudget, accountId)!=0 || check.checkExist(checkPlanBudg, accountId)!=0){
-            log.info("This record has a link in the other table(s). Delete all related entries first.");
-            return;
-        } else {
-            String deletAccount = "DELETE FROM accounts WHERE account_number = ? AND person_id_fk = ?";
-            jdbcTemplate.update(deletAccount, accountId, personId);
-        }
+        String deleteAccount = "DELETE FROM accounts WHERE account_id= ? AND person_id_fk = ?";
+        jdbcTemplate.update(deleteAccount, accountId, personId);
     }
 
     @Override
@@ -102,13 +97,14 @@ public class AccountsImpl implements Accounts {
     public Integer findAccountId(String accNum, Integer persId){
         String qwr = "SELECT account_id AS id FROM accounts WHERE account_number = ? AND person_id_fk = ?";
         Integer findAccId = jdbcTemplate.queryForObject(qwr, Integer.class, accNum, persId);
-        if(findAccId != 0){
+        if(findAccId != Integer.valueOf(0)){
             return findAccId;
         } else {
             log.info("Account with the specified ACCOUNT_NUMBER and PERSON_ID is not in the table ACCOUNTS");
         }
-        return 0;
+        return Integer.valueOf(0);
     }
+
 
     public void createUniqId(){
         DatabaseWork dbObj = new DatabaseWork(jdbcTemplate);

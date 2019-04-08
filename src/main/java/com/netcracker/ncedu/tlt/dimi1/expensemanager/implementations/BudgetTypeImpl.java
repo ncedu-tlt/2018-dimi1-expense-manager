@@ -19,7 +19,9 @@ public class BudgetTypeImpl implements BudgetType {
     private Boolean required;
     private BigDecimal checkMax;
     private JdbcTemplate jdbcTemplate;
+  
     Logger log = LoggerFactory.getLogger(BudgetTypeImpl.class);
+  
     public BudgetTypeImpl(JdbcTemplate jdbcTemplate){ this.jdbcTemplate = jdbcTemplate; }
 
     @Override
@@ -89,5 +91,4 @@ public class BudgetTypeImpl implements BudgetType {
         DatabaseWork dbObj = new DatabaseWork(jdbcTemplate);
         budgetTypeId = dbObj.getUniqBudgetTypeId();
     }
-
 }

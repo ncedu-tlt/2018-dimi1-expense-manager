@@ -3,15 +3,17 @@ INSERT INTO Person (person_id, login, pass, access, email, phone_number) VALUES 
 INSERT INTO Person (person_id, login, pass, access, email, description, reg_date, phone_number) VALUES (3, 'testtest', 'testtest', 'USER', 'test1@mail.ru', 'description', TO_DATE('11.12.2018', 'dd.mm.yyyy'), 89171546552);
 
 INSERT INTO Accounts (account_id, account_number, person_id_fk, currency, balance, description)
-                        VALUES (1, 4854630037067858, 1, 'RUB', 3500.25, 'Кредитная');
+                        VALUES (1, 4854630037067858, 1, 'RUB', 3500, 'Credit Card');
 INSERT INTO Accounts (account_id, account_number, person_id_fk, currency, balance, description)
-                        VALUES (2, 3608650012003000, 1, 'RUB', 500, 'Дебетовая');
+                        VALUES (2, 3608650012003000, 1, 'RUB', 500, 'Debit Card');
 INSERT INTO Accounts (account_id, account_number, person_id_fk, currency, balance, description)
-                        VALUES (3, 4565123278982585, 2, 'USD', 5000, 'Дебетовая');
+                        VALUES (3, 4565123278982585, 2, 'USD', 5000, 'Debit Card');
+INSERT INTO Accounts (account_id, person_id_fk, currency, balance, description)
+                        VALUES (4, 2, 'RUB', 250, 'Cash');
+INSERT INTO Accounts (account_id, person_id_fk, currency, balance, description)
+                        VALUES (5, 2, 'RUB', 2000, 'Cash');
 INSERT INTO Accounts (account_id, account_number, person_id_fk, currency, balance, description)
-                        VALUES (4, 1, 1, 'RUB', 250, 'Наличные');
-INSERT INTO Accounts (account_id, account_number, person_id_fk, currency, balance, description)
-                        VALUES (5, 1, 2, 'RUB', 2000, 'Наличные');
+                        VALUES (6, 3608650012003222, 1, 'RUB', 500, 'Credit Card');
 
 INSERT INTO Budget_type (budget_type_id, name, required, check_max)
                         VALUES (1, 'Питание', true, 7000);
@@ -104,5 +106,3 @@ INSERT INTO Plan_budget (plan_budget_id, operation_type, budget_type_id_fk,
                                               description, account_id_fk, operation_date, charge_value,
                                               regular_mask, repeat_count, start_date, end_date, spliter)
                        VALUES (107, 'Безнал', 3, 'TEST3', 2, null, 30, '0 30 12-14 * 3 * ', 3, TO_DATE('05.03.2019','dd.mm.yyyy'), null, false );
-
-

@@ -139,13 +139,9 @@ public class DatabaseWork {
         return planBudgetL;
     }
 
-    public boolean checkLogin(String sql, String login) {
-        List<String> result = jdbcTemplate.query(sql, new RowMapper(){
-            public Object mapRow(ResultSet res, int rowNum) throws SQLException{
-                return res.getString(1);
-            }
-        }, login);
-        if(result.isEmpty()){
+    public boolean checkLogin(String sql) {
+        List<String> list = jdbcTemplate.queryForList(sql, String.class);
+        if(list.isEmpty()){
             return false;
         }
         return true;
@@ -176,8 +172,60 @@ public class DatabaseWork {
             return false;
         }
         return true;
+  }
+
+    public boolean checkAccountCardNumber(String personId, String cardNumber)
+    {
+        Person person = getPersonByLogin(personId);
+        String sql = "select account_number from accounts where person_id_fk = '"+ person.getPersonId() +"'" +
+                " and account_number = '"+ cardNumber +"'";
+        List<String> list = jdbcTemplate.queryForList(sql, String.class);
+
+        if(list.isEmpty())
+        {
+            return false;
+        }
+        return true;
     }
 
+    public List<Accounts> getByPersonIdAccounts(String personId)
+    {
+        List<Accounts> listAccounts = new ArrayList<Accounts>();
+        Person person = getPersonByLogin(personId);
+        String qwr = "SELECT account_id AS id FROM accounts where person_id_fk = '"+ person.getPersonId() + "'";
+        List<Integer> accountsIds = jdbcTemplate.queryForList(qwr, Integer.class);
+        for(Integer accountId : accountsIds){
+            Accounts account = new AccountsImpl(jdbcTemplate);
+            account.load(accountId);
+            listAccounts.add(account);
+        }
+        return listAccounts;
+    }
+
+    public void deleteAccount(String personId, String id)
+    {
+        Person person = getPersonByLogin(personId);
+        String qwr = "SELECT account_id AS id FROM accounts where person_id_fk = '"+ person.getPersonId() + "' and account_id = '"+ id +"'";
+        List<Integer> accountsIds = jdbcTemplate.queryForList(qwr, Integer.class);
+        for(Integer accountId : accountsIds){
+            Accounts account = new AccountsImpl(jdbcTemplate);
+            account.load(accountId);
+            account.delete();
+        }
+    }
+
+    public void addAccount(String personId, String cardNumber, String currency, BigDecimal balance, String description)
+    {
+        Person person = getPersonByLogin(personId);
+        AccountsImpl accounts = new AccountsImpl(jdbcTemplate);
+        accounts.setPersonId(person.getPersonId());
+        accounts.setAccountNumber(cardNumber);
+        accounts.setCurrency(currency);
+        accounts.setBalance(balance);
+        accounts.setDescription(description);
+        accounts.create();
+    }
+          
     public List<Report1> getReport1(){
         List<Report1> report1L = new ArrayList<>();
         Report1 repObj = new Report1(jdbcTemplate);
@@ -239,5 +287,60 @@ public class DatabaseWork {
                 Date.from(end.atZone(ZoneId.systemDefault()).toInstant()));
         return report3L;
     }
+
+    public Collection<String> getDBTablesAsJsonArray()
+    {
+        List<Map<String, Object>> dataBaseColumns = jdbcTemplate.queryForList(QUERY_GET_DATA_BASE_COLUMNS);
+
+        Map<Integer, JSONObject> tables = new HashMap<>();
+        for(Map<String, Object> dbColumn : dataBaseColumns)
+        {
+            Integer tableId = (Integer) dbColumn.get("TABLE_ID");
+            String tableName = (String) dbColumn.get("TABLE_NAME");
+            String columnName = (String) dbColumn.get("COLUMN_NAME");
+            String columnType = (String) dbColumn.get("COLUMN_TYPE");
+
+            JSONObject table = tables.computeIfAbsent( tableId, k -> new JSONObject().put("key", tableId).put("name", tableName).put("properties", new JSONArray()) );
+            table.getJSONArray("properties").put( new JSONObject().put("name", columnName).put("type", columnType) );
+        }
+
+        return tables.values()
+                .stream()
+                .map(JSONObject::toString)
+                .collect(Collectors.toList());
+    }
+
+    public Collection<String> getDBTablesRelationsAsJsonArray()
+    {
+        return jdbcTemplate.queryForList(QUERY_GET_DATA_BASE_TABLES_RELATIONS).stream()
+                .map(JSONObject::new)
+                .map(JSONObject::toString)
+                .collect(Collectors.toList());
+    }
+
+    private static final String QUERY_GET_DATA_BASE_COLUMNS =
+            "select tables.id as table_id,\n" +
+            "       tables.table_name as table_name,\n" +
+            "       columns.column_name as column_name,\n" +
+            "       decode(columns.sequence_name, null, columns.column_type, 'SERIAL') as column_type\n" +
+            "  from information_schema.tables tables,\n" +
+            "       information_schema.columns columns \n" +
+            " where tables.id > 0 /* User Tables */\n" +
+            "   and tables.table_name = columns.table_name" +
+            " order by columns.sequence_name nulls last /* SERIAL type first */";
+
+    private static final String QUERY_GET_DATA_BASE_TABLES_RELATIONS =
+            "select from_table.id as \"from\",\n" +
+            "       to_table.id as \"to\",\n" +
+            "       'generalization' as \"relationship\"\n" +
+            "  from information_schema.key_column_usage cu,\n" +
+            "       information_schema.referential_constraints rc,\n" +
+            "       information_schema.indexes ix,\n" +
+            "       information_schema.tables from_table,\n" +
+            "       information_schema.tables to_table\n" +
+            " where cu.constraint_name = rc.constraint_name\n" +
+            "   and ix.index_name = rc.unique_constraint_name\n" +
+            "   and from_table.table_name = cu.table_name\n" +
+            "   and to_table.table_name = ix.table_name";
 }
 

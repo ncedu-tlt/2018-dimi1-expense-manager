@@ -1,0 +1,22 @@
+.sing-right{
+     position:absolute;
+     top:10;
+     right:10px;
+}
+
+.tec{
+    width: 900px;
+   margin-left: -200px;
+
+}
+
+.c { color: green; }
+
+.wid{
+
+    max-width: 200px;
+}
+
+.bord{
+    border-bottom: 0px solid #e9ecef;
+}

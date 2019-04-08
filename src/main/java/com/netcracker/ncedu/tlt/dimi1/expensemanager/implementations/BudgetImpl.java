@@ -11,7 +11,6 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.Map;
 
-
 @Data
 public class BudgetImpl implements Budget {
     private Integer budgetId;
@@ -22,6 +21,7 @@ public class BudgetImpl implements Budget {
     private Date operationDate;
     private BigDecimal chargeValue;
     private JdbcTemplate jdbcTemplate;
+  
     Logger log = LoggerFactory.getLogger(BudgetImpl.class);
 
     public BudgetImpl(JdbcTemplate jdbcTemplate) {

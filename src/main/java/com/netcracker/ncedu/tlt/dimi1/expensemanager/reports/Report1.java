@@ -67,5 +67,4 @@ public class Report1 {
     public void setPercent(Double sum, Double totSum){
         percent = Double.valueOf(Math.round(sum*100/totSum));
     }
-
 }
