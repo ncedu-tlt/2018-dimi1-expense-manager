@@ -42,7 +42,6 @@ public class Report3 {
                    obj.setDescription(plans.get(i).getDescription());
                    obj.setSum(plans.get(i).getChargeValue());
                    rL.add(obj);
-
                }
            } else {
                if (plans.get(i).getStartDate().after(criterialStartDate) ||

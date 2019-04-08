@@ -1,7 +1,6 @@
 package com.netcracker.ncedu.tlt.dimi1.expensemanager.controllers;
 
 import com.netcracker.ncedu.tlt.dimi1.expensemanager.ExpenseManagerApplication;
-import com.netcracker.ncedu.tlt.dimi1.expensemanager.controllers.BudgetController;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.runner.RunWith;

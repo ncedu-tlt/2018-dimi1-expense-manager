@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -25,9 +26,17 @@ public class PlanBudgetController {
     public PlanBudgetController(JdbcTemplate jdbcTemplate){ this.jdbcTemplate = jdbcTemplate; }
 
     @RequestMapping(value = "/addPlanBudget")
-    public String addPlanBudget(String operationType, Integer budgetTypeId, String description,
-                     Integer accountId, Date operationDate, BigDecimal chargeValue,
-                     String regularMask, Integer repeatCount, Date startDate, Date endDate, Boolean spliter){
+    public String addPlanBudget(@RequestParam(value = "operationType") String operationType,
+                                @RequestParam(value = "budgetTypeId") Integer budgetTypeId,
+                                @RequestParam(value = "description") String description,
+                                @RequestParam(value = "accountId") Integer accountId,
+                                @RequestParam(value = "operationDate") Date operationDate,
+                                @RequestParam(value = "chargeValue") BigDecimal chargeValue,
+                                @RequestParam(value = "regularMask") String regularMask,
+                                @RequestParam(value = "repeatCount") Integer repeatCount,
+                                @RequestParam(value = "startDate") Date startDate,
+                                @RequestParam(value = "endDate") Date endDate,
+                                @RequestParam(value = "spliter") Boolean spliter){
         PlanBudgetImpl planBudgetForAdd = new PlanBudgetImpl(jdbcTemplate);
         BudgetType objForCheckBT = new BudgetTypeImpl(jdbcTemplate);
         Accounts objForCheckAcc = new AccountsImpl(jdbcTemplate);
@@ -69,9 +78,9 @@ public class PlanBudgetController {
     }
 
     @RequestMapping(value = "deletePlanBudget")
-    public String deletePlanBudget(Integer budgetId){
+    public String deletePlanBudget(@RequestParam(value = "planBudgetId") Integer planBudgetId){
         PlanBudgetImpl planBudgetForDelete = new PlanBudgetImpl(jdbcTemplate);
-        if(planBudgetForDelete.load(budgetId)){
+        if(planBudgetForDelete.load(planBudgetId)){
             planBudgetForDelete.delete();
             log.info("Record removed from PLAN_BUDGET");
         } else {
@@ -81,9 +90,18 @@ public class PlanBudgetController {
     }
 
     @RequestMapping(value = "/updatePlanBudget")
-    public String updatePlanBudget(Integer planBudgetId, String operationType, Integer budgetTypeId, String description,
-                            Integer accountId, Date operationDate, BigDecimal chargeValue,
-                            String regularMask, Integer repeatCount, Date startDate, Date endDate, Boolean spliter){
+    public String updatePlanBudget(@RequestParam(value = "planBudgetId") Integer planBudgetId,
+                                   @RequestParam(value = "operationType") String operationType,
+                                   @RequestParam(value = "budgetTypeId") Integer budgetTypeId,
+                                   @RequestParam(value = "description") String description,
+                                   @RequestParam(value = "accountId") Integer accountId,
+                                   @RequestParam(value = "operationDate") Date operationDate,
+                                   @RequestParam(value = "chargeValue") BigDecimal chargeValue,
+                                   @RequestParam(value = "regularMask") String regularMask,
+                                   @RequestParam(value = "repeatCount") Integer repeatCount,
+                                   @RequestParam(value = "startDate") Date startDate,
+                                   @RequestParam(value = "endDate") Date endDate,
+                                   @RequestParam(value = "spliter") Boolean spliter){
         PlanBudgetImpl planBudgetForUpdate = new PlanBudgetImpl(jdbcTemplate);
         BudgetType objForCheckBT = new BudgetTypeImpl(jdbcTemplate);
         Accounts objForCheckAcc = new AccountsImpl(jdbcTemplate);

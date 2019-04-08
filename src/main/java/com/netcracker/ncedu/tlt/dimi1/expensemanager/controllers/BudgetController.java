@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -24,8 +25,12 @@ public class BudgetController {
     public BudgetController(JdbcTemplate jdbcTemplate){ this.jdbcTemplate = jdbcTemplate; }
 
     @RequestMapping(value = "/addBudget")
-    public String addBudget(String operationType, Integer budgetTypeId, String description,
-                            Integer accountId, Date operationDate, BigDecimal chargeValue){
+    public String addBudget(@RequestParam(value = "operationType") String operationType,
+                            @RequestParam(value = "budgetTypeId")Integer budgetTypeId,
+                            @RequestParam(value = "description")String description,
+                            @RequestParam(value = "accountId") Integer accountId,
+                            @RequestParam(value = "operationDate") Date operationDate,
+                            @RequestParam(value = "chargeValue") BigDecimal chargeValue){
         BudgetImpl budgetForAdd = new BudgetImpl(jdbcTemplate);
         BudgetTypeImpl objForCheckBT = new BudgetTypeImpl(jdbcTemplate);
         Accounts objForCheckAcc = new AccountsImpl(jdbcTemplate);
@@ -49,7 +54,7 @@ public class BudgetController {
     }
 
     @RequestMapping(value = "deleteBudget")
-    public String deleteBudget(Integer budgetId){
+    public String deleteBudget(@RequestParam(value = "budgetId") Integer budgetId){
         BudgetImpl budgetForDelete = new BudgetImpl(jdbcTemplate);
         if(budgetForDelete.load(budgetId)){
             budgetForDelete.delete();
@@ -61,8 +66,13 @@ public class BudgetController {
     }
 
     @RequestMapping(value = "updateBudget")
-    public String updateBudget(Integer budgetId, String operationType, Integer budgetTypeId, String description,
-                        Integer accountId, Date operationDate, BigDecimal chargeValue) {
+    public String updateBudget(@RequestParam(value = "budgetId") Integer budgetId,
+                               @RequestParam(value = "operationType") String operationType,
+                               @RequestParam(value = "budgetTypeId") Integer budgetTypeId,
+                               @RequestParam(value = "description") String description,
+                               @RequestParam(value = "accountId") Integer accountId,
+                               @RequestParam(value = "operationDate") Date operationDate,
+                               @RequestParam(value = "chargeValue") BigDecimal chargeValue) {
         BudgetImpl budgetForUpdate = new BudgetImpl(jdbcTemplate);
         BudgetType objForCheckBT = new BudgetTypeImpl(jdbcTemplate);
         Accounts objForCheckAcc = new AccountsImpl(jdbcTemplate);

@@ -59,7 +59,7 @@ public class BudgetTypeController {
     }
 
     @RequestMapping(value = "deleteBudgetType")
-    public String deleteBudgetType(Integer budgetTypeId){
+    public String deleteBudgetType(@RequestParam(value = "budgetTypeId") Integer budgetTypeId){
         BudgetTypeImpl budgetTypeForDelete = new BudgetTypeImpl(jdbcTemplate);
         if(budgetTypeForDelete.load(budgetTypeId)){
             budgetTypeForDelete.delete();
@@ -71,7 +71,11 @@ public class BudgetTypeController {
     }
 
     @RequestMapping(value = "updateBudgetType")
-    public String updateBudgetType(Integer budgetTypeId, Integer groupId, String name, Boolean isRequired, BigDecimal checkMax){
+    public String updateBudgetType(@RequestParam(value = "budgetTypeId") Integer budgetTypeId,
+                                   @RequestParam(value = "groupId") Integer groupId,
+                                   @RequestParam(value = "name") String name,
+                                   @RequestParam(value = "isRequired") Boolean isRequired,
+                                   @RequestParam(value = "checkMax") BigDecimal checkMax){
         BudgetTypeImpl budgetTypeForUpdate = new BudgetTypeImpl(jdbcTemplate);
         if(budgetTypeForUpdate.load(budgetTypeId)){
             budgetTypeForUpdate.setBudgetTypeId(budgetTypeId);

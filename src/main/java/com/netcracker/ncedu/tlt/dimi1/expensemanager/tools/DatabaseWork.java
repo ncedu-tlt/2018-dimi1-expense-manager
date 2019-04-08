@@ -14,10 +14,11 @@ import org.springframework.jdbc.core.RowMapper;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-import java.util.List;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 
 public class DatabaseWork {
     private JdbcTemplate jdbcTemplate;
@@ -225,26 +226,17 @@ public class DatabaseWork {
         return totSum;
     }
 
-    public List<Report3> getReport3(){
+    public List<Report3> getReport3(String startDate, String endDate){
         List<PlanBudget> planBudgetL = getAllPlanBudgets();
         List<Report3> report3L = new ArrayList<>();
         Report3 rep3 = new Report3(jdbcTemplate);
-        Calendar calendar = new GregorianCalendar();
-        calendar.set(Calendar.YEAR, 2019);
-        calendar.set(Calendar.MONTH, 2);
-        calendar.set(Calendar.DAY_OF_MONTH, 2);
-        calendar.set(Calendar.HOUR, 10);
-        calendar.set(Calendar.MINUTE, 30);
-        java.util.Date start = calendar.getTime();
 
-        calendar.set(Calendar.YEAR, 2019);
-        calendar.set(Calendar.MONTH, 4);
-        calendar.set(Calendar.DAY_OF_MONTH, 3);
-        calendar.set(Calendar.HOUR, 3);
-        calendar.set(Calendar.MINUTE, 0);
-        java.util.Date end = calendar.getTime();
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
+        LocalDateTime start = LocalDateTime.parse(startDate, dateTimeFormatter);
+        LocalDateTime end = LocalDateTime.parse(endDate, dateTimeFormatter);
 
-        rep3.getReportRow(planBudgetL, report3L, start, end);
+        rep3.getReportRow(planBudgetL, report3L, Date.from(start.atZone(ZoneId.systemDefault()).toInstant()),
+                Date.from(end.atZone(ZoneId.systemDefault()).toInstant()));
         return report3L;
     }
 }
