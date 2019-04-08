@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.hamcrest.SelfDescribing; // Это должен подтянуть Maven, но автоматически не подтягивает.
+import org.hamcrest.SelfDescribing;
 
 import static org.junit.Assert.*;
 
