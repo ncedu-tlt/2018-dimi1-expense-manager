@@ -13,8 +13,7 @@ import static org.junit.Assert.*;
 
 @RunWith(SpringRunner.class)
 @ContextConfiguration(classes = ExpenseManagerApplication.class)
-public class BudgetTypeImplTest
-{
+public class BudgetTypeImplTest {
     @Autowired
     JdbcTemplate jdbcTemplate;
 
