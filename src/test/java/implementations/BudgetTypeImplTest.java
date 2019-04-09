@@ -18,8 +18,7 @@ public class BudgetTypeImplTest {
     JdbcTemplate jdbcTemplate;
 
     @org.junit.Test
-    public void create()
-    {
+    public void create() {
         BudgetTypeImpl budgetType = new BudgetTypeImpl(jdbcTemplate);
         budgetType.createUniqId();
         budgetType.create();
