@@ -22,7 +22,6 @@
    <script src="/js/go.js"></script>
 
    <script src="/js/menu.js" rel="stylesheet" type="text/javascript"></script>
-   <script src="https://www.google.com/jsapi"></script>
 
     <div class="modal fade" id="modalError" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
              aria-hidden="true">
@@ -183,7 +182,6 @@
 <jsp:include page="modal_db_structure.jsp" />
 
 <body>
-    <nav class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow"></nav>
 
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <a class="navbar-brand text-nowrap" href="">Manager</a>
@@ -194,7 +192,7 @@
         <div class="collapse navbar-collapse" id="navbarNavDropdown">
             <ul class="navbar-nav">
                 <li class="nav-item active">
-                    <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                    <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/accounts?showModal" id="btnModal">Purse</a>

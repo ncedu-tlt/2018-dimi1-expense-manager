@@ -3,10 +3,17 @@ package com.netcracker.ncedu.tlt.dimi1.expensemanager.controllers;
 import com.netcracker.ncedu.tlt.dimi1.expensemanager.tools.DatabaseWork;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 @Controller
 public class Report3Controller {
@@ -18,10 +25,18 @@ public class Report3Controller {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    @RequestMapping(value = "/showReport3", method = RequestMethod.GET)
-    String showReport1(ModelMap model){
+    @RequestMapping(value = "/showReport3/{accountId}", method = RequestMethod.GET)
+    String showReport1(ModelMap model, String date, @PathVariable("accountId") Integer accountId){
         DatabaseWork dbObj = new DatabaseWork(jdbcTemplate);
-        model.addAttribute("report3", dbObj.getReport3());
+        return "report3";
+    }
+
+    @RequestMapping(value = "/showReport3/{accountId}", method = RequestMethod.POST)
+    String showReport11(ModelMap model, String addDate, @PathVariable("accountId") Integer accountId) throws ParseException {
+        DatabaseWork dbObj = new DatabaseWork(jdbcTemplate);
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Date newDate = new SimpleDateFormat("dd/MM/yyyy").parse(addDate);
+        model.addAttribute("report3", dbObj.getReport3(newDate, user.getUsername(), accountId));
         return "report3";
     }
 }

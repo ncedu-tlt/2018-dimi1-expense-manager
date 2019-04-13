@@ -8,13 +8,7 @@ import org.json.JSONObject;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.GregorianCalendar;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class DatabaseWork {
@@ -135,6 +129,20 @@ public class DatabaseWork {
         return planBudgetL;
     }
 
+    public List<PlanBudget> getAccountPlanBudgets(Integer personId, Integer cardNumber){
+        List<PlanBudget> planBudgetL = new ArrayList<PlanBudget>();
+        String qwr = "select Plan_Budget.plan_budget_id from Person  left join Accounts on Accounts.person_id_fk = Person.person_id\n" +
+                "left join Plan_Budget on Plan_Budget.account_id_fk = Accounts.account_id\n" +
+                "where Plan_Budget.account_id_fk = '"+ cardNumber +"' and Person.person_id = '"+ personId +"';";
+        List<Integer> planBudgetsIds = jdbcTemplate.queryForList(qwr, Integer.class);
+        for(Integer planBudgetId : planBudgetsIds){
+            PlanBudget planBudget = new PlanBudgetImpl(jdbcTemplate);
+            planBudget.load(planBudgetId);
+            planBudgetL.add(planBudget);
+        }
+        return planBudgetL;
+    }
+
     public boolean checkLogin(String sql) {
         List<String> list = jdbcTemplate.queryForList(sql, String.class);
         if(list.isEmpty()){
@@ -237,26 +245,24 @@ public class DatabaseWork {
         return totSum;
     }
 
-    public List<Report3> getReport3(){
-        List<PlanBudget> planBudgetL = getAllPlanBudgets();
-        List<Report3> report3L = new ArrayList<>();
+    public Map<Date,Report3> getReport3(Date date, String personLongin, Integer id){
+        Person person = getPersonByLogin(personLongin);
+        List<PlanBudget> planBudgetL = getAccountPlanBudgets(person.getPersonId(), id);
+        Map<Date,Report3> report3L = new TreeMap<Date, Report3>();
         Report3 rep3 = new Report3(jdbcTemplate);
         Calendar calendar = new GregorianCalendar();
-        calendar.set(Calendar.YEAR, 2019);
-        calendar.set(Calendar.MONTH, 2);
-        calendar.set(Calendar.DAY_OF_MONTH, 2);
-        calendar.set(Calendar.HOUR, 22);
+        calendar.setTime(date);
+        calendar.set(Calendar.HOUR_OF_DAY, 12);
         calendar.set(Calendar.MINUTE, 30);
-        java.util.Date start = calendar.getTime();
+        Date start = calendar.getTime();
 
-        calendar.set(Calendar.YEAR, 2019);
-        calendar.set(Calendar.MONTH, 4);
-        calendar.set(Calendar.DAY_OF_MONTH, 3);
-        calendar.set(Calendar.HOUR, 3);
-        calendar.set(Calendar.MINUTE, 0);
-        calendar.set(Calendar.SECOND, 0);
-        java.util.Date end = calendar.getTime();
+        if(Calendar.MONTH == 11)
+        {
+            calendar.set(Calendar.YEAR, calendar.get(Calendar.YEAR) + 1);
+        }
 
+        calendar.set(Calendar.MONTH, calendar.get(Calendar.MONTH) + 1);
+        Date end = calendar.getTime();
         rep3.getReportRow(planBudgetL, report3L, start, end);
         return report3L;
     }
