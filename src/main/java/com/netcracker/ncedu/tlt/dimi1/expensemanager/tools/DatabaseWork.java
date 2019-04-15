@@ -8,6 +8,10 @@ import org.json.JSONObject;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -245,25 +249,23 @@ public class DatabaseWork {
         return totSum;
     }
 
-    public Map<Date,Report3> getReport3(Date date, String personLongin, Integer id){
+    public Map<Date,Report3> getReport3(String date, String personLongin, Integer id){
         Person person = getPersonByLogin(personLongin);
         List<PlanBudget> planBudgetL = getAccountPlanBudgets(person.getPersonId(), id);
         Map<Date,Report3> report3L = new TreeMap<Date, Report3>();
         Report3 rep3 = new Report3(jdbcTemplate);
-        Calendar calendar = new GregorianCalendar();
-        calendar.setTime(date);
-        calendar.set(Calendar.HOUR_OF_DAY, 12);
-        calendar.set(Calendar.MINUTE, 30);
-        Date start = calendar.getTime();
 
-        if(Calendar.MONTH == 11)
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        LocalDate start = LocalDate.parse(date, dateTimeFormatter);
+        LocalDate end;
+
+        if(start.getMonthValue() == 11)
         {
-            calendar.set(Calendar.YEAR, calendar.get(Calendar.YEAR) + 1);
+            end = start.plusYears(1);
         }
-
-        calendar.set(Calendar.MONTH, calendar.get(Calendar.MONTH) + 1);
-        Date end = calendar.getTime();
-        rep3.getReportRow(planBudgetL, report3L, start, end);
+            end = start.plusMonths(1);
+        rep3.getReportRow(planBudgetL, report3L, Date.from(start.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant()),
+                Date.from(end.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant()));
         return report3L;
     }
 

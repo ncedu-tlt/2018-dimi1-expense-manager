@@ -26,17 +26,16 @@ public class Report3Controller {
     }
 
     @RequestMapping(value = "/showReport3/{accountId}", method = RequestMethod.GET)
-    String showReport1(ModelMap model, String date, @PathVariable("accountId") Integer accountId){
+    String showReport(ModelMap model, String date, @PathVariable("accountId") Integer accountId){
         DatabaseWork dbObj = new DatabaseWork(jdbcTemplate);
         return "report3";
     }
 
     @RequestMapping(value = "/showReport3/{accountId}", method = RequestMethod.POST)
-    String showReport11(ModelMap model, String addDate, @PathVariable("accountId") Integer accountId) throws ParseException {
+    String showReportChart(ModelMap model, String addDate, @PathVariable("accountId") Integer accountId) throws ParseException {
         DatabaseWork dbObj = new DatabaseWork(jdbcTemplate);
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Date newDate = new SimpleDateFormat("dd/MM/yyyy").parse(addDate);
-        model.addAttribute("report3", dbObj.getReport3(newDate, user.getUsername(), accountId));
+        model.addAttribute("report3", dbObj.getReport3(addDate, user.getUsername(), accountId));
         return "report3";
     }
 }
