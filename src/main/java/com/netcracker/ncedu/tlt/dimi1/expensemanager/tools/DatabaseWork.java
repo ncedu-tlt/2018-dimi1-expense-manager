@@ -2,23 +2,22 @@ package com.netcracker.ncedu.tlt.dimi1.expensemanager.tools;
 
 import com.netcracker.ncedu.tlt.dimi1.expensemanager.implementations.*;
 import com.netcracker.ncedu.tlt.dimi1.expensemanager.interfaces.*;
-import com.netcracker.ncedu.tlt.dimi1.expensemanager.implementations.*;
-import com.netcracker.ncedu.tlt.dimi1.expensemanager.interfaces.*;
 import com.netcracker.ncedu.tlt.dimi1.expensemanager.reports.Report1;
 import com.netcracker.ncedu.tlt.dimi1.expensemanager.reports.Report2;
 import com.netcracker.ncedu.tlt.dimi1.expensemanager.reports.Report3;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.time.LocalDate;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.stream.Collectors;
+
 
 public class DatabaseWork {
     private JdbcTemplate jdbcTemplate;
