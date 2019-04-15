@@ -13,6 +13,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
+@ContextConfiguration(classes = HelloController.class)
 public class HelloControllerTest {
 
     @Autowired
