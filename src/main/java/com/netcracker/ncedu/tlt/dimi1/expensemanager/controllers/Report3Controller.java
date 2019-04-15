@@ -21,7 +21,7 @@ public class Report3Controller {
     @RequestMapping(value = "/showReport3", method = RequestMethod.GET)
     String showReport1(ModelMap model){
         DatabaseWork dbObj = new DatabaseWork(jdbcTemplate);
-        model.addAttribute("report3", dbObj.getReport3());
+        model.addAttribute("report3", dbObj.getReport3("03.03.2019 10:30", "04.05.2019 3:00"));
         return "report3";
     }
 }

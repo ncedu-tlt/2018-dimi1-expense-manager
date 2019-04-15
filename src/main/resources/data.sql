@@ -102,7 +102,7 @@ INSERT INTO Plan_budget (plan_budget_id, operation_type, budget_type_id_fk,
                                               regular_mask, repeat_count, start_date, end_date, spliter)
                        VALUES (106, 'Безнал', 3, 'TEST2', 2, null, 30, '0 30 12 ? 4-5 * ', null, TO_DATE('05.03.2019','dd.mm.yyyy'), null, false );
 
-                       INSERT INTO Plan_budget (plan_budget_id, operation_type, budget_type_id_fk,
+INSERT INTO Plan_budget (plan_budget_id, operation_type, budget_type_id_fk,
                                               description, account_id_fk, operation_date, charge_value,
                                               regular_mask, repeat_count, start_date, end_date, spliter)
                        VALUES (107, 'Безнал', 3, 'TEST3', 2, null, 30, '0 30 12-14 * 3 * ', 3, TO_DATE('05.03.2019','dd.mm.yyyy'), null, false );

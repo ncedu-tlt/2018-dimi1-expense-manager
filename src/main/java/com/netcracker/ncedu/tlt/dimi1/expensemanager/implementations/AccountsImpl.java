@@ -1,15 +1,19 @@
 package com.netcracker.ncedu.tlt.dimi1.expensemanager.implementations;
 
-import com.netcracker.ncedu.tlt.dimi1.expensemanager.interfaces.Accounts;
 import com.netcracker.ncedu.tlt.dimi1.expensemanager.tools.DatabaseWork;
+import com.netcracker.ncedu.tlt.dimi1.expensemanager.interfaces.Accounts;
+import lombok.Data;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.math.BigDecimal;
 import java.util.Map;
 import java.util.Scanner;
 
-public class AccountsImpl implements Accounts
-{
+
+@Data
+public class AccountsImpl implements Accounts {
     private Integer accountId;
     private String accountNumber;
     private Integer personId;
@@ -17,6 +21,8 @@ public class AccountsImpl implements Accounts
     private BigDecimal balance;
     private String description;
     private JdbcTemplate jdbcTemplate;
+  
+    Logger log = LoggerFactory.getLogger(AccountsImpl.class);
 
     Scanner in = new Scanner(System.in);
 
@@ -56,11 +62,11 @@ public class AccountsImpl implements Accounts
             this.accountNumber = (String)result.get("ACCOUNT_NUMBER");
             this.personId = (Integer)result.get("PERSON_ID_FK");//Заменила тип на Integer
             this.currency = (String)result.get("CURRENCY");
-            this.balance = (BigDecimal)result.get("BALANCE");//Зкаменила тип на BigDecimal
+            this.balance = (BigDecimal)result.get("BALANCE");//Заменила тип на BigDecimal
             this.description = (String)result.get("DESCRIPTION");
             return true;
         } else {
-            System.out.println("Account with the specified ID is not in the table ACCOUNTS");
+            log.info("Account with the specified ID is not in the table ACCOUNTS");
         }
         return false;
     }
@@ -72,7 +78,7 @@ public class AccountsImpl implements Accounts
         if(checkExist != 0){
             return true;
         } else {
-            System.out.println("You haven't got account with such id");
+            log.info("You haven't got account with such id");
         }
         return false;
     }
@@ -83,14 +89,9 @@ public class AccountsImpl implements Accounts
         if(checkExist != 0){
             return true;
         } else {
-            System.out.println("Account with the specified ID is not in the table ACCOUNTS");
+            log.info("Account with the specified ID is not in the table ACCOUNTS");
         }
         return false;
-    }
-
-    @Override
-    public Integer getAccountId() {
-        return accountId;
     }
 
     public Integer findAccountId(String accNum, Integer persId){
@@ -99,100 +100,14 @@ public class AccountsImpl implements Accounts
         if(findAccId != Integer.valueOf(0)){
             return findAccId;
         } else {
-            System.out.println("Account with the specified ACCOUNT_NUMBER and PERSON_ID is not in the table ACCOUNTS");
+            log.info("Account with the specified ACCOUNT_NUMBER and PERSON_ID is not in the table ACCOUNTS");
         }
         return Integer.valueOf(0);
     }
 
-    public void setAccountId(Integer accountId) {
-        this.accountId = accountId;
-    }
 
     public void createUniqId(){
         DatabaseWork dbObj = new DatabaseWork(jdbcTemplate);
         accountId = dbObj.getUniqAccountId();
-    }
-
-    public String getAccountNumber(){ return accountNumber; }
-
-    public void setAccountNumber(String accountNumber){
-        this.accountNumber = accountNumber;
-    }
-
-    @Override
-    public Integer getPersonId() {
-        return personId;
-    }
-
-    public void setPersonId(Integer personId) {
-        this.personId = personId;
-    }
-
-    @Override
-    public String getCurrency() {
-        return currency;
-    }
-
-    public void setCurrency(String currency) {
-        this.currency = currency;
-    }
-
-    public void setCurrency() {
-        System.out.println("Выберите валюту: ");
-        System.out.println("1 - RUB");
-        System.out.println("2 - USD");
-        System.out.println("3 - EUR");
-        System.out.println("4 - GBP");
-        System.out.println("5 - другое");
-        int choice = -1;
-        try{
-            choice = in.nextInt();
-        } catch(Exception ex) {
-            System.out.print("Вы ввели некорректное число. Повторите: ");
-            choice = in.nextInt();
-        }
-        switch (choice) {
-            case 1:
-                currency = "RUB";
-                break;
-            case 2:
-                currency = "USD";
-                break;
-            case 3:
-                currency = "EUR";
-                break;
-            case 4:
-                currency = "GBP";
-                break;
-            case 5:
-                currency = in.nextLine();
-                break;
-                default:
-                    System.out.println("Такого пункта нет. Повторите ввод: ");
-                    try{
-                        choice = in.nextInt();
-                    } catch(Exception ex) {
-                        System.out.print("Вы ввели некорректное число. Повторите: ");
-                        choice = in.nextInt();
-                    }
-        }
-    }
-
-    @Override
-    public BigDecimal getBalance() {
-        return balance;
-    }
-
-    public void setBalance(BigDecimal balance) {
-        this.balance = balance;
-    }
-
-    @Override
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 }

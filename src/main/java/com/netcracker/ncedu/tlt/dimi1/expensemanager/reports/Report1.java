@@ -1,11 +1,13 @@
 package com.netcracker.ncedu.tlt.dimi1.expensemanager.reports;
 
+import lombok.Data;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Data
 public class Report1 {
     private Integer id;
     private String name;
@@ -62,25 +64,7 @@ public class Report1 {
         totalSum = jdbcTemplate.queryForObject(getTotalSum, Double.class);
     }
 
-    public Double getTotalSum(){
-        return totalSum;
-    }
-
     public void setPercent(Double sum, Double totSum){
         percent = Double.valueOf(Math.round(sum*100/totSum));
     }
-
-    public Double getPercent(){ return percent; }
-
-    public Integer getId(){ return id; }
-
-    public String getName() { return name; }
-
-    public Double getSum() { return sum; }
-
-    public void setId(Integer id) { this.id = id; }
-
-    public void setName(String name) { this.name = name; }
-
-    public void setSum(Double sum) { this.sum = sum; }
 }

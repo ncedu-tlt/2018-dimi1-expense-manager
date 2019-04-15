@@ -1,15 +1,17 @@
 package com.netcracker.ncedu.tlt.dimi1.expensemanager.reports;
 
+import lombok.Data;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Data
 public class Report2 {
     private Integer id;
     private String name;
-    private Boolean isRequired;
+    private Boolean required;
     private Double sum;
     private Double totalSum;
     private List<Integer> groups = new ArrayList<>();
@@ -66,39 +68,5 @@ public class Report2 {
                 "AND budget.budget_type_id_fk = budget_type.budget_type_id " +
                 "AND budget_type.required = ?";
         totalSum = jdbcTemplate.queryForObject(getTotalSum, Double.class, required);
-    }
-
-    public Double getTotalSum(){
-        return totalSum;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public Boolean getRequired(){ return isRequired; }
-
-    public Double getSum() {
-        return sum;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setRequired(Boolean required) {
-        isRequired = required;
-    }
-
-    public void setSum(Double sum) {
-        this.sum = sum;
     }
 }

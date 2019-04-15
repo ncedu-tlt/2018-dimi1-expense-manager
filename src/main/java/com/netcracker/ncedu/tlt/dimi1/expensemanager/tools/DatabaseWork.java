@@ -1,24 +1,28 @@
 package com.netcracker.ncedu.tlt.dimi1.expensemanager.tools;
 
+import com.netcracker.ncedu.tlt.dimi1.expensemanager.implementations.*;
 import com.netcracker.ncedu.tlt.dimi1.expensemanager.interfaces.*;
 import com.netcracker.ncedu.tlt.dimi1.expensemanager.implementations.*;
-import com.netcracker.ncedu.tlt.dimi1.expensemanager.reports.*;
-import org.json.JSONArray;
-import org.json.JSONObject;
+import com.netcracker.ncedu.tlt.dimi1.expensemanager.interfaces.*;
+import com.netcracker.ncedu.tlt.dimi1.expensemanager.reports.Report1;
+import com.netcracker.ncedu.tlt.dimi1.expensemanager.reports.Report2;
+import com.netcracker.ncedu.tlt.dimi1.expensemanager.reports.Report3;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.GregorianCalendar;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 
 public class DatabaseWork {
     private JdbcTemplate jdbcTemplate;
+    Logger log = LoggerFactory.getLogger(DatabaseWork.class);
 
     public DatabaseWork(JdbcTemplate jdbcTemplate){
         this.jdbcTemplate = jdbcTemplate;
@@ -143,6 +147,33 @@ public class DatabaseWork {
         return true;
     }
 
+    public Boolean checkRegularMask(String regM){
+        String[] mask = regM.split(" ");
+        String seconds, minutes, hours, dayMonth, dayWeek;
+        seconds = mask[0];
+        minutes = mask[1];
+        hours = mask[2];
+        dayMonth = mask[3];
+        dayWeek = mask[5];
+        if(seconds.equals("*") && minutes.equals("*") && hours.equals("*")){
+            log.info("Time must be set");
+            return false;
+        } else if(seconds.equals("*") || minutes.equals("*") || hours.equals("*")){
+            log.info("Both HOURS and MINUTES must be set");
+            return false;
+        } else if(dayMonth.equals("*") && dayWeek.equals("*")){
+            log.info("A DAYS_MONTH or DAYS_WEEK field must be filled");
+            return false;
+        } else if(!dayMonth.equals("*") && dayWeek.equals("*")){
+            log.info("Incorrect DAYS_WEEK value. Either a specific value or '?' must be set");
+            return false;
+        } else if(dayMonth.equals("*") && !dayWeek.equals("*")){
+            log.info("Incorrect DAYS_MONTH value. Either a specific value or '?' must be set");
+            return false;
+        }
+        return true;
+  }
+
     public boolean checkAccountCardNumber(String personId, String cardNumber)
     {
         Person person = getPersonByLogin(personId);
@@ -194,7 +225,7 @@ public class DatabaseWork {
         accounts.setDescription(description);
         accounts.create();
     }
-
+          
     public List<Report1> getReport1(){
         List<Report1> report1L = new ArrayList<>();
         Report1 repObj = new Report1(jdbcTemplate);
@@ -243,27 +274,17 @@ public class DatabaseWork {
         return totSum;
     }
 
-    public List<Report3> getReport3(){
+    public List<Report3> getReport3(String startDate, String endDate){
         List<PlanBudget> planBudgetL = getAllPlanBudgets();
         List<Report3> report3L = new ArrayList<>();
         Report3 rep3 = new Report3(jdbcTemplate);
-        Calendar calendar = new GregorianCalendar();
-        calendar.set(Calendar.YEAR, 2019);
-        calendar.set(Calendar.MONTH, 2);
-        calendar.set(Calendar.DAY_OF_MONTH, 2);
-        calendar.set(Calendar.HOUR, 22);
-        calendar.set(Calendar.MINUTE, 30);
-        java.util.Date start = calendar.getTime();
 
-        calendar.set(Calendar.YEAR, 2019);
-        calendar.set(Calendar.MONTH, 4);
-        calendar.set(Calendar.DAY_OF_MONTH, 3);
-        calendar.set(Calendar.HOUR, 3);
-        calendar.set(Calendar.MINUTE, 0);
-        calendar.set(Calendar.SECOND, 0);
-        java.util.Date end = calendar.getTime();
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
+        LocalDateTime start = LocalDateTime.parse(startDate, dateTimeFormatter);
+        LocalDateTime end = LocalDateTime.parse(endDate, dateTimeFormatter);
 
-        rep3.getReportRow(planBudgetL, report3L, start, end);
+        rep3.getReportRow(planBudgetL, report3L, Date.from(start.atZone(ZoneId.systemDefault()).toInstant()),
+                Date.from(end.atZone(ZoneId.systemDefault()).toInstant()));
         return report3L;
     }
 
