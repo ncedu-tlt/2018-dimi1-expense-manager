@@ -1,22 +1,27 @@
 package com.netcracker.ncedu.tlt.dimi1.expensemanager.tools;
 
-import com.netcracker.ncedu.tlt.dimi1.expensemanager.interfaces.*;
 import com.netcracker.ncedu.tlt.dimi1.expensemanager.implementations.*;
-import com.netcracker.ncedu.tlt.dimi1.expensemanager.reports.*;
+import com.netcracker.ncedu.tlt.dimi1.expensemanager.interfaces.*;
+import com.netcracker.ncedu.tlt.dimi1.expensemanager.reports.Report1;
+import com.netcracker.ncedu.tlt.dimi1.expensemanager.reports.Report2;
+import com.netcracker.ncedu.tlt.dimi1.expensemanager.reports.Report3;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
+
 public class DatabaseWork {
     private JdbcTemplate jdbcTemplate;
+    Logger log = LoggerFactory.getLogger(DatabaseWork.class);
 
     public DatabaseWork(JdbcTemplate jdbcTemplate){
         this.jdbcTemplate = jdbcTemplate;
@@ -154,6 +159,33 @@ public class DatabaseWork {
         }
         return true;
     }
+
+    public Boolean checkRegularMask(String regM){
+        String[] mask = regM.split(" ");
+        String seconds, minutes, hours, dayMonth, dayWeek;
+        seconds = mask[0];
+        minutes = mask[1];
+        hours = mask[2];
+        dayMonth = mask[3];
+        dayWeek = mask[5];
+        if(seconds.equals("*") && minutes.equals("*") && hours.equals("*")){
+            log.info("Time must be set");
+            return false;
+        } else if(seconds.equals("*") || minutes.equals("*") || hours.equals("*")){
+            log.info("Both HOURS and MINUTES must be set");
+            return false;
+        } else if(dayMonth.equals("*") && dayWeek.equals("*")){
+            log.info("A DAYS_MONTH or DAYS_WEEK field must be filled");
+            return false;
+        } else if(!dayMonth.equals("*") && dayWeek.equals("*")){
+            log.info("Incorrect DAYS_WEEK value. Either a specific value or '?' must be set");
+            return false;
+        } else if(dayMonth.equals("*") && !dayWeek.equals("*")){
+            log.info("Incorrect DAYS_MONTH value. Either a specific value or '?' must be set");
+            return false;
+        }
+        return true;
+  }
 
     public boolean checkAccountCardNumber(String personId, String cardNumber)
     {

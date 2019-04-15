@@ -3,7 +3,6 @@ package com.netcracker.ncedu.tlt.dimi1.expensemanager.reports;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 
-
 import java.sql.ResultSet;
 import java.sql.SQLException;
 

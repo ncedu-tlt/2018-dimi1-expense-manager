@@ -1,6 +1,7 @@
 package com.netcracker.ncedu.tlt.dimi1.expensemanager.controllers;
 
 import com.netcracker.ncedu.tlt.dimi1.expensemanager.tools.DatabaseWork;
+import com.netcracker.ncedu.tlt.dimi1.expensemanager.implementations.PersonImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Controller;
@@ -41,5 +42,4 @@ public class RegistrationController {
         }
         return "redirect:/";
     }
-
 }

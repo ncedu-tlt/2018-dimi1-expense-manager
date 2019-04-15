@@ -1,15 +1,18 @@
 package com.netcracker.ncedu.tlt.dimi1.expensemanager.implementations;
 
-import com.netcracker.ncedu.tlt.dimi1.expensemanager.interfaces.Budget;
 import com.netcracker.ncedu.tlt.dimi1.expensemanager.tools.DatabaseWork;
+import com.netcracker.ncedu.tlt.dimi1.expensemanager.interfaces.Budget;
+import lombok.Data;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.Map;
 
-public class BudgetImpl implements Budget
-{
+@Data
+public class BudgetImpl implements Budget {
     private Integer budgetId;
     private String operationType;
     private Integer budgetTypeId;
@@ -18,8 +21,12 @@ public class BudgetImpl implements Budget
     private Date operationDate;
     private BigDecimal chargeValue;
     private JdbcTemplate jdbcTemplate;
+  
+    Logger log = LoggerFactory.getLogger(BudgetImpl.class);
 
-    public BudgetImpl(JdbcTemplate jdbcTemplate){ this.jdbcTemplate = jdbcTemplate; }
+    public BudgetImpl(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
+    }
 
     @Override
     public void create() {
@@ -49,7 +56,7 @@ public class BudgetImpl implements Budget
     public boolean load(Integer id) {
         String checkExistBudget = "SELECT COUNT(*) AS cnt FROM budget WHERE budget_id = ?";
         Integer checkResult = jdbcTemplate.queryForObject(checkExistBudget, Integer.class, id);
-        if(checkResult != 0){
+        if (checkResult != 0) {
             String dataBudget = "SELECT operation_type, budget_type_id_fk, description, " +
                     "account_id_fk, operation_date, charge_value " +
                     "FROM budget WHERE budget_id = ?";
@@ -63,14 +70,9 @@ public class BudgetImpl implements Budget
             this.chargeValue = (BigDecimal) result.get("CHARGE_VALUE");//Заменила тип на BigDecimal
             return true;
         } else {
-            System.out.println("Budget with the specified ID is not in the table BUDGET");
+            log.info("Budget with the specified ID is not in the table BUDGET");
         }
         return false;
-    }
-
-    @Override
-    public Integer getBudgetId() {
-        return budgetId;
     }
 
     public void createUniqId() {
@@ -78,61 +80,4 @@ public class BudgetImpl implements Budget
         budgetId = dbObj.getUniqBudgetId();
     }
 
-    public void setBudgetId(Integer budgetId) {
-        this.budgetId = budgetId;
-    }
-
-    @Override
-    public String getOperationType() {
-        return operationType;
-    }
-
-    public void setOperationType(String operationType) {
-        this.operationType = operationType;
-    }
-
-    @Override
-    public Integer getBudgetTypeId() {
-        return budgetTypeId;
-    }
-
-    public void setBudgetTypeId(Integer budgetTypeId) {
-        this.budgetTypeId = budgetTypeId;
-    }
-
-    @Override
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    @Override
-    public Integer getAccountId() {
-        return accountId;
-    }
-
-    public void setAccountId(Integer accountId) {
-        this.accountId = accountId;
-    }
-
-    @Override
-    public Date getOperationDate() {
-        return operationDate;
-    }
-
-    public void setOperationDate(Date operationDate) {
-        this.operationDate = operationDate;
-    }
-
-    @Override
-    public BigDecimal getChargeValue() {
-        return chargeValue;
-    }
-
-    public void setChargeValue(BigDecimal chargeValue) {
-        this.chargeValue = chargeValue;
-    }
 }
