@@ -57,10 +57,32 @@ public class Report1 {
         }
     }
 
-    public void setTotalSum(){
-        String getTotalSum = "SELECT SUM(charge_value) AS sum FROM budget " +
-                "WHERE budget_type_id_fk NOT IN (" +
-                "SELECT budget_type_id FROM budget_type WHERE group_id = 11 AND 11) ";
+    public void getReportPersonRow(Integer personId, int accountId, List<Report1> rL) {
+        String rep1 = "select b2.budget_type_id, b2.name, sum(budget.charge_value) as SUMMA from person \n" +
+                "left join accounts on person_id = accounts.person_id_fk\n" +
+                "right join budget on budget.account_id_fk = accounts.account_id\n" +
+                "left join budget_type as b1 on budget.budget_type_id_fk = b1.budget_type_id\n" +
+                "left join budget_type as b2 on b2.budget_type_id = b1.group_id\n" +
+                "where person_id = '"+ personId +"' and account_id = '"+ accountId +"'" +
+                "group by(b1.budget_type_id)" +
+                "order by b2.budget_type_id asc;";
+        RowMapper<Report1> rowMapper = new Report1RowMapper(jdbcTemplate);
+        List<Report1> getRows = jdbcTemplate.query(rep1, rowMapper);
+        for(Report1 i : getRows){
+            rL.add(i);
+        }
+    }
+
+    public void setTotalSum(Integer personId, Integer accountId){
+        String getTotalSum = "select sum(summa) as totalSumma from\n" +
+                "(select sum(budget.charge_value) as SUMMA from person \n" +
+                "left join accounts on person_id = accounts.person_id_fk\n" +
+                "right join budget on budget.account_id_fk = accounts.account_id\n" +
+                "left join budget_type as b1 on budget.budget_type_id_fk = b1.budget_type_id\n" +
+                "left join budget_type as b2 on b2.budget_type_id = b1.group_id\n" +
+                "where person_id = '"+ personId +"' and account_id = '"+ accountId +"'\n" +
+                "group by b2.budget_type_id\n" +
+                "order by b2.budget_type_id asc)";
         totalSum = jdbcTemplate.queryForObject(getTotalSum, Double.class);
     }
 

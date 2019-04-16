@@ -12,7 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -138,6 +138,20 @@ public class DatabaseWork {
         return planBudgetL;
     }
 
+    public List<PlanBudget> getAccountPlanBudgets(Integer personId, Integer cardNumber){
+        List<PlanBudget> planBudgetL = new ArrayList<PlanBudget>();
+        String qwr = "select Plan_Budget.plan_budget_id from Person  left join Accounts on Accounts.person_id_fk = Person.person_id\n" +
+                "left join Plan_Budget on Plan_Budget.account_id_fk = Accounts.account_id\n" +
+                "where Plan_Budget.account_id_fk = '"+ cardNumber +"' and Person.person_id = '"+ personId +"';";
+        List<Integer> planBudgetsIds = jdbcTemplate.queryForList(qwr, Integer.class);
+        for(Integer planBudgetId : planBudgetsIds){
+            PlanBudget planBudget = new PlanBudgetImpl(jdbcTemplate);
+            planBudget.load(planBudgetId);
+            planBudgetL.add(planBudget);
+        }
+        return planBudgetL;
+    }
+
     public boolean checkLogin(String sql) {
         List<String> list = jdbcTemplate.queryForList(sql, String.class);
         if(list.isEmpty()){
@@ -224,66 +238,66 @@ public class DatabaseWork {
         accounts.setDescription(description);
         accounts.create();
     }
-          
-    public List<Report1> getReport1(){
-        List<Report1> report1L = new ArrayList<>();
+
+    public List<Report1> getReport1(Integer personId, Integer accountId){
+        List<Report1> report1L = new ArrayList<Report1>();
         Report1 repObj = new Report1(jdbcTemplate);
-        List<Integer> expenseGroups = repObj.getAllExpenseGroups();
-        for(int i=0; i<expenseGroups.size(); i++){
-            repObj.getReportRow(expenseGroups.get(i), report1L);
-        }
-        repObj.setTotalSum();
+        repObj.getReportPersonRow(personId, accountId, report1L);
+        repObj.setTotalSum(personId, accountId);
+
         for(int i=0; i<report1L.size(); i++){
             report1L.get(i).setPercent(report1L.get(i).getSum(), repObj.getTotalSum());
         }
         return report1L;
     }
 
-    public Double getTotalSum(){
+    public Double getTotalSum(Integer personId, Integer accountId){
         Report1 repObj = new Report1(jdbcTemplate);
-        repObj.setTotalSum();
+        repObj.setTotalSum(personId, accountId);
         Double totSum = repObj.getTotalSum();
         return totSum;
     }
 
-    public List<Report2> getReport2Required(){
-        List<Report2> report2L = new ArrayList<>();
+    public List<Report2> getReport2Required(Integer personId, Integer accountId){
+        List<Report2> report2L = new ArrayList<Report2>();
         Report2 repObj = new Report2(jdbcTemplate);
-        List<Integer> expenseGroups = repObj.getAllExpenseGroups();
-        for(int i=0; i<expenseGroups.size(); i++){
-            repObj.getReportRow(expenseGroups.get(i), report2L, true);
-        }
+        repObj.getReportPersonRow(personId, accountId, report2L, true);
+
         return report2L;
     }
 
-    public List<Report2> getReport2Unrequired(){
-        List<Report2> report2L = new ArrayList<>();
+    public List<Report2> getReport2Unrequired(Integer personId, Integer accountId){
+        List<Report2> report2L = new ArrayList<Report2>();
         Report2 repObj = new Report2(jdbcTemplate);
-        List<Integer> expenseGroups = repObj.getAllExpenseGroups();
-        for(int i=0; i<expenseGroups.size(); i++){
-            repObj.getReportRow(expenseGroups.get(i), report2L, false);
-        }
+        repObj.getReportPersonRow(personId, accountId, report2L, false);
+
         return report2L;
     }
 
-    public Double getTotalSum(boolean required){
+    public Double getTotalSum(Integer personId, Integer accountId, boolean required){
         Report2 repObj = new Report2(jdbcTemplate);
-        repObj.setTotalSum(required);
+        repObj.setTotalSum(personId, accountId, required);
         Double totSum = repObj.getTotalSum();
         return totSum;
     }
 
-    public List<Report3> getReport3(String startDate, String endDate){
-        List<PlanBudget> planBudgetL = getAllPlanBudgets();
-        List<Report3> report3L = new ArrayList<>();
+    public Map<Date,Report3> getReport3(String date, String personLongin, Integer id){
+        Person person = getPersonByLogin(personLongin);
+        List<PlanBudget> planBudgetL = getAccountPlanBudgets(person.getPersonId(), id);
+        Map<Date,Report3> report3L = new TreeMap<Date, Report3>();
         Report3 rep3 = new Report3(jdbcTemplate);
 
-        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
-        LocalDateTime start = LocalDateTime.parse(startDate, dateTimeFormatter);
-        LocalDateTime end = LocalDateTime.parse(endDate, dateTimeFormatter);
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        LocalDate start = LocalDate.parse(date, dateTimeFormatter);
+        LocalDate end;
 
-        rep3.getReportRow(planBudgetL, report3L, Date.from(start.atZone(ZoneId.systemDefault()).toInstant()),
-                Date.from(end.atZone(ZoneId.systemDefault()).toInstant()));
+        if(start.getMonthValue() == 11)
+        {
+            end = start.plusYears(1);
+        }
+            end = start.plusMonths(1);
+        rep3.getReportRow(planBudgetL, report3L, Date.from(start.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant()),
+                Date.from(end.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant()));
         return report3L;
     }
 
