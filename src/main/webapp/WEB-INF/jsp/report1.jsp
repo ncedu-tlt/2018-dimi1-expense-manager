@@ -29,16 +29,6 @@
                 <li class="nav-item">
                     <a class="nav-link" href="/accounts?showModal" id="btnModal">Purse</a>
                 </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownReportsMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Reports
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdownReportsMenuLink">
-                        <a class="dropdown-item" href="/showReport1">Report by Category</a>
-                        <a class="dropdown-item" href="/showReport2">Mandatory/Optional</a>
-                        <a class="dropdown-item" href="/showReport3">Planned expenses</a>
-                    </div>
-                </li>
             </ul>
         </div>
         <ul class="navbar-nav sing-right">
