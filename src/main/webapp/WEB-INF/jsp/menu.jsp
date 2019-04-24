@@ -8,7 +8,7 @@
    <!-- Required meta tags -->
    <meta http-equiv="Content-Type" content="text/html; charset=windows-1251" />
    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-   <title>Sign in · Web Site</title>
+   <title>Sign in Expense-Manager</title>
    <!-- Bootstrap CSS -->
    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous"></link>
    <link href="/css/menu.css" rel="stylesheet" type="text/css"/></link>
@@ -136,7 +136,7 @@
                                         <div class="form-group wid">
                                             <select onchange="getValue(this.value);"  name="description"
                                                     class="custom-select" required>
-                                                <option value="">Select currency</option>
+                                                <option value="">Select description</option>
                                                 <option value="Debit Card">Debit Card</option>
                                                 <option value="Credit Card">Credit Card</option>
                                                 <option value="Cash">Cash</option>

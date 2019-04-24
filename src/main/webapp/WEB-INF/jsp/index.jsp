@@ -8,7 +8,7 @@
        <!-- Required meta tags -->
        <meta http-equiv="Content-Type" content="text/html; charset=windows-1251" />
        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-       <title>Sign in Â· Web Site</title>
+       <title>Sign in Expense-Manager</title>
        <!-- Bootstrap CSS -->
        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
        <link href="/css/index.css" rel="stylesheet" type="text/css"/></link>
@@ -117,7 +117,7 @@
                                 </div>
                                 <div class="form-group te">
                                     <input type="hidden" name="_csrf" value="${_csrf.token}"/>
-                                    <button onClick="return validateAuthorization();" type="submit" class="bttn btn-success">Sign up</button>
+                                    <button onClick="return validateAuthorization();" type="submit" class="bttn btn-success">Sign in</button>
                                 </div>
                             </form>
                         </div>
