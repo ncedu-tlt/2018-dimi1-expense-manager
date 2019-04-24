@@ -63,7 +63,7 @@ public class Report1 {
                 "right join budget on budget.account_id_fk = accounts.account_id\n" +
                 "left join budget_type as b1 on budget.budget_type_id_fk = b1.budget_type_id\n" +
                 "left join budget_type as b2 on b2.budget_type_id = b1.group_id\n" +
-                "where person_id = '"+ personId +"' and account_id = '"+ accountId +"'" +
+                "where person_id = '"+ personId +"' and account_id = '"+ accountId +"' and b2.budget_type_id <> 11" +
                 "group by(b1.budget_type_id)" +
                 "order by b2.budget_type_id asc;";
         RowMapper<Report1> rowMapper = new Report1RowMapper(jdbcTemplate);
@@ -80,7 +80,7 @@ public class Report1 {
                 "right join budget on budget.account_id_fk = accounts.account_id\n" +
                 "left join budget_type as b1 on budget.budget_type_id_fk = b1.budget_type_id\n" +
                 "left join budget_type as b2 on b2.budget_type_id = b1.group_id\n" +
-                "where person_id = '"+ personId +"' and account_id = '"+ accountId +"'\n" +
+                "where person_id = '"+ personId +"' and account_id = '"+ accountId +"' and b2.budget_type_id <> 11\n" +
                 "group by b2.budget_type_id\n" +
                 "order by b2.budget_type_id asc)";
         totalSum = jdbcTemplate.queryForObject(getTotalSum, Double.class);

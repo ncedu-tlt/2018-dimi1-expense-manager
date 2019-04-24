@@ -1,4 +1,4 @@
-INSERT INTO Person (person_id, login, pass, access, email, reg_date) VALUES (1, 'test', 'test', 'USER', 'test@mail.ru', TO_DATE('11.12.2018', 'dd.mm.yyyy'));
+INSERT INTO Person (person_id, login, pass, access, email, reg_date) VALUES (1, 'person', 'person', 'USER', 'test@mail.ru', TO_DATE('11.12.2018', 'dd.mm.yyyy'));
 INSERT INTO Person (person_id, login, pass, access, email, phone_number) VALUES (2, 'test1', 'test1', 'USER', 'test1@mail.ru', 89171546552);
 INSERT INTO Person (person_id, login, pass, access, email, description, reg_date, phone_number) VALUES (3, 'testtest', 'testtest', 'USER', 'test1@mail.ru', 'description', TO_DATE('11.12.2018', 'dd.mm.yyyy'), 89171546552);
 
@@ -102,7 +102,7 @@ INSERT INTO Plan_budget (plan_budget_id, operation_type, budget_type_id_fk,
 INSERT INTO Plan_budget (plan_budget_id, operation_type, budget_type_id_fk,
                                               description, account_id_fk, operation_date, charge_value,
                                               regular_mask, repeat_count, start_date, end_date, spliter)
-                       VALUES (106, 'Безнал', 3, 'Платёж за телефон/Интернет', 2, null, 30, '0 30 12 ? 4-5 * ', null, TO_DATE('05.03.2019','dd.mm.yyyy'), null, false );
+                       VALUES (106, 'Безнал', 3, 'Маршрутка в/из универа', 2, null, 30, '0 30 12 ? 4-5 * ', null, TO_DATE('05.03.2019','dd.mm.yyyy'), null, false );
 
 INSERT INTO Plan_budget (plan_budget_id, operation_type, budget_type_id_fk,
                                               description, account_id_fk, operation_date, charge_value,
