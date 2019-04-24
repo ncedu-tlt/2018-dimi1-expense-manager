@@ -102,6 +102,10 @@
                                     <td><p>${account.getDescription()}</p></td>
                                     <td><a href="/showReport1/${account.getAccountId()}" class="btn btn-primary"
                                            role="button" aria-pressed="true">Report1</a></button>
+                                        <a href="/showReport2/${account.getAccountId()}" class="btn btn-primary"
+                                           role="button" aria-pressed="true">Report2</a></button>
+                                        <a href="/showReport3/${account.getAccountId()}" class="btn btn-primary"
+                                           role="button" aria-pressed="true">Report3</a></button>
                                     </td>
                                     <td>
                                         <input type="hidden" id="accountId" name="accountId"
@@ -196,16 +200,6 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/accounts?showModal" id="btnModal">Purse</a>
-                </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownReportsMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Reports
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdownReportsMenuLink">
-                        <a class="dropdown-item" href="/showReport1">Report by Category</a>
-                        <a class="dropdown-item" href="/showReport2">Mandatory/Optional</a>
-                        <a class="dropdown-item" href="/showReport3">Planned expenses</a>
-                    </div>
                 </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownToolsMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

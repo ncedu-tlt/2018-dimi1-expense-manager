@@ -3,7 +3,6 @@ $( document ).ready( function() {
         { image: './picture/bootstrap.png', width: '40', height: '40', url: 'https://getbootstrap.com/', target: '_blank', tooltip: 'Bootstrap' },
         { image: './picture/git.png', width: '40', height: '40', url: 'https://git-scm.com/', target: '_blank', tooltip: 'Git' },
         { image: './picture/github.png', width: '40', height: '40', url: 'https://github.com/ncedu-tlt/2018-dimi1-expense-manager', target: '_blank', tooltip: 'GitHub' },
-        { image: './picture/google_oauth.png', width: '40', height: '40', url: 'https://developers.google.com/identity/protocols/OAuth2', target: '_blank', tooltip: 'Google OAuth 2.0' },
         { image: './picture/h2.png', width: '40', height: '40', url: 'http://www.h2database.com/html/main.html', target: '_blank', tooltip: 'H2 Database Engine' },
         { image: './picture/heroku.png', width: '40', height: '40', url: 'https://www.heroku.com/', target: '_blank', tooltip: 'Heroku' },
         { image: './picture/idea.png', width: '40', height: '40', url: 'https://www.jetbrains.com/idea/', target: '_blank', tooltip: 'IntelliJ IDEA' },

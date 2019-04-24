@@ -45,6 +45,27 @@
   </div>
 </div>
 
+<div class="modal fade" id="modalAbout" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Information</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+            <center><p>This is the accounting of income and expenses. To start using the application, you need to
+            register a personal account, where you can create an unlimited number of accounts, clearly see expenses
+            and incomes, as well as the ability to plan the budget of these accounts.</p></center>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-dismiss="modal">Ok</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <body>
     <header class="navbar fixed-top navbar-empty">
         <div class="container">
@@ -133,31 +154,11 @@
                     </div>
                 </div>
                 <p>
-                <div class="card">
-                    <div class="conteiner">
-                        <div class="form-group te">
-                            <small><dt label for="attName" class="col-sm-5 col-sm-5 col-form-label">Sign in with</label></dt></small>
-                        </div>
-                        <div class="row justify-content-center">
-                            <div class="col-sm-4 col-sm-5">
-                                <a class="btn brd d-flex align-items-center omniauth-btn text-left oauth-login" id="oauth-login-google_oauth2" rel="nofollow" data-method="post" href="/users/auth/google_oauth2"><img src="/picture/google.png" width="15" height="15" title="Sign in with Google" alt="Google">
-                                    <span>&#8194; Google</span>
-                                </a>
-                            </div>
-                            <div class="col-sm-4 col-sm-5">
-                                <a class="btn brd d-flex align-items-center omniauth-btn text-left oauth-login" id="oauth-login-google_oauth2" rel="nofollow" data-method="post" href="/users/auth/google_oauth2"><img src="/picture/ya1.jpg" width="15" height="15" title="Sign in with Yandex" alt="Yandex">
-                                    <span>&#8194; Yandex</span>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
                 <ul class="fixed-bottom nigth-footer">
                     <div class="container">
                         <div class="row">
                             <div class="footer-links text-footer">
-                                <a class="col" href="#">Help</a>
-                                <a class="col" href="#">About Site</a>
+                                <a class="col" href="" data-toggle="modal" data-target="#modalAbout">About Site</a>
                             </div>
                         </div>
                     </div>
